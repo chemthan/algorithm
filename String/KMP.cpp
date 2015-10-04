@@ -17,7 +17,7 @@ void preprocess() {
 	}
 }
 void search() {
-    preprocess();
+	preprocess();
 	int i = 0, j = 0;
 	while (i < nT) {
 		while (j >= 0 && T[i] != P[j]) j = b[j];
@@ -30,9 +30,9 @@ void search() {
 }
 
 int main() {
-    strcpy(T, "123123123");
-    strcpy(P, "123");
-    nT = strlen(T); nP = strlen(P);
-    search();
-    return 0;
+	strcpy(T, "123123123");
+	strcpy(P, "123");
+	nT = strlen(T); nP = strlen(P);
+	search();
+	return 0;
 }
