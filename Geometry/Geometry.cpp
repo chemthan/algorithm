@@ -73,9 +73,9 @@ Point ComputeLineIntersection(Point a, Point b, Point c, Point d) {
 }
 //Compute center of circle given three points
 Point ComputeCircleCenter(Point a, Point b, Point c) {
-	b=(a + b) / 2;
-	c=(a + c) / 2;
-	return ComputeLineIntersection(b, b+RotateCW90(a - b), c, c+RotateCW90(a - c));
+	b = (a + b) / 2;
+	c = (a + c) / 2;
+	return ComputeLineIntersection(b, b + RotateCW90(a - b), c, c + RotateCW90(a - c));
 }
 //Determine if point is in a possibly non-convex polygon
 //returns 1 for strictly interior points, 0 for
@@ -89,7 +89,7 @@ bool PointInPolygonSlow(const vector<Point>& p, Point q) {
 	return c;
 }
 //Strictly inside Polygon
-#define Det(a, b, c) ((b.x - a.x) * (c.y - a.y)-(b.y - a.y) * (c.x - a.x))
+#define Det(a, b, c) ((b.x - a.x) * (c.y - a.y) - (b.y - a.y) * (c.x - a.x))
 bool PointInPolygon(vector<Point>& l, Point p) {
 	int a = 1, b = l.size() - 1, c;
 	if (Det(l[0], l[a], l[b]) > 0) swap(a, b);
@@ -102,7 +102,7 @@ bool PointInPolygon(vector<Point>& l, Point p) {
 }
 //Determine if point is on the boundary of a polygon
 bool PointOnPolygon(const vector<Point>& p, Point q) {
-	for (int i = 0; i < p.size(); i++) if (dist2(ProjectPointSegment(p[i], p[(i+1)%p.size()], q), q) < EPS) return true;
+	for (int i = 0; i < p.size(); i++) if (dist2(ProjectPointSegment(p[i], p[(i + 1) % p.size()], q), q) < EPS) return true;
 	return false;
 }
 //Compute intersection of line through points a and b with circle centered at c with radius r > 0
@@ -114,7 +114,7 @@ vector<Point> CircleLineIntersection(Point a, Point b, Point c, double r) {
 	double C = dot(a, a) - r * r;
 	double D = B * B - A * C;
 	if (D < -EPS) return ret;
-	ret.push_back(c + a + b * (-B + sqrt(D+EPS)) / A);
+	ret.push_back(c + a + b * (-B + sqrt(D + EPS)) / A);
 	if (D > EPS) ret.push_back(c + a + b * (-B - sqrt(D)) / A);
 	return ret;
 }
