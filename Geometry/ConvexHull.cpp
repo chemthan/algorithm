@@ -32,8 +32,8 @@ void ConvexHull(vector<Point>& pts) {
 	pts.erase(unique(pts.begin(), pts.end()), pts.end());
 	vector<Point> up, dn;
 	for (int i = 0; i < pts.size(); i++) {
-		while (up.size() > 1 && area2(up[up.size()-2], up.back(), pts[i]) >= 0) up.pop_back();
-		while (dn.size() > 1 && area2(dn[dn.size()-2], dn.back(), pts[i]) <= 0) dn.pop_back();
+		while (up.size() > 1 && area2(up[up.size() - 2], up.back(), pts[i]) >= 0) up.pop_back();
+		while (dn.size() > 1 && area2(dn[dn.size() - 2], dn.back(), pts[i]) <= 0) dn.pop_back();
 		up.push_back(pts[i]);
 		dn.push_back(pts[i]);
 	}
@@ -45,7 +45,7 @@ void ConvexHull(vector<Point>& pts) {
 	dn.push_back(pts[0]);
 	dn.push_back(pts[1]);
 	for (int i = 2; i < pts.size(); i++) {
-		if (between(dn[dn.size()-2], dn[dn.size()-1], pts[i])) dn.pop_back();
+		if (between(dn[dn.size() - 2], dn[dn.size() - 1], pts[i])) dn.pop_back();
 		dn.push_back(pts[i]);
 	}
 	if (dn.size() >= 3 && between(dn.back(), dn[0], dn[1])) {
