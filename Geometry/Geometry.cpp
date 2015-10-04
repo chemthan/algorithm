@@ -49,13 +49,13 @@ bool LinesParallel(Point a, Point b, Point c, Point d) {
 	return fabs(cross(b - a, c - d)) < EPS;
 }
 bool LinesCollinear(Point a, Point b, Point c, Point d) {
-	return LinesParallel(a, b, c, d) && fabs(cross(a-b, a-c)) < EPS && fabs(cross(c-d, c-a)) < EPS;
+	return LinesParallel(a, b, c, d) && fabs(cross(a - b, a - c)) < EPS && fabs(cross(c - d, c - a)) < EPS;
 }
 //Determine if line segment from a to b intersects with line segment from c to d
 bool SegmentsIntersect(Point a, Point b, Point c, Point d) {
 	if (LinesCollinear(a, b, c, d)) {
 		if (dist2(a, c) < EPS || dist2(a, d) < EPS || dist2(b, c) < EPS || dist2(b, d) < EPS) return true;
-		if (dot(c-a, c-b) > 0 && dot(d-a, d-b) > 0 && dot(c-b, d-b) > 0) return false;
+		if (dot(c - a, c - b) > 0 && dot(d - a, d - b) > 0 && dot(c - b, d - b) > 0) return false;
 		return true;
 	}
 	if (cross(d - a, b - a) * cross(c - a, b - a) > 0) return false;
@@ -168,100 +168,6 @@ bool IsSimple(const vector<Point>& p) {
 	return true;
 }
 
-ostream &operator<<(ostream& os, const Point& p) {
-	os<<"("<<p.x<<","<<p.y<<")";
-}
-
 int main() {
-
-	// expected: (-5,2)
-	cerr << RotateCCW90(Point(2,5)) << endl;
-
-	// expected: (5,-2)
-	cerr << RotateCW90(Point(2,5)) << endl;
-
-	// expected: (-5,2)
-	cerr << RotateCCW(Point(2,5),M_PI/2) << endl;
-
-	// expected: (5,2)
-	cerr << ProjectPointLine(Point(-5,-2), Point(10,4), Point(3,7)) << endl;
-
-	// expected: (5,2) (7.5,3) (2.5,1)
-	cerr << ProjectPointSegment(Point(-5,-2), Point(10,4), Point(3,7)) << " "
-		<< ProjectPointSegment(Point(7.5,3), Point(10,4), Point(3,7)) << " "
-		<< ProjectPointSegment(Point(-5,-2), Point(2.5,1), Point(3,7)) << endl;
-
-	// expected: 6.78903
-	cerr << DistancePointPlane(4,-4,3,2,-2,5,-8) << endl;
-
-	// expected: 1 0 1
-	cerr << LinesParallel(Point(1,1), Point(3,5), Point(2,1), Point(4,5)) << " "
-		<< LinesParallel(Point(1,1), Point(3,5), Point(2,0), Point(4,5)) << " "
-		<< LinesParallel(Point(1,1), Point(3,5), Point(5,9), Point(7,13)) << endl;
-
-	// expected: 0 0 1
-	cerr << LinesCollinear(Point(1,1), Point(3,5), Point(2,1), Point(4,5)) << " "
-		<< LinesCollinear(Point(1,1), Point(3,5), Point(2,0), Point(4,5)) << " "
-		<< LinesCollinear(Point(1,1), Point(3,5), Point(5,9), Point(7,13)) << endl;
-
-	// expected: 1 1 1 0
-	cerr << SegmentsIntersect(Point(0,0), Point(2,4), Point(3,1), Point(-1,3)) << " "
-		<< SegmentsIntersect(Point(0,0), Point(2,4), Point(4,3), Point(0,5)) << " "
-		<< SegmentsIntersect(Point(0,0), Point(2,4), Point(2,-1), Point(-2,1)) << " "
-		<< SegmentsIntersect(Point(0,0), Point(2,4), Point(5,5), Point(1,7)) << endl;
-
-	// expected: (1,2)
-	cerr << ComputeLineIntersection(Point(0,0), Point(2,4), Point(3,1), Point(-1,3)) << endl;
-
-	// expected: (1,1)
-	cerr << ComputeCircleCenter(Point(-3,4), Point(6,1), Point(4,5)) << endl;
-
-	vector<Point> v;
-	v.push_back(Point(0,0));
-	v.push_back(Point(5,0));
-	v.push_back(Point(5,5));
-	v.push_back(Point(0,5));
-
-	// expected: 1 1 1 0 0
-	cerr << PointInPolygonSlow(v, Point(2,2)) << " "
-		<< PointInPolygonSlow(v, Point(2,0)) << " "
-		<< PointInPolygonSlow(v, Point(0,2)) << " "
-		<< PointInPolygonSlow(v, Point(5,2)) << " "
-		<< PointInPolygonSlow(v, Point(2,5)) << endl;
-
-	// expected: 0 1 1 1 1
-	cerr << PointOnPolygon(v, Point(2,2)) << " "
-		<< PointOnPolygon(v, Point(2,0)) << " "
-		<< PointOnPolygon(v, Point(0,2)) << " "
-		<< PointOnPolygon(v, Point(5,2)) << " "
-		<< PointOnPolygon(v, Point(2,5)) << endl;
-
-	// expected: (1,6)
-	//           (5,4) (4,5)
-	//           blank line
-	//           (4,5) (5,4)
-	//           blank line
-	//           (4,5) (5,4)
-	vector<Point> u = CircleLineIntersection(Point(0,6), Point(2,6), Point(1,1), 5);
-	for (int i = 0; i < u.size(); i++) cerr << u[i] << " "; cerr << endl;
-	u = CircleLineIntersection(Point(0,9), Point(9,0), Point(1,1), 5);
-	for (int i = 0; i < u.size(); i++) cerr << u[i] << " "; cerr << endl;
-	u = CircleCircleIntersection(Point(1,1), Point(10,10), 5, 5);
-	for (int i = 0; i < u.size(); i++) cerr << u[i] << " "; cerr << endl;
-	u = CircleCircleIntersection(Point(1,1), Point(8,8), 5, 5);
-	for (int i = 0; i < u.size(); i++) cerr << u[i] << " "; cerr << endl;
-	u = CircleCircleIntersection(Point(1,1), Point(4.5,4.5), 10, sqrt(2.0)/2.0);
-	for (int i = 0; i < u.size(); i++) cerr << u[i] << " "; cerr << endl;
-	u = CircleCircleIntersection(Point(1,1), Point(4.5,4.5), 5, sqrt(2.0)/2.0);
-	for (int i = 0; i < u.size(); i++) cerr << u[i] << " "; cerr << endl;
-
-	// area should be 5.0
-	// centroid should be (1.1666666, 1.166666)
-	Point pa[] = { Point(0,0), Point(5,0), Point(1,1), Point(0,5) };
-	vector<Point> p(pa, pa+4);
-	Point c = ComputeCentroid(p);
-	cerr << "Area: " << ComputeArea(p) << endl;
-	cerr << "Centroid: " << c << endl;
-
 	return 0;
 }
