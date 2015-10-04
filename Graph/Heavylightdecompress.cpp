@@ -2,10 +2,9 @@
 using namespace std;
 
 const int maxn = 100010;
+const int maxe = 30;
 int n;
 vector<int> adj[maxn];
-
-const int maxe = 30;
 int nchain, nbase;
 int hchain[maxn];
 int ichain[maxn];
@@ -72,5 +71,5 @@ void update(int u, int a) {
 }
 
 int main() {
-    return 0;
+	return 0;
 }

@@ -270,8 +270,8 @@ struct bigint {
 };
 
 int main() {
-    bigint n = bigint("123123123123123");
-    bigint m = bigint("1232131238493589354");
-    cout<<n * m;
-    return 0;
+	bigint n = bigint("123123123123123");
+	bigint m = bigint("1232131238493589354");
+	cout<<n * m;
+	return 0;
 }

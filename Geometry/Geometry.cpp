@@ -1,7 +1,7 @@
 #include <bits/stdc++.h>
 using namespace std;
 
-const double EPS = 1e-12;
+const double EPS = 1e-9;
 struct Point {
 	double x, y;
 	Point() {}

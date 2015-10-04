@@ -21,7 +21,7 @@ void lyndon(string s) {
 }
 
 int main() {
-    string s = "basdafswaer";
-    lyndon(s);
-    return 0;
+	string s = "basdafswaer";
+	lyndon(s);
+	return 0;
 }

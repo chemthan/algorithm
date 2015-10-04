@@ -31,10 +31,10 @@ int get(int x, int y) {
 }
 
 int main() {
-    add(1, 1, 1);
-    add(1, 2, 1);
-    add(2, 1, 1);
-    add(3, 3, 1);
-    printf("%d", get(2, 2));
-    return 0;
+	add(1, 1, 1);
+	add(1, 2, 1);
+	add(2, 1, 1);
+	add(3, 3, 1);
+	printf("%d", get(2, 2));
+	return 0;
 }

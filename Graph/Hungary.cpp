@@ -58,9 +58,9 @@ struct Hungary {
 } hungary;
 
 int main() {
-    hungary.init(3, 3);
-    hungary.add(1, 2, 3);
-    hungary.add(1, 2, 1);
-    printf("%d", hungary.mincost());
-    return 0;
+	hungary.init(3, 3);
+	hungary.add(1, 2, 3);
+	hungary.add(1, 2, 1);
+	printf("%d", hungary.mincost());
+	return 0;
 }

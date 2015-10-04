@@ -54,9 +54,9 @@ struct Dinic {
 } dinic;
 
 int main() {
-    dinic.init(3, 0, 2);
-    dinic.add(0, 1, 3, 0);
-    dinic.add(1, 2, 4, 0);
-    printf("%d", dinic.maxflow());
-    return 0;
+	dinic.init(3, 0, 2);
+	dinic.add(0, 1, 3, 0);
+	dinic.add(1, 2, 4, 0);
+	printf("%d", dinic.maxflow());
+	return 0;
 }

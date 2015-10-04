@@ -197,8 +197,8 @@ void pollard_rho_fact(unsigned long long N) {
 }
 
 int main() {
-    pollard_rho_fact(123568412123568412LL);
-    sort(Fa, Fa + nfact);
-    for (int i = 0; i < nfact; i++) printf("%lld ", Fa[i]);
-    return 0;
+	pollard_rho_fact(123568412123568412LL);
+	sort(Fa, Fa + nfact);
+	for (int i = 0; i < nfact; i++) printf("%lld ", Fa[i]);
+	return 0;
 }

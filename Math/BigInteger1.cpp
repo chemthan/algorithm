@@ -286,8 +286,8 @@ int log(int n, BigInt a) {
 }
 
 int main() {
-    BigInt n = Integer("123123123123123");
-    BigInt m = Integer("1232131238493589354");
-    cout<<n * m;
-    return 0;
+	BigInt n = Integer("123123123123123");
+	BigInt m = Integer("1232131238493589354");
+	cout<<n * m;
+	return 0;
 }

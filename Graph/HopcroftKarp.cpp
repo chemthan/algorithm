@@ -58,10 +58,10 @@ struct HopcroftKarp {
 } hopkarp;
 
 int main() {
-    hopkarp.init(3, 3);
-    hopkarp.add(1, 2);
-    hopkarp.add(1, 3);
-    hopkarp.add(2, 3);
-    printf("%d", hopkarp.maxmat());
-    return 0;
+	hopkarp.init(3, 3);
+	hopkarp.add(1, 2);
+	hopkarp.add(1, 3);
+	hopkarp.add(2, 3);
+	printf("%d", hopkarp.maxmat());
+	return 0;
 }

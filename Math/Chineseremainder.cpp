@@ -26,8 +26,8 @@ long long chineseRemainder(int n, int p[], int r[]) {
 }
 
 int main() {
-    int p[] = {2, 3, 5};
-    int r[] = {1, 2, 3};
-    printf("%lld", chineseRemainder(3, p, r));
-    return 0;
+	int p[] = {2, 3, 5};
+	int r[] = {1, 2, 3};
+	printf("%lld", chineseRemainder(3, p, r));
+	return 0;
 }

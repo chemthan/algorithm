@@ -32,9 +32,9 @@ void zfunction() {
 }
 
 int main() {
-    strcpy(S, "stringsrandom");
-    n = strlen(S);
-    zfunction();
-    for (int i = 0; i < n; i++) printf("%d ", z[i]);
-    return 0;
+	strcpy(S, "stringsrandom");
+	n = strlen(S);
+	zfunction();
+	for (int i = 0; i < n; i++) printf("%d ", z[i]);
+	return 0;
 }

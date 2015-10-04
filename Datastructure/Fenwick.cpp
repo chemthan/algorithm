@@ -19,8 +19,8 @@ int get(int p)
 }
 
 int main() {
-    add(1, 1);
-    add(2, 3);
-    printf("%d", get(2));
-    return 0;
+	add(1, 1);
+	add(2, 3);
+	printf("%d", get(2));
+	return 0;
 }

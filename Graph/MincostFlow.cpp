@@ -74,11 +74,11 @@ struct MincostFlow {
 } mcf;
 
 int main() {
-    mcf.init(3, 0, 2);
-    mcf.add(0, 1, 1, 3);
-    mcf.add(1, 2, 1, 10);
-    mcf.add(0, 2, 1, 100);
-    mcf.maxflow();
-    printf("%lld", mcf.totalCost);
-    return 0;
+	mcf.init(3, 0, 2);
+	mcf.add(0, 1, 1, 3);
+	mcf.add(1, 2, 1, 10);
+	mcf.add(0, 2, 1, 100);
+	mcf.maxflow();
+	printf("%lld", mcf.totalCost);
+	return 0;
 }

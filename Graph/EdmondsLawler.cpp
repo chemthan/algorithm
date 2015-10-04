@@ -104,11 +104,11 @@ struct EdmondsLawler {
 } edmonds;
 
 int main() {
-    edmonds.init(3);
-    edmonds.add(1, 2);
-    edmonds.add(2, 1);
-    edmonds.add(1, 3);
-    edmonds.add(3, 1);
-    printf("%d", edmonds.maxmat());
-    return 0;
+	edmonds.init(3);
+	edmonds.add(1, 2);
+	edmonds.add(2, 1);
+	edmonds.add(1, 3);
+	edmonds.add(3, 1);
+	printf("%d", edmonds.maxmat());
+	return 0;
 }

@@ -7,15 +7,12 @@ struct Point {
 	int idx;
 	int t, d, nxt;
 };
-
 bool comparey(Point a, Point b) {
 	return make_pair(a.y, a.x) < make_pair(b.y, b.x);
 }
-
 bool comparesum(Point a, Point b) {
 	return make_pair(a.x + a.y, a.y) < make_pair(b.x + b.y, b.y);
 }
-
 bool comparesub(Point a, Point b) {
 	return make_pair(a.x - a.y, a.y) < make_pair(b.x - b.y, b.y);
 }
@@ -36,7 +33,6 @@ int find(int u) {
 void joint(int u, int v) {
 	par[find(u)] = par[find(v)];
 }
-
 void go1(int l, int r) {
 	if (p[l].y < p[r].y) {
 		int k = (p[l].y + p[r].y) >> 1;
@@ -66,7 +62,6 @@ void go1(int l, int r) {
 		p[i].nxt = p[i - 1].idx;
 	}
 }
-
 void go2(int l, int r) {
 	if (p[l].y < p[r].y) {
 		int k = (p[l].y + p[r].y) >> 1;

@@ -23,7 +23,7 @@ int minmove(char s[], int n) {
 }
 
 int main() {
-    char s[] = "stringrandom";
-    printf("%d", minmove(s, strlen(s)));
-    return 0;
+	char s[] = "stringrandom";
+	printf("%d", minmove(s, strlen(s)));
+	return 0;
 }

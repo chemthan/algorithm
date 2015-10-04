@@ -48,13 +48,13 @@ void computeLCP() {
 }
 
 int main() {
-    memset(T, 0, sizeof(T));
-    strcpy(T, "stringsrandom");
-    nlen = strlen(T);
-    T[nlen++] = '$';
-    constructSA(); computeLCP();
-    for (int i = 0; i < nlen; i++) printf("%d ", SA[i]); printf("\n");
-    for (int i = 0; i < nlen; i++) printf("%d ", RA[i]); printf("\n");
-    for (int i = 0; i < nlen; i++) printf("%d ", LCP[i]);
-    return 0;
+	memset(T, 0, sizeof(T));
+	strcpy(T, "stringsrandom");
+	nlen = strlen(T);
+	T[nlen++] = '$';
+	constructSA(); computeLCP();
+	for (int i = 0; i < nlen; i++) printf("%d ", SA[i]); printf("\n");
+	for (int i = 0; i < nlen; i++) printf("%d ", RA[i]); printf("\n");
+	for (int i = 0; i < nlen; i++) printf("%d ", LCP[i]);
+	return 0;
 }
