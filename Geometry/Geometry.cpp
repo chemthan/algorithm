@@ -88,17 +88,17 @@ bool PointInPolygonSlow(const vector<Point>& p, Point q) {
 	}
 	return c;
 }
-//Strictly inside Polygon
+//Strictly inside convex Polygon
 #define Det(a, b, c) ((b.x - a.x) * (c.y - a.y) - (b.y - a.y) * (c.x - a.x))
-bool PointInPolygon(vector<Point>& l, Point p) {
-	int a = 1, b = l.size() - 1, c;
-	if (Det(l[0], l[a], l[b]) > 0) swap(a, b);
-	if (Det(l[0], l[a], p) >= 0 || Det(l[0], l[b], p) <= 0) return false;
+bool PointInPolygon(vector<Point>& p, Point q) {
+	int a = 1, b = p.size() - 1, c;
+	if (Det(p[0], p[a], p[b]) > 0) swap(a, b);
+	if (Det(p[0], p[a], q) >= 0 || Det(p[0], p[b], q) <= 0) return false;
 	while(abs(a - b) > 1) {
 		c = (a + b) / 2;
-		if (Det(l[0], l[c], p) > 0) b = c; else a = c;
+		if (Det(p[0], p[c], q) > 0) b = c; else a = c;
 	}
-	return Det(l[a], l[b], p) < 0;
+	return Det(p[a], p[b], q) < 0;
 }
 //Determine if point is on the boundary of a polygon
 bool PointOnPolygon(const vector<Point>& p, Point q) {
