@@ -107,30 +107,29 @@ bool PointOnPolygon(const vector<Point>& p, Point q) {
 }
 //Compute intersection of line through points a and b with circle centered at c with radius r > 0
 vector<Point> CircleLineIntersection(Point a, Point b, Point c, double r) {
-	vector<Point> ret;
+	vector<Point> res;
 	b = b - a; a = a - c;
 	double A = dot(b, b);
 	double B = dot(a, b);
 	double C = dot(a, a) - r * r;
 	double D = B * B - A * C;
-	if (D < -EPS) return ret;
-	ret.push_back(c + a + b * (-B + sqrt(D + EPS)) / A);
-	if (D > EPS) ret.push_back(c + a + b * (-B - sqrt(D)) / A);
-	return ret;
+	if (D < -EPS) return res;
+	res.push_back(c + a + b * (-B + sqrt(D + EPS)) / A);
+	if (D > EPS) res.push_back(c + a + b * (-B - sqrt(D)) / A);
+	return res;
 }
 //Compute intersection of circle centered at a with radius r with circle centered at b with radius R
 vector<Point> CircleCircleIntersection(Point a, Point b, double r, double R) {
-	vector<Point> ret;
+	vector<Point> res;
 	double d = sqrt(dist2(a, b));
-	if (d > r + R || d + min(r, R) < max(r, R)) return ret;
+	if (d > r + R || d + min(r, R) < max(r, R)) return res;
 	double x = (d * d - R * R + r * r) / (2 * d);
 	double y = sqrt(r * r - x * x);
 	Point v = (b - a) / d;
-	ret.push_back(a + v * x + RotateCCW90(v) * y);
-	if (y > 0) ret.push_back(a + v * x - RotateCCW90(v) * y);
-	return ret;
+	res.push_back(a + v * x + RotateCCW90(v) * y);
+	if (y > 0) res.push_back(a + v * x - RotateCCW90(v) * y);
+	return res;
 }
-
 //This code computes the area or centroid of a (possibly nonconvex)
 //polygon, assuming that the coordinates are listed in a clockwise or
 //counterclockwise fashion.  Note that the centroid is often known as
