@@ -93,11 +93,13 @@ bool PointInPolygonSlow(const vector<Point>& p, Point q) {
 bool PointInPolygon(vector<Point>& p, Point q) {
 	int a = 1, b = p.size() - 1, c;
 	if (Det(p[0], p[a], p[b]) > 0) swap(a, b);
+	//Allow on edge --> if (Det... > 0 || Det ... < 0)
 	if (Det(p[0], p[a], q) >= 0 || Det(p[0], p[b], q) <= 0) return false;
 	while(abs(a - b) > 1) {
 		c = (a + b) / 2;
 		if (Det(p[0], p[c], q) > 0) b = c; else a = c;
 	}
+	//Alow on edge --> return Det... <= 0
 	return Det(p[a], p[b], q) < 0;
 }
 //Determine if point is on the boundary of a polygon
