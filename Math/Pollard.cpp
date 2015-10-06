@@ -6,10 +6,10 @@ using namespace std;
 #define MAXNUMFACT 64
 int nfact = 0;
 unsigned long long Fa[MAXNUMFACT];
-void decompose(unsigned long long p, int* k, unsigned long long* m) {
-	int i = 0;
-	while ((p & 1) == 0) {i++; p >>= 1;}
-	*k = i; *m = p;
+unsigned long long gcd(unsigned long long a, unsigned long long b) {
+	unsigned long long tmp;
+	while (b != 0) {tmp = b; b = a % b; a = tmp;}
+	return a;
 }
 unsigned long long mod_mul(unsigned long long a, unsigned long long b, unsigned long long p) {
 	if (b == 1) return a % p;
@@ -23,11 +23,6 @@ unsigned long long mod_power(unsigned long long a, unsigned long long b, unsigne
 	if ((b & 1) == 0) return mod_mul(x, x, p);
 	else return (mod_mul(mod_mul(x, x, p), a, p));
 }
-unsigned long long gcd(unsigned long long a, unsigned long long b) {
-	unsigned long long tmp;
-	while (b != 0) {tmp = b; b = a % b; a = tmp;}
-	return a;
-}
 unsigned long long random64() {
 	unsigned long long n = 0;
 	int l = rand() % (RAND_MAX - 2) + 2;
@@ -35,15 +30,10 @@ unsigned long long random64() {
 	n |= 1ULL * r; n <<= 32; n |= 1ULL * l;
 	return n;
 }
-unsigned long long sqrt(unsigned long long N) {
-	unsigned long long X, A2, R;
-	X = N, A2 = 1ULL << 62, R = 0;
-	while (N < A2)  A2 >>= 2;
-	while (A2 > 0) {
-		if (X >= R + A2) {X -= R + A2; R = (R >> 1) + A2; A2 >>= 2;}
-		else {A2 >>= 2; R >>= 1;}
-	}
-	return R;
+void decompose(unsigned long long p, int* k, unsigned long long* m) {
+	int i = 0;
+	while ((p & 1) == 0) {i++; p >>= 1;}
+	*k = i; *m = p;
 }
 int witness(unsigned long long a, unsigned long long N) {
 	unsigned long long m;
@@ -71,6 +61,17 @@ int miller_rabin_testing(int acc, unsigned long long N) {
 		else if (witness(a, N) == 0) return 0;
 	}
 	return 1;
+}
+
+unsigned long long sqrt(unsigned long long N) {
+	unsigned long long X, A2, R;
+	X = N, A2 = 1ULL << 62, R = 0;
+	while (N < A2)  A2 >>= 2;
+	while (A2 > 0) {
+		if (X >= R + A2) {X -= R + A2; R = (R >> 1) + A2; A2 >>= 2;}
+		else {A2 >>= 2; R >>= 1;}
+	}
+	return R;
 }
 unsigned long long next_prng(unsigned long long x, unsigned long long N) {
 	unsigned long long xs = mod_mul(x, x, N);
