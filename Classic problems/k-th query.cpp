@@ -17,6 +17,8 @@ const int mod = 1000000007;
 const int INF = (int) 1e9;
 const ll LINF = (ll) 1e18;
 
+//http://www.spoj.com/problems/MKTHNUM/en/
+//Persistent segment tree
 struct node
 {
 	int cnt;
