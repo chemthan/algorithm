@@ -24,7 +24,7 @@ struct node
 	int cnt;
 	node *left, *right;
 	node() {cnt = 0; left = right = NULL;}
-	node(int cnt, node *left, node *right): cnt(cnt), left(left), right(right) {}
+	node(int cnt, node* left, node* right): cnt(cnt), left(left), right(right) {}
 	node* insert(int l, int r, int w);
 };
 
