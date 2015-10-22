@@ -12,12 +12,15 @@ unsigned long long gcd(unsigned long long a, unsigned long long b) {
 	return a;
 }
 unsigned long long mod_mul(unsigned long long a, unsigned long long b, unsigned long long p) {
+	if (b == 0) return 0;
 	if (b == 1) return a % p;
 	unsigned long long x = mod_mul(a, b >> 1, p);
 	if ((b & 1) == 0) return (x << 1) % p;
 	else return (((x << 1) % p) + a) % p;
 }
 unsigned long long mod_power(unsigned long long a, unsigned long long b, unsigned long long p) {
+	if (a == 0) return 0;
+	if (b == 0) return 1 % p;
 	if (b == 1) return a % p;
 	unsigned long long x = mod_power(a, b / 2, p);
 	if ((b & 1) == 0) return mod_mul(x, x, p);
