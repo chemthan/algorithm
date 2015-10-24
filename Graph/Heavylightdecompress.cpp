@@ -13,9 +13,9 @@ int pib[maxn];
 int vis[maxn];
 int lev[maxn];
 int p[maxe][maxn];
+int tms;
 int tin[maxn];
 int tou[maxn];
-int tms;
 
 void init() {
 	memset(vis, 0, sizeof(vis)); memset(p, 0, sizeof(p)); memset(lev, 0, sizeof(lev));
