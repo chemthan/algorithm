@@ -1,7 +1,7 @@
 #include <bits/stdc++.h>
 using namespace std;
 
-#define maxv 20000
+#define maxv 200010
 #define pos(v) ((v) << 1)
 #define neg(v) (pos(v) ^ 1)
 namespace twosat {

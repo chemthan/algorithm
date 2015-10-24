@@ -1,7 +1,6 @@
 #include <bits/stdc++.h>
 using namespace std;
 
-//Lyndon
 //O(n)
 void lyndon(string s) {
 	int n = (int) s.length();

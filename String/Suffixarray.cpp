@@ -1,7 +1,6 @@
 #include <bits/stdc++.h>
 using namespace std;
 
-//Suffix array
 //O(nlogn)
 const int maxn = 100010;
 char T[maxn];

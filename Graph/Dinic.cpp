@@ -1,7 +1,6 @@
 #include <bits/stdc++.h>
 using namespace std;
 
-//Dinic
 //O(|V|^2 * |E|)
 #define maxv 1000010
 #define maxe 1000010

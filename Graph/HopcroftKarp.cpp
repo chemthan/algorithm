@@ -1,9 +1,8 @@
 #include <bits/stdc++.h>
 using namespace std;
 
-//HopcroftKarp
 //O(|E| * |V| ^ 1/2)
-//index from 1
+//Index from 1
 #define maxv 1000010
 #define maxe 1000010
 struct HopcroftKarp {

@@ -1,7 +1,6 @@
 #include <bits/stdc++.h>
 using namespace std;
 
-//Hungary
 //O(n^3)
 //Index from 1
 #define maxn 1010

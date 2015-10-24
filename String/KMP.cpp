@@ -1,7 +1,6 @@
 #include <bits/stdc++.h>
 using namespace std;
 
-//KMP Search
 //O(nlogn)
 int const maxn = 100010;
 int b[maxn];

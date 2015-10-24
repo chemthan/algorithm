@@ -1,7 +1,6 @@
 #include <bits/stdc++.h>
 using namespace std;
 
-//Zfunction
 //z[i] the length of the longest substr begins at i
 const int maxn = 100010;
 char S[maxn];

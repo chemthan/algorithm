@@ -1,7 +1,6 @@
 #include <bits/stdc++.h>
 using namespace std;
 
-//Binary Indexed Tree
 //O(nlogn)
 const int maxn = 100010;
 int fen[maxn];
