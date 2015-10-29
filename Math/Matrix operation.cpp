@@ -16,22 +16,22 @@ struct matrix {
 	matrix operator + (matrix A) {
 		matrix res;
 		for (int i = 0; i < maxn; i++) for (int j = 0; j < maxn; j++) {
-				res.x[i][j] = (x[i][j] + A.x[i][j]) % mod;
-			}
+			res.x[i][j] = (x[i][j] + A.x[i][j]) % mod;
+		}
 		return res;
 	}
 	matrix operator * (matrix A) {
 		matrix res;
 		for (int i = 0; i < maxn; i++) for (int j = 0; j < maxn; j++) {
-				for (int k = 0; k < maxn; k++) res.x[i][j] = (res.x[i][j] + x[i][k] * A.x[k][j]) % mod;
-			}
+			for (int k = 0; k < maxn; k++) res.x[i][j] = (res.x[i][j] + x[i][k] * A.x[k][j]) % mod;
+		}
 		return res;
 	}
 	matrix operator ^ (long long k) {
 		matrix res, tmp;
 		for (int i = 0; i < maxn; i++) for (int j = 0; j < maxn; j++) {
-				res.x[i][j] = tmp.x[i][j] = x[i][j];
-			}
+			res.x[i][j] = tmp.x[i][j] = x[i][j];
+		}
 		k--;
 		while (k) {
 			if (k & 1) res = res * tmp;
