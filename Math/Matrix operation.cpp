@@ -40,11 +40,11 @@ struct matrix {
 		}
 		return res;
 	}
-	friend matrix cal(matrix A, long long k) {
+	friend matrix sumpower(matrix A, long long k) {
 		if (k == 1) return A;
-		if (k & 1) return (A ^ k) + cal(A, k - 1);
+		if (k & 1) return (A ^ k) + sumpower(A, k - 1);
 		k >>= 1;
-		matrix tmp = cal(A, k);
+		matrix tmp = sumpower(A, k);
 		return tmp + (tmp * (A ^ k));
 	}
 };
