@@ -1,12 +1,12 @@
 #include <bits/stdc++.h>
 using namespace std;
 
-const int maxn = 100010;
-const int maxc = 26;
+const int MAXN = 100010;
+const int MAXC = 26;
 
 struct Node {
 	Node* parent;
-	Node* child[maxc];
+	Node* child[MAXC];
 	Node* bfail;
 	Node* gfail;
 	int key;
@@ -15,10 +15,10 @@ struct Node {
 		bfail = 0;
 		key = -1;
 	}
-} node[maxn];
+} node[MAXN];
 
 Node* alloc = node;
-Node* q[maxn];
+Node* q[MAXN];
 Node* root = alloc++;
 
 Node* insert(Node* x, char* s, int key) {
@@ -41,7 +41,7 @@ void pushlink(Node* root) {
 	q[e++] = root;
 	while (b < e) {
 		Node* x = q[b++];
-		for (int i = 0; i < maxc; i++) {
+		for (int i = 0; i < MAXC; i++) {
 			if (x->child[i]) q[e++] = x->child[i];
 		}
 		if (x == root || x->parent == root) {

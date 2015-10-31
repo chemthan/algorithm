@@ -2,18 +2,14 @@
 using namespace std;
 
 //O(nlogn)
-const int maxn = 100010;
-int fen[maxn];
-void add(int p, int val)
-{
-	for (; p < maxn; p += p & -p)
-		fen[p] += val;
+const int MAXN = 100010;
+int fen[MAXN];
+void add(int p, int val) {
+	for (; p < MAXN; p += p & -p) fen[p] += val;
 }
-int get(int p)
-{
+int get(int p) {
 	int res = 0;
-	for (; p > 0; p -= p & -p)
-		res += fen[p];
+	for (; p > 0; p -= p & -p) res += fen[p];
 	return res;
 }
 

@@ -1,35 +1,36 @@
 #include <bits/stdc++.h>
 using namespace std;
 
-const int maxn = 100;
-const int mod = 1000000007;
+const int MAXN = 100;
+const int MOD = 1000000007;
 struct matrix {
-	long long x[maxn][maxn];
+	int x[MAXN][MAXN];
 	matrix() {
 		memset(x, 0, sizeof(x));
 	}
 	matrix unit() {
 		matrix res;
-		for (int i = 0; i < maxn; i++) res.x[i][i] = 1;
+		for (int i = 0; i < MAXN; i++) res.x[i][i] = 1;
 		return res;
 	}
 	matrix operator + (matrix A) {
 		matrix res;
-		for (int i = 0; i < maxn; i++) for (int j = 0; j < maxn; j++) {
-			res.x[i][j] = (x[i][j] + A.x[i][j]) % mod;
+		for (int i = 0; i < MAXN; i++) for (int j = 0; j < MAXN; j++) {
+			res.x[i][j] = (x[i][j] + A.x[i][j]) % MOD;
 		}
 		return res;
 	}
 	matrix operator * (matrix A) {
 		matrix res;
-		for (int i = 0; i < maxn; i++) for (int j = 0; j < maxn; j++) {
-			for (int k = 0; k < maxn; k++) res.x[i][j] = (res.x[i][j] + x[i][k] * A.x[k][j]) % mod;
+		for (int i = 0; i < MAXN; i++) for (int j = 0; j < MAXN; j++) {
+			for (int k = 0; k < MAXN; k++) res.x[i][j] = (res.x[i][j] + 1LL * x[i][k] * A.x[k][j]) % MOD;
 		}
 		return res;
 	}
 	matrix operator ^ (long long k) {
+		if (!k) return unit();
 		matrix res, tmp;
-		for (int i = 0; i < maxn; i++) for (int j = 0; j < maxn; j++) {
+		for (int i = 0; i < MAXN; i++) for (int j = 0; j < MAXN; j++) {
 			res.x[i][j] = tmp.x[i][j] = x[i][j];
 		}
 		k--;

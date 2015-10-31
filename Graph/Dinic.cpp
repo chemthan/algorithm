@@ -2,11 +2,11 @@
 using namespace std;
 
 //O(|V|^2 * |E|)
-#define maxv 1000010
-#define maxe 1000010
+#define MAXV 1010
+#define MAXE 1000010
 #define inf 1000000000
 struct Dinic {
-	int n, s, t, E, adj[maxe], flow[maxe], cap[maxe], next[maxe], last[maxv], run[maxv], level[maxv], que[maxv];
+	int n, s, t, E, adj[MAXE], flow[MAXE], cap[MAXE], next[MAXE], last[MAXV], run[MAXV], level[MAXV], que[MAXV];
 	void init(int _n, int _s, int _t) {
 		n = _n; s = _s; t = _t; E = 0;
 		for (int i = 0; i <= n; i++) last[i] = -1;

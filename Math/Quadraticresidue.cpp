@@ -2,8 +2,8 @@
 using namespace std;
 
 //Find x such that x * x = a [mod]
-const int maxn = 100010;
-long long qn[maxn];
+const int MAXN = 100010;
+long long qn[MAXN];
 long long ex(long long n, long long k, long long mod) {
 	if (k == 0) return 1;
 	if (k % 2 == 1) return n * ex(n, k - 1, mod) % mod;

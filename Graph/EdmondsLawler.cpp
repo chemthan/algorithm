@@ -1,14 +1,13 @@
 #include <bits/stdc++.h>
 using namespace std;
 
-//EdmondsLawler
 //O(|E| * |V| ^ 1/2)
 //index from 1
-#define maxv 1000010
-#define maxe 1000010
+#define MAXV 1010
+#define MAXE 1000010
 struct EdmondsLawler {
-	int n, E, start, finish, newRoot, qsize, adj[maxe], next[maxe], last[maxv], mat[maxv], que[maxv], dad[maxv], root[maxv];
-	bool inque[maxv], inpath[maxv], inblossom[maxv];
+	int n, E, start, finish, newRoot, qsize, adj[MAXE], next[MAXE], last[MAXV], mat[MAXV], que[MAXV], dad[MAXV], root[MAXV];
+	bool inque[MAXV], inpath[MAXV], inblossom[MAXV];
 	void init(int _n) {
 		n = _n; E = 0;
 		for (int x = 1; x <= n; x++) {last[x] = -1; mat[x] = 0;}

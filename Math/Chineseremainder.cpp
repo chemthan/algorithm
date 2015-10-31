@@ -3,9 +3,9 @@ using namespace std;
 
 //Chinese Remainder theorem
 //Return -1 if there is no solution
-const int maxn = 100010;
+const int MAXN = 100010;
 int n;
-long long p[maxn], r[maxn], b[maxn], x[maxn];
+long long p[MAXN], r[MAXN], b[MAXN], x[MAXN];
 pair<long long, long long> euclid(long long a, long long b) {
 	if (b == 0) return make_pair(1, 0);
 	pair <long long, long long> r = euclid(b, a % b);

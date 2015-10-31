@@ -1,10 +1,10 @@
 #include <bits/stdc++.h>
 using namespace std;
 
-const int maxn = 100010;
-const int maxc = 26;
+const int MAXN = 100010;
+const int MAXC = 26;
 
-int key[maxn], next[maxn], ptrlist, nil;
+int key[MAXN], next[MAXN], ptrlist, nil;
 
 struct List {
 	int head, tail;
@@ -34,8 +34,8 @@ struct List {
 	}
 };
 
-int go[maxn][maxc], fail[maxn], ptrtrie, que[maxn], qsize;
-List out[maxn];
+int go[MAXN][MAXC], fail[MAXN], ptrtrie, que[MAXN], qsize;
+List out[MAXN];
 
 void init() {
 	nil = ptrlist = -1;
@@ -61,13 +61,13 @@ void add(char s[], int len, int key) {
 
 void build() {
 	qsize = 0;
-	for (int c = 0; c < maxc; c++) if (go[0][c]) {
+	for (int c = 0; c < MAXC; c++) if (go[0][c]) {
 			fail[go[0][c]] = 0;
 			que[qsize++] = go[0][c];
 		}
 	for (int i = 0; i < qsize; i++) {
 		int r = que[i];
-		for (int c = 0; c < maxc; c++) {
+		for (int c = 0; c < MAXC; c++) {
 			int u = go[r][c];
 			if (u < 0) go[r][c] = go[fail[r]][c];
 			else {
@@ -92,7 +92,6 @@ void search(char s[], int len) {
 		}
 	}
 }
-
 
 int main() {
 	init();

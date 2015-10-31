@@ -3,10 +3,10 @@ using namespace std;
 
 //O(|E| * |V| ^ 1/2)
 //Index from 1
-#define maxv 1000010
-#define maxe 1000010
+#define MAXV 1010
+#define MAXE 1000010
 struct HopcroftKarp {
-	int nx, ny, E, adj[maxe], next[maxe], last[maxv], run[maxv], level[maxv], que[maxv], matx[maxv], maty[maxv];
+	int nx, ny, E, adj[MAXE], next[MAXE], last[MAXV], run[MAXV], level[MAXV], que[MAXV], matx[MAXV], maty[MAXV];
 	void init(int _nx, int _ny) {
 		nx = _nx; ny = _ny;
 		E = 0; memset(last, -1, sizeof(last));

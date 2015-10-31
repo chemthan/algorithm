@@ -2,10 +2,10 @@
 using namespace std;
 
 //O(nlogn)
-int const maxn = 100010;
-int b[maxn];
-char T[maxn];
-char P[maxn];
+int const MAXN = 100010;
+int b[MAXN];
+char T[MAXN];
+char P[MAXN];
 int nT, nP;
 void preprocess() {
 	int i = 0, j = -1; b[0] = -1;

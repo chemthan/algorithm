@@ -3,13 +3,13 @@ using namespace std;
 
 const int base = 1000000000;
 const int basedigit = 9;
-struct bigint {
+struct Bigint {
 	vector<int> a;
 	int sign;
-	bigint() : sign(1) {}
-	bigint(long long v) {*this = v;}
-	bigint(const string& s) {read(s);}
-	void operator = (const bigint& v) {sign = v.sign; a = v.a;}
+	Bigint() : sign(1) {}
+	Bigint(long long v) {*this = v;}
+	Bigint(const string& s) {read(s);}
+	void operator = (const Bigint& v) {sign = v.sign; a = v.a;}
 	void operator = (long long v) {
 		sign = 1;
 		if (v < 0)
@@ -17,9 +17,9 @@ struct bigint {
 		for (; v > 0; v = v / base)
 			a.push_back(v % base);
 	}
-	bigint operator + (const bigint& v) const {
+	Bigint operator + (const Bigint& v) const {
 		if (sign == v.sign) {
-			bigint res = v;
+			Bigint res = v;
 			for (int i = 0, carry = 0; i < (int) max(a.size(), v.a.size()) || carry; ++i) {
 				if (i == (int) res.a.size()) res.a.push_back(0);
 				res.a[i] += carry + (i < (int) a.size() ? a[i] : 0);
@@ -30,10 +30,10 @@ struct bigint {
 		}
 		return *this - (-v);
 	}
-	bigint operator - (const bigint& v) const {
+	Bigint operator - (const Bigint& v) const {
 		if (sign == v.sign) {
 			if (abs() >= v.abs()) {
-				bigint res = *this;
+				Bigint res = *this;
 				for (int i = 0, carry = 0; i < (int) v.a.size() || carry; ++i) {
 					res.a[i] -= carry + (i < (int) v.a.size() ? v.a[i] : 0);
 					carry = res.a[i] < 0;
@@ -57,16 +57,16 @@ struct bigint {
 		}
 		trim();
 	}
-	bigint operator * (int v) const {
-		bigint res = *this;
+	Bigint operator * (int v) const {
+		Bigint res = *this;
 		res *= v;
 		return res;
 	}
-	friend pair<bigint, bigint> divmod(const bigint& a1, const bigint& b1) {
+	friend pair<Bigint, Bigint> divmod(const Bigint& a1, const Bigint& b1) {
 		int norm = base / (b1.a.back() + 1);
-		bigint a = a1.abs() * norm;
-		bigint b = b1.abs() * norm;
-		bigint q, r;
+		Bigint a = a1.abs() * norm;
+		Bigint b = b1.abs() * norm;
+		Bigint q, r;
 		q.a.resize(a.a.size());
 		for (int i = a.a.size() - 1; i >= 0; i--) {
 			r *= base;
@@ -85,10 +85,10 @@ struct bigint {
 		r.trim();
 		return make_pair(q, r / norm);
 	}
-	bigint operator / (const bigint& v) const {
+	Bigint operator / (const Bigint& v) const {
 		return divmod(*this, v).first;
 	}
-	bigint operator % (const bigint& v) const {
+	Bigint operator % (const Bigint& v) const {
 		return divmod(*this, v).second;
 	}
 	void operator /= (int v) {
@@ -100,8 +100,8 @@ struct bigint {
 		}
 		trim();
 	}
-	bigint operator / (int v) const {
-		bigint res = *this;
+	Bigint operator / (int v) const {
+		Bigint res = *this;
 		res /= v;
 		return res;
 	}
@@ -111,37 +111,37 @@ struct bigint {
 		for (int i = a.size() - 1; i >= 0; --i) m = (a[i] + m * (long long) base) % v;
 		return m * sign;
 	}
-	void operator += (const bigint& v) {
+	void operator += (const Bigint& v) {
 		*this = *this + v;
 	}
-	void operator -= (const bigint& v) {
+	void operator -= (const Bigint& v) {
 		*this = *this - v;
 	}
-	void operator *= (const bigint& v) {
+	void operator *= (const Bigint& v) {
 		*this = *this * v;
 	}
-	void operator /= (const bigint& v) {
+	void operator /= (const Bigint& v) {
 		*this = *this / v;
 	}
-	bool operator < (const bigint& v) const {
+	bool operator < (const Bigint& v) const {
 		if (sign != v.sign) return sign < v.sign;
 		if (a.size() != v.a.size()) return a.size() * sign < v.a.size() * v.sign;
 		for (int i = a.size() - 1; i >= 0; i--) if (a[i] != v.a[i]) return a[i] * sign < v.a[i] * sign;
 		return false;
 	}
-	bool operator > (const bigint& v) const {
+	bool operator > (const Bigint& v) const {
 		return v < *this;
 	}
-	bool operator <= (const bigint& v) const {
+	bool operator <= (const Bigint& v) const {
 		return !(v < *this);
 	}
-	bool operator >= (const bigint& v) const {
+	bool operator >= (const Bigint& v) const {
 		return !(*this < v);
 	}
-	bool operator == (const bigint& v) const {
+	bool operator == (const Bigint& v) const {
 		return !(*this < v) && !(v < *this);
 	}
-	bool operator != (const bigint& v) const {
+	bool operator != (const Bigint& v) const {
 		return *this < v || v < *this;
 	}
 	void trim() {
@@ -151,13 +151,13 @@ struct bigint {
 	bool isZero() const {
 		return a.empty() || (a.size() == 1 && !a[0]);
 	}
-	bigint operator - () const {
-		bigint res = *this;
+	Bigint operator - () const {
+		Bigint res = *this;
 		res.sign = -sign;
 		return res;
 	}
-	bigint abs() const {
-		bigint res = *this;
+	Bigint abs() const {
+		Bigint res = *this;
 		res.sign *= res.sign;
 		return res;
 	}
@@ -166,10 +166,10 @@ struct bigint {
 		for (int i = a.size() - 1; i >= 0; i--) res = res * base + a[i];
 		return res * sign;
 	}
-	friend bigint gcd(const bigint& a, const bigint& b) {
+	friend Bigint gcd(const Bigint& a, const Bigint& b) {
 		return b.isZero() ? a : gcd(b, a % b);
 	}
-	friend bigint lcm(const bigint& a, const bigint& b) {
+	friend Bigint lcm(const Bigint& a, const Bigint& b) {
 		return a / gcd(a, b) * b;
 	}
 	void read(const string& s) {
@@ -182,11 +182,11 @@ struct bigint {
 		}
 		trim();
 	}
-	friend istream& operator>>(istream& stream, bigint& v) {
+	friend istream& operator>>(istream& stream, Bigint& v) {
 		string s; stream>>s; v.read(s);
 		return stream;
 	}
-	friend ostream& operator<<(ostream& stream, const bigint& v) {
+	friend ostream& operator<<(ostream& stream, const Bigint& v) {
 		if (v.sign == -1) stream << '-';
 		stream<<(v.a.empty() ? 0 : v.a.back());
 		for (int i = (int) v.a.size() - 2; i >= 0; --i) stream << setw(basedigit) << setfill('0') << v.a[i];
@@ -239,7 +239,7 @@ struct bigint {
 		for (int i = 0; i < (int) a2b2.size(); i++) res[i + n] += a2b2[i];
 		return res;
 	}
-	bigint operator * (const bigint& v) const {
+	Bigint operator * (const Bigint& v) const {
 		vector<int> a6 = convert_base(this->a, basedigit, 6);
 		vector<int> b6 = convert_base(v.a, basedigit, 6);
 		vll a(a6.begin(), a6.end());
@@ -248,7 +248,7 @@ struct bigint {
 		while (b.size() < a.size()) b.push_back(0);
 		while (a.size() & (a.size() - 1)) a.push_back(0), b.push_back(0);
 		vll c = karatsubaMultiply(a, b);
-		bigint res;
+		Bigint res;
 		res.sign = sign * v.sign;
 		for (int i = 0, carry = 0; i < (int) c.size(); i++) {
 			long long cur = c[i] + carry;
@@ -259,8 +259,8 @@ struct bigint {
 		res.trim();
 		return res;
 	}
-	friend bigint sqrt(const bigint& a) {
-		bigint x0 = a, x1 = (a + 1) / 2;
+	friend Bigint sqrt(const Bigint& a) {
+		Bigint x0 = a, x1 = (a + 1) / 2;
 		while (x1 < x0) {
 			x0 = x1;
 			x1 = (x1 + a / x1) / 2;
@@ -270,8 +270,8 @@ struct bigint {
 };
 
 int main() {
-	bigint n = bigint("123123123123123");
-	bigint m = bigint("1232131238493589354");
+	Bigint n = Bigint("123123123123123");
+	Bigint m = Bigint("1232131238493589354");
 	cout<<n * m;
 	return 0;
 }

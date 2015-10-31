@@ -1,15 +1,14 @@
 #include <bits/stdc++.h>
 using namespace std;
 
-//O(n(logn)^2)
-const int maxx = 1010;
-const int maxy = 1010;
-int fen[maxx][maxy];
-void add(int x , int y , int val) {
-	int y1;
-	while (x <= maxx) {
-		y1 = y;
-		while (y1 <= maxy) {
+//O((logn)^2)
+const int MAXX = 1010;
+const int MAXY = 1010;
+int fen[MAXX][MAXY];
+void add(int x, int y, int val) {
+	while (x < MAXX) {
+		int y1 = y;
+		while (y1 < MAXY) {
 			fen[x][y1] += val;
 			y1 += y1 & -y1;
 		}

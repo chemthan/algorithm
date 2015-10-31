@@ -3,12 +3,12 @@ using namespace std;
 
 //MincostFlow
 //O(|V|^4 * MAX_EDGE_COST)
-#define maxv 1000010
-#define maxe 1000010
-#define linf 1000000000000000000LL
+#define MAXV 1010
+#define MAXE 1000010
+#define LINF 1000000000000000000LL
 struct MincostFlow {
-	int n, s, t, E, adj[maxe], next[maxe], last[maxv], which[maxv];
-	long long totalCost, totalFlow, cap[maxe], flow[maxe], cost[maxe], pot[maxe], dist[maxv];
+	int n, s, t, E, adj[MAXE], next[MAXE], last[MAXV], which[MAXV];
+	long long totalCost, totalFlow, cap[MAXE], flow[MAXE], cost[MAXE], pot[MAXE], dist[MAXV];
 	void init(int _n, int _s, int _t) {
 		n = _n; s = _s; t = _t;
 		memset(last, -1, sizeof(last)); E = 0;
@@ -34,7 +34,7 @@ struct MincostFlow {
 	bool dijkstra() {
 		typedef pair<long long, int> node;
 		priority_queue<node, vector<node>, greater<node> > que;
-		for (int u = 0; u < n; u++) dist[u] = linf;
+		for (int u = 0; u < n; u++) dist[u] = LINF;
 		dist[s] = 0;
 		que.push(make_pair(0, s));
 		while (!que.empty()) {
@@ -52,9 +52,9 @@ struct MincostFlow {
 				}
 			}
 		}
-		return dist[t] < linf;
+		return dist[t] < LINF;
 	}
-	bool maxflow(long long desireFlow = linf) {
+	bool maxflow(long long desireFlow = LINF) {
 		totalCost = totalFlow = 0;
 		bellman();
 		while (totalFlow < desireFlow) {

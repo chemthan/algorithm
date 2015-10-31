@@ -1,14 +1,14 @@
 #include <bits/stdc++.h>
 using namespace std;
 
-const int maxn = 100010;
-bool flag[maxn];
-int sp[maxn];
+const int MAXN = 100010;
+bool flag[MAXN];
+int sp[MAXN];
 void Sieve() {
-	for (int i = 2; i < maxn; i += 2) sp[i] = 2;
-	for (int i = 3; i < maxn; i += 2) if (!flag[i]) {
+	for (int i = 2; i < MAXN; i += 2) sp[i] = 2;
+	for (int i = 3; i < MAXN; i += 2) if (!flag[i]) {
 		sp[i] = i;
-		for (int j = i; 1LL * i * j < maxn; j += 2) if (!flag[i * j]) {
+		for (int j = i; 1LL * i * j < MAXN; j += 2) if (!flag[i * j]) {
 			flag[i * j] = 1;
 			sp[i * j] = i;
 		}

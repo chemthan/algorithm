@@ -1,14 +1,14 @@
 #include <bits/stdc++.h>
 using namespace std;
 
-#define maxv 200010
+#define MAXV 200010
 #define pos(v) ((v) << 1)
 #define neg(v) (pos(v) ^ 1)
-namespace twosat {
+namespace Twosat {
 	int n;
-	vector<int> forward[maxv], backward[maxv];
-	bool used[maxv];
-	int cnt, order[maxv], comp[maxv];
+	vector<int> forward[MAXV], backward[MAXV];
+	bool used[MAXV];
+	int cnt, order[MAXV], comp[MAXV];
 	void init(int _n) {
 		n = _n;
 		for (int i = 0; i < n; i++) {

@@ -2,14 +2,14 @@
 using namespace std;
 
 //O(nlogn)
-const int maxn = 100010;
-char T[maxn];
+const int MAXN = 100010;
+char T[MAXN];
 int nlen;
-int RA[maxn], tempRA[maxn];
-int SA[maxn], tempSA[maxn];
-int c[maxn];
-int Phi[maxn], PLCP[maxn];
-int LCP[maxn];
+int RA[MAXN], tempRA[MAXN];
+int SA[MAXN], tempSA[MAXN];
+int c[MAXN];
+int Phi[MAXN], PLCP[MAXN];
+int LCP[MAXN];
 void countingsort(int k) {
 	int sum = 0, maxi = max(300, nlen);
 	memset(c, 0, sizeof(c));

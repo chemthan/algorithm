@@ -3,23 +3,23 @@ using namespace std;
 
 //O(n^3)
 //Index from 1
-#define maxn 1010
-#define inf 1000000000
+#define MAXN 1010
+#define INF 1000000000
 struct Hungary {
-	int nx, ny, cost[maxn][maxn], fx[maxn], fy[maxn], maty[maxn], which[maxn], dist[maxn];
-	bool used[maxn];
+	int nx, ny, cost[MAXN][MAXN], fx[MAXN], fy[MAXN], maty[MAXN], which[MAXN], dist[MAXN];
+	bool used[MAXN];
 	void init(int _nx, int _ny) {
 		nx = _nx; ny = _ny; memset(fx, 0, sizeof(fx)); memset(fy, 0, sizeof(fy)); memset(maty, 0, sizeof(maty));
-		for (int i = 0; i <= nx; i++) for (int j = 0; j <= ny; j++) cost[i][j] = inf;
+		for (int i = 0; i <= nx; i++) for (int j = 0; j <= ny; j++) cost[i][j] = INF;
 	}
 	void add(int x, int y, int c) {cost[x][y] = c;}
 	int mincost() {
 		for (int x = 1; x <= nx; x++) {
 			int y0 = 0; maty[0] = x;
-			for (int y = 0; y <= ny; y++) {dist[y] = inf + 1; used[y] = false;}
+			for (int y = 0; y <= ny; y++) {dist[y] = INF + 1; used[y] = false;}
 			do {
 				used[y0] = true;
-				int x0 = maty[y0], delta = inf + 1, y1;
+				int x0 = maty[y0], delta = INF + 1, y1;
 				for (int y = 1; y <= ny; y++) if (!used[y]) {
 					int curdist = cost[x0][y] - fx[x0] - fy[y];
 					if (curdist < dist[y]) {
@@ -50,7 +50,7 @@ struct Hungary {
 		int ret = 0;
 		for (int y = 1; y <= ny; y++) {
 			int x = maty[y];
-			if (cost[x][y] < inf) ret += cost[x][y];
+			if (cost[x][y] < INF) ret += cost[x][y];
 		}
 		return ret;
 	}
