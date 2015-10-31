@@ -4,7 +4,7 @@ using namespace std;
 //O(|V|^2 * |E|)
 #define MAXV 1010
 #define MAXE 1000010
-#define inf 1000000000
+#define INF 1000000000
 struct Dinic {
 	int n, s, t, E, adj[MAXE], flow[MAXE], cap[MAXE], next[MAXE], last[MAXV], run[MAXV], level[MAXV], que[MAXV];
 	void init(int _n, int _s, int _t) {
@@ -46,7 +46,7 @@ struct Dinic {
 		int total = 0;
 		while (bfs()) {
 			for (int i = 0; i <= n; i++) run[i] = last[i];
-			for (int delta = dfs(s, inf); delta > 0; delta = dfs(s, inf)) total += delta;
+			for (int delta = dfs(s, INF); delta > 0; delta = dfs(s, INF)) total += delta;
 		}
 		return total;
 	}
