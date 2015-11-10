@@ -5,7 +5,7 @@ const int MAXN = 100010;
 int inv[MAXN];
 void build(int p) {
 	inv[1] = 1;
-	for (int i = 2; i < p; i++) inv[i] = (p - (p / i) * inv[p % i] % p) % p;
+	for (int i = 2; i < MAXN; i++) inv[i] = (p - 1LL * (p / i) * inv[p % i] % p) % p;
 }
 
 int main() {
