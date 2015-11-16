@@ -2,6 +2,7 @@
 using namespace std;
 
 const double EPS = 1e-9;
+
 struct Point {
 	double x, y;
 	Point() {}
@@ -14,6 +15,7 @@ struct Point {
 	Point operator * (double c) const {return Point(x * c, y * c);}
 	Point operator / (double c) const {return Point(x / c, y / c);}
 };
+
 double cross(Point p, Point q) {return p.x * q.y - p.y * q.x;}
 double area(Point a, Point b, Point c) {return fabs(cross(a, b) + cross(b, c) + cross(c, a)) / 2;}
 double area2(Point a, Point b, Point c) {return cross(a, b) + cross(b, c) + cross(c, a);}
@@ -23,9 +25,8 @@ double dist2(Point p, Point q) {return dot(p - q, p - q);}
 
 Point RotateCCW90(Point p) {return Point(-p.y, p.x);}
 Point RotateCW90(Point p) {return Point(p.y, -p.x);}
-Point RotateCCW(Point p, double t) {
-	return Point(p.x * cos(t) - p.y * sin(t), p.x * sin(t) + p.y * cos(t));
-}
+Point RotateCCW(Point p, double t) {return Point(p.x * cos(t) - p.y * sin(t), p.x * sin(t) + p.y * cos(t));}
+
 Point ProjectPointLine(Point a, Point b, Point c) {
 	return a + (b - a) * dot(c - a, b - a) / dot(b - a, b - a);
 }
