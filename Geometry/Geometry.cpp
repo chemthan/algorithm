@@ -69,7 +69,6 @@ bool SegmentsIntersect(Point a, Point b, Point c, Point d) {
 //segments intersect first
 Point ComputeLineIntersection(Point a, Point b, Point c, Point d) {
 	b = b - a; d = c - d; c = c - a;
-	assert(dot(b, b) > EPS && dot(d, d) > EPS);
 	return a + b * cross(c, d) / cross(b, d);
 }
 //Compute center of circle given three points
