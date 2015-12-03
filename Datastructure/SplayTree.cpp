@@ -65,16 +65,20 @@ void splay(node* x) {
 		if (!x->p->p) {
 			if (x->p->l == x) rrotate(x->p);
 			else lrotate(x->p);
-		} else if (x->p->l == x && x->p->p->l == x->p) {
+		}
+		else if (x->p->l == x && x->p->p->l == x->p) {
 			rrotate(x->p->p);
 			rrotate(x->p);
-		} else if (x->p->r == x && x->p->p->r == x->p) {
+		}
+		else if (x->p->r == x && x->p->p->r == x->p) {
 			lrotate(x->p->p);
 			lrotate(x->p);
-		} else if (x->p->l == x && x->p->p->r == x->p) {
+		}
+		else if (x->p->l == x && x->p->p->r == x->p) {
 			rrotate(x->p);
 			lrotate(x->p);
-		} else {
+		}
+		else {
 			lrotate(x->p);
 			rrotate(x->p);
 		}
@@ -175,10 +179,11 @@ void split(int i, node*& x, node*& y) {
 int main() {
 	insert(3); insert(4); insert(5);
 	cout<<root->key<<"\n";
-	//Result: 5
 	node *x, *y;
 	split(4, x, y);
 	cout<<x->key<<" "<<y->key<<"\n";
-	//Result: 4 5
+	//Result:
+	//5
+	//4 5
 	return 0;
 }
