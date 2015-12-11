@@ -182,8 +182,5 @@ int main() {
 	node *x, *y;
 	split(4, x, y);
 	cout<<x->key<<" "<<y->key<<"\n";
-	//Result:
-	//5
-	//4 5
 	return 0;
 }
