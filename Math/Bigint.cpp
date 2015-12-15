@@ -1,8 +1,9 @@
 #include <bits/stdc++.h>
 using namespace std;
 
-const int base = 1000000000;
-const int basedigit = 9;
+const int base = 10;
+const int nblock = 9;
+const int blockbase = (int) round(pow(base, nblock));
 struct Bigint {
 	vector<int> a;
 	int sign;
@@ -14,17 +15,17 @@ struct Bigint {
 		sign = 1;
 		if (v < 0)
 			sign = -1, v = -v;
-		for (; v > 0; v = v / base)
-			a.push_back(v % base);
+		for (; v > 0; v = v / blockbase)
+			a.push_back(v % blockbase);
 	}
 	Bigint operator + (const Bigint& v) const {
 		if (sign == v.sign) {
 			Bigint res = v;
-			for (int i = 0, carry = 0; i < (int) max(a.size(), v.a.size()) || carry; ++i) {
+			for (int i = 0, carry = 0; i < (int) max(a.size(), v.a.size()) || carry; i++) {
 				if (i == (int) res.a.size()) res.a.push_back(0);
 				res.a[i] += carry + (i < (int) a.size() ? a[i] : 0);
-				carry = res.a[i] >= base;
-				if (carry) res.a[i] -= base;
+				carry = res.a[i] >= blockbase;
+				if (carry) res.a[i] -= blockbase;
 			}
 			return res;
 		}
@@ -34,10 +35,10 @@ struct Bigint {
 		if (sign == v.sign) {
 			if (abs() >= v.abs()) {
 				Bigint res = *this;
-				for (int i = 0, carry = 0; i < (int) v.a.size() || carry; ++i) {
+				for (int i = 0, carry = 0; i < (int) v.a.size() || carry; i++) {
 					res.a[i] -= carry + (i < (int) v.a.size() ? v.a[i] : 0);
 					carry = res.a[i] < 0;
-					if (carry) res.a[i] += base;
+					if (carry) res.a[i] += blockbase;
 				}
 				res.trim();
 				return res;
@@ -48,12 +49,11 @@ struct Bigint {
 	}
 	void operator *= (int v) {
 		if (v < 0) sign = -sign, v = -v;
-		for (int i = 0, carry = 0; i < (int) a.size() || carry; ++i) {
+		for (int i = 0, carry = 0; i < (int) a.size() || carry; i++) {
 			if (i == (int) a.size()) a.push_back(0);
 			long long cur = a[i] * (long long) v + carry;
-			carry = (int) (cur / base);
-			a[i] = (int) (cur % base);
-			//asm("divl %%ecx" : "=a"(carry), "=d"(a[i]) : "A"(cur), "c"(base));
+			carry = (int) (cur / blockbase);
+			a[i] = (int) (cur % blockbase);
 		}
 		trim();
 	}
@@ -63,20 +63,20 @@ struct Bigint {
 		return res;
 	}
 	friend pair<Bigint, Bigint> divmod(const Bigint& a1, const Bigint& b1) {
-		int norm = base / (b1.a.back() + 1);
+		int norm = blockbase / (b1.a.back() + 1);
 		Bigint a = a1.abs() * norm;
 		Bigint b = b1.abs() * norm;
 		Bigint q, r;
 		q.a.resize(a.a.size());
 		for (int i = a.a.size() - 1; i >= 0; i--) {
-			r *= base;
+			r *= blockbase;
 			r += a.a[i];
 			int s1 = r.a.size() <= b.a.size() ? 0 : r.a[b.a.size()];
 			int s2 = r.a.size() <= b.a.size() - 1 ? 0 : r.a[b.a.size() - 1];
-			int d = ((long long) base * s1 + s2) / b.a.back();
+			int d = ((long long) blockbase * s1 + s2) / b.a.back();
 			r -= b * d;
 			while (r < 0)
-				r += b, --d;
+				r += b, d--;
 			q.a[i] = d;
 		}
 		q.sign = a1.sign * b1.sign;
@@ -93,8 +93,8 @@ struct Bigint {
 	}
 	void operator /= (int v) {
 		if (v < 0) sign = -sign, v = -v;
-		for (int i = (int) a.size() - 1, rem = 0; i >= 0; --i) {
-			long long cur = a[i] + rem * (long long) base;
+		for (int i = (int) a.size() - 1, rem = 0; i >= 0; i--) {
+			long long cur = a[i] + rem * (long long) blockbase;
 			a[i] = (int) (cur / v);
 			rem = (int) (cur % v);
 		}
@@ -108,7 +108,7 @@ struct Bigint {
 	int operator % (int v) const {
 		if (v < 0) v = -v;
 		int m = 0;
-		for (int i = a.size() - 1; i >= 0; --i) m = (a[i] + m * (long long) base) % v;
+		for (int i = a.size() - 1; i >= 0; i--) m = (a[i] + m * (long long) blockbase) % v;
 		return m * sign;
 	}
 	void operator += (const Bigint& v) {
@@ -163,7 +163,7 @@ struct Bigint {
 	}
 	long long longValue() const {
 		long long res = 0;
-		for (int i = a.size() - 1; i >= 0; i--) res = res * base + a[i];
+		for (int i = a.size() - 1; i >= 0; i--) res = res * blockbase + a[i];
 		return res * sign;
 	}
 	friend Bigint gcd(const Bigint& a, const Bigint& b) {
@@ -174,10 +174,10 @@ struct Bigint {
 	}
 	void read(const string& s) {
 		sign = 1; a.clear(); int pos = 0;
-		while (pos < (int) s.size() && (s[pos] == '-' || s[pos] == '+')) {if (s[pos] == '-') sign = -sign; ++pos;}
-		for (int i = s.size() - 1; i >= pos; i -= basedigit) {
+		while (pos < (int) s.size() && (s[pos] == '-' || s[pos] == '+')) {if (s[pos] == '-') sign = -sign; pos++;}
+		for (int i = s.size() - 1; i >= pos; i -= nblock) {
 			int x = 0;
-			for (int j = max(pos, i - basedigit + 1); j <= i; j++) x = x * 10 + s[j] - '0';
+			for (int j = max(pos, i - nblock + 1); j <= i; j++) x = x * base + s[j] - '0';
 			a.push_back(x);
 		}
 		trim();
@@ -189,13 +189,13 @@ struct Bigint {
 	friend ostream& operator<<(ostream& stream, const Bigint& v) {
 		if (v.sign == -1) stream << '-';
 		stream<<(v.a.empty() ? 0 : v.a.back());
-		for (int i = (int) v.a.size() - 2; i >= 0; --i) stream << setw(basedigit) << setfill('0') << v.a[i];
+		for (int i = (int) v.a.size() - 2; i >= 0; i--) stream << setw(nblock) << setfill('0') << v.a[i];
 		return stream;
 	}
 	static vector<int> convert_base(const vector<int>& a, int old_digits, int new_digits) {
 		vector<long long> p(max(old_digits, new_digits) + 1);
 		p[0] = 1;
-		for (int i = 1; i < (int) p.size(); i++) p[i] = p[i - 1] * 10;
+		for (int i = 1; i < (int) p.size(); i++) p[i] = p[i - 1] * base;
 		vector<int> res;
 		long long cur = 0;
 		int cur_digits = 0;
@@ -240,10 +240,12 @@ struct Bigint {
 		return res;
 	}
 	Bigint operator * (const Bigint& v) const {
-		vector<int> a6 = convert_base(this->a, basedigit, 6);
-		vector<int> b6 = convert_base(v.a, basedigit, 6);
-		vll a(a6.begin(), a6.end());
-		vll b(b6.begin(), b6.end());
+		int r = 6;
+		int t = round(pow(base, r));
+		vector<int> ar = convert_base(this->a, nblock, r);
+		vector<int> br = convert_base(v.a, nblock, r);
+		vll a(ar.begin(), ar.end());
+		vll b(br.begin(), br.end());
 		while (a.size() < b.size()) a.push_back(0);
 		while (b.size() < a.size()) b.push_back(0);
 		while (a.size() & (a.size() - 1)) a.push_back(0), b.push_back(0);
@@ -252,10 +254,10 @@ struct Bigint {
 		res.sign = sign * v.sign;
 		for (int i = 0, carry = 0; i < (int) c.size(); i++) {
 			long long cur = c[i] + carry;
-			res.a.push_back((int) (cur % 1000000));
-			carry = (int) (cur / 1000000);
+			res.a.push_back((int) (cur % t));
+			carry = (int) (cur / t);
 		}
-		res.a = convert_base(res.a, 6, basedigit);
+		res.a = convert_base(res.a, r, nblock);
 		res.trim();
 		return res;
 	}
@@ -267,11 +269,28 @@ struct Bigint {
 		}
 		return x0;
 	}
+	friend Bigint pow(Bigint a, Bigint b) {
+		if (b == Bigint(0)) return Bigint(1);
+		Bigint T = pow(a, b / 2);
+		if (b % 2 == 0) return T * T;
+		return T * T * a;
+	}
+	friend Bigint pow(Bigint a, int b) {
+		return pow(a, (Bigint(b)));
+	}
+	friend int log(Bigint a, int n) {
+		int res = 0;
+		while (a > Bigint(1)) {
+			res++;
+			a /= n;
+		}
+		return res;
+	}
 };
 
 int main() {
-	Bigint n = Bigint("123123123123123");
-	Bigint m = Bigint("1232131238493589354");
+	Bigint n = Bigint("123456789");
+	Bigint m = Bigint("987654321");
 	cout<<n * m;
 	return 0;
 }

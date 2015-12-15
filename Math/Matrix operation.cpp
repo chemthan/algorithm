@@ -22,8 +22,8 @@ struct matrix {
 	}
 	matrix operator * (matrix A) {
 		matrix res;
-		for (int i = 0; i < MAXN; i++) for (int j = 0; j < MAXN; j++) {
-			for (int k = 0; k < MAXN; k++) res.x[i][j] = (res.x[i][j] + 1LL * x[i][k] * A.x[k][j]) % MOD;
+		for (int i = 0; i < MAXN; i++) for (int k = 0; k < MAXN; k++) for (int j = 0; j < MAXN; j++) {
+			res.x[i][j] = (res.x[i][j] + 1LL * x[i][k] * A.x[k][j]) % MOD;
 		}
 		return res;
 	}
@@ -45,8 +45,8 @@ struct matrix {
 		if (k == 1) return A;
 		if (k & 1) return (A ^ k) + sumpower(A, k - 1);
 		k >>= 1;
-		matrix tmp = sumpower(A, k);
-		return tmp + (tmp * (A ^ k));
+		matrix T = sumpower(A, k);
+		return T + (T * (A ^ k));
 	}
 };
 

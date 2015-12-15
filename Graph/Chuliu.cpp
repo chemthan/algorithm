@@ -99,7 +99,6 @@ namespace Chuliu {
 }
 
 int main() {
-	freopen("in.txt", "r", stdin);
 	Chuliu::init(4);
 	Chuliu::add(1, 0, 1, 2);
 	Chuliu::add(1, 1, 2, 8);
