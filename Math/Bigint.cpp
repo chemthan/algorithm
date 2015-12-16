@@ -212,10 +212,9 @@ struct Bigint {
 		while (!res.empty() && !res.back()) res.pop_back();
 		return res;
 	}
-	typedef vector<long long> vll;
-	static vll karatsubaMultiply(const vll& a, const vll& b) {
+	static vector<long long> karatsuba(vector<long long>& a, vector<long long>& b) {
 		int n = a.size();
-		vll res(n + n);
+		vector<long long> res(n << 1);
 		if (n <= 32) {
 			for (int i = 0; i < n; i++)
 				for (int j = 0; j < n; j++)
@@ -223,15 +222,15 @@ struct Bigint {
 			return res;
 		}
 		int k = n >> 1;
-		vll a1(a.begin(), a.begin() + k);
-		vll a2(a.begin() + k, a.end());
-		vll b1(b.begin(), b.begin() + k);
-		vll b2(b.begin() + k, b.end());
-		vll a1b1 = karatsubaMultiply(a1, b1);
-		vll a2b2 = karatsubaMultiply(a2, b2);
+		vector<long long> a1(a.begin(), a.begin() + k);
+		vector<long long> a2(a.begin() + k, a.end());
+		vector<long long> b1(b.begin(), b.begin() + k);
+		vector<long long> b2(b.begin() + k, b.end());
+		vector<long long> a1b1 = karatsuba(a1, b1);
+		vector<long long> a2b2 = karatsuba(a2, b2);
 		for (int i = 0; i < k; i++) a2[i] += a1[i];
 		for (int i = 0; i < k; i++) b2[i] += b1[i];
-		vll r = karatsubaMultiply(a2, b2);
+		vector<long long> r = karatsuba(a2, b2);
 		for (int i = 0; i < (int) a1b1.size(); i++) r[i] -= a1b1[i];
 		for (int i = 0; i < (int) a2b2.size(); i++) r[i] -= a2b2[i];
 		for (int i = 0; i < (int) r.size(); i++) res[i + k] += r[i];
@@ -244,12 +243,12 @@ struct Bigint {
 		int t = round(pow(base, r));
 		vector<int> ar = convert_base(this->a, nblock, r);
 		vector<int> br = convert_base(v.a, nblock, r);
-		vll a(ar.begin(), ar.end());
-		vll b(br.begin(), br.end());
+		vector<long long> a(ar.begin(), ar.end());
+		vector<long long> b(br.begin(), br.end());
 		while (a.size() < b.size()) a.push_back(0);
 		while (b.size() < a.size()) b.push_back(0);
 		while (a.size() & (a.size() - 1)) a.push_back(0), b.push_back(0);
-		vll c = karatsubaMultiply(a, b);
+		vector<long long> c = karatsuba(a, b);
 		Bigint res;
 		res.sign = sign * v.sign;
 		for (int i = 0, carry = 0; i < (int) c.size(); i++) {
