@@ -1,8 +1,8 @@
 #include <bits/stdc++.h>
 using namespace std;
 
-//Make ensure that a.size() is a power of 2
 vector<long long> karatsuba(vector<long long>& a, vector<long long>& b) {
+	while (a.size() & (a.size() - 1)) {a.push_back(0); b.push_back(0);}
 	int n = a.size();
 	vector<long long> res(n + n);
 	if (n <= 32) {
@@ -34,7 +34,7 @@ long long d[100010];
 int main() {
 	srand(time(NULL));
 	vector<long long> a, b;
-	int n = 1 << 10;
+	int n = 1000;
 	for (int i = 0; i < n; i++) a.push_back(rand() * rand() % 10000);
 	for (int i = 0; i < n; i++) b.push_back(rand() * rand() % 10000);
 	vector<long long> c = karatsuba(a, b);
