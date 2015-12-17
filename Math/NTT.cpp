@@ -8,22 +8,22 @@ const int maxn = 1 << 18;
 int E1, E2, F1, F2, I1, I2;
 int A[maxn << 1], B[maxn << 1], C[maxn << 1];
 int X[maxn], Y[maxn];
-long long mul(long long a, long long b, long long m) {
-	a %= m, b %= m;
-	long long res = 0;
+long long mul(long long a, long long b, long long p) {
+	a %= p; b %= p;
+	long long r = 0;
 	for (; b; b >>= 1) {
-		if (b & 1) res = (res + a) % m;
-		a = (a + a) % m;
+		if (b & 1) r = (r + a) % p;
+		a = (a + a) % p;
 	}
-	return res;
+	return r;
 }
-long long fpow(long long a, long long p, int mod) {
-	long long res = 1;
-	for (; p; p >>= 1) {
-		if (p & 1) res = (res * a) % mod;
-		a = (a * a) % mod;
+long long fpow(long long n, long long k, int p) {
+	long long r = 1;
+	for (; k; k >>= 1) {
+		if (k & 1) r = r * n % p;
+		n = n * n % p;
 	}
-	return res;
+	return r;
 }
 int CRT(int x1, int x2, int p) {
 	return (mul(M1, x1, MM) + mul(M2, x2, MM)) % MM % p;

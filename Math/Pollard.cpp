@@ -11,20 +11,25 @@ unsigned long long gcd(unsigned long long a, unsigned long long b) {
 	while (b != 0) {tmp = b; b = a % b; a = tmp;}
 	return a;
 }
-unsigned long long mod_mul(unsigned long long a, unsigned long long b, unsigned long long p) {
-	if (b == 0) return 0;
-	if (b == 1) return a % p;
-	unsigned long long x = mod_mul(a, b >> 1, p);
-	if ((b & 1) == 0) return (x << 1) % p;
-	else return (((x << 1) % p) + a) % p;
+long long mod64_mul(long long a, long long b, long long p) {
+	a %= p; b %= p;
+	long long r = 0;
+	int block = 10;
+	long long base = 1LL << block;
+	for (; b; b >>= block) {
+		r = (r + a * (b & (base - 1))) % p;
+		a = a * base % p;
+	}
+	return r;
 }
-unsigned long long mod_power(unsigned long long a, unsigned long long b, unsigned long long p) {
-	if (a == 0) return 0;
-	if (b == 0) return 1 % p;
-	if (b == 1) return a % p;
-	unsigned long long x = mod_power(a, b / 2, p);
-	if ((b & 1) == 0) return mod_mul(x, x, p);
-	else return (mod_mul(mod_mul(x, x, p), a, p));
+long long mod64_pow(long long n, long long k, long long p) {
+	if (!n) return 0;
+	long long r = 1;
+	for (; k; k >>= 1) {
+		if (k & 1) r = mod64_mul(r, n, p);
+		n = mod64_mul(n, n, p);
+	}
+	return r;
 }
 unsigned long long random64() {
 	unsigned long long n = 0;
@@ -42,11 +47,11 @@ int witness(unsigned long long a, unsigned long long N) {
 	unsigned long long m;
 	int k; decompose(N - 1, &k, &m);
 	unsigned long long B[k + 1];
-	B[0] = mod_power(a, m, N);
+	B[0] = mod64_pow(a, m, N);
 	if (B[0] == 1) return 1;
 	int i = 1;
 	while (i <= k) {
-		B[i] =  mod_mul(B[i - 1], B[i - 1], N);
+		B[i] =  mod64_mul(B[i - 1], B[i - 1], N);
 		if (B[i] == 1) {
 			if (B[i - 1] == N - 1) return 1;
 			else return 0;
@@ -60,7 +65,7 @@ int miller_rabin_testing(int acc, unsigned long long N) {
 	for (int i = 0; i <= acc; i++){
 		a = random64() % (N - 2) + 2;
 		if (gcd(a, N) != 1) return 0;
-		else if (mod_power(a, N - 1, N) != 1) return 0;
+		else if (mod64_pow(a, N - 1, N) != 1) return 0;
 		else if (witness(a, N) == 0) return 0;
 	}
 	return 1;
@@ -77,7 +82,7 @@ unsigned long long sqrt(unsigned long long N) {
 	return R;
 }
 unsigned long long next_prng(unsigned long long x, unsigned long long N) {
-	unsigned long long xs = mod_mul(x, x, N);
+	unsigned long long xs = mod64_mul(x, x, N);
 	return xs + 1ULL;
 }
 unsigned long long find_factor(unsigned long long N) {
@@ -137,8 +142,20 @@ void pollard_rho_fact(unsigned long long N) {
 }
 
 int main() {
-	pollard_rho_fact(123568412123568412LL);
+	srand(time(NULL));
+	unsigned long long n = random64();
+	pollard_rho_fact(n);
 	sort(Fa, Fa + nfact);
-	for (int i = 0; i < nfact; i++) printf("%lld ", Fa[i]);
+	unsigned long long t = 1;
+	for (int i = 0; i < nfact; i++) {
+		printf("%lld ", Fa[i]);
+		t *= Fa[i];
+	}
+	if (n != t) {
+		printf("\nWrong!");
+	}
+	else {
+		printf("\nCorrect!");
+	}
 	return 0;
 }
