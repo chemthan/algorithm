@@ -60,7 +60,6 @@ int init(int n) {
 	I2 = fpow(N, P2 - 2, P2);
 	return N;
 }
-
 void mul(int* a, int* b, int* c, int n, int p) {
 	int N = init(n);
 	memcpy(X, a, sizeof(*a) * n); memcpy(Y, b, sizeof(*b) * n);
