@@ -14,7 +14,7 @@ void fft(cplex a[], int n, bool invert) {
 		cplex wlen(cos(alpha), sin(alpha));
 		for (int i = 1; i < len2; i++) wlen_pw[i] = wlen_pw[i - 1] * wlen;
 		for (int i = 0; i < n; i += len) {
-			cplex t, *pu = a+i, *pv = a + i + len2, *pu_end = a + i + len2, *pw = wlen_pw;
+			cplex t, *pu = a + i, *pv = a + i + len2, *pu_end = a + i + len2, *pw = wlen_pw;
 			for (; pu != pu_end; pu++, pv++, pw++) {t = *pv **pw; *pv = *pu - t; *pu += t;}
 		}
 	}
