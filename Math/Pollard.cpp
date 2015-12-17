@@ -11,20 +11,20 @@ unsigned long long gcd(unsigned long long a, unsigned long long b) {
 	while (b != 0) {tmp = b; b = a % b; a = tmp;}
 	return a;
 }
-long long mod64_mul(long long a, long long b, long long p) {
+unsigned long long mod64_mul(unsigned long long a, unsigned long long b, unsigned long long p) {
 	a %= p; b %= p;
-	long long r = 0;
-	int block = 10;
-	long long base = 1LL << block;
+	unsigned long long r = 0;
+	int block = 1;
+	unsigned long long base = 1LL << block;
 	for (; b; b >>= block) {
 		r = (r + a * (b & (base - 1))) % p;
 		a = a * base % p;
 	}
 	return r;
 }
-long long mod64_pow(long long n, long long k, long long p) {
+unsigned long long mod64_pow(unsigned long long n, unsigned long long k, unsigned long long p) {
 	if (!n) return 0;
-	long long r = 1;
+	unsigned long long r = 1;
 	for (; k; k >>= 1) {
 		if (k & 1) r = mod64_mul(r, n, p);
 		n = mod64_mul(n, n, p);
