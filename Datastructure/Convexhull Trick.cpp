@@ -41,7 +41,7 @@ struct Convexhull {
 struct Node {
 	vector<pair<T, T> > line;
 	Convexhull hull;
-} null;
+};
 
 Node merge(Node n1, Node n2) {
 	Node res;
@@ -75,10 +75,10 @@ struct SegmentTree {
 		build((node << 1) + 1, ((L + R) >> 1) + 1, R);
 		st[node] = merge(st[node << 1], st[(node << 1) + 1]);
 	}
-	Node query(int node, int l, int r, int L, int R) {
-		if (l > R || r < L) return null;
-		if (l <= L && r >= R) return st[node];
-		return merge(query(node << 1, l, r, L, (L + R) >> 1), query((node << 1) + 1, l, r, ((L + R) >> 1) + 1, R));
+	T query(int node, int l, int r, int L, int R, T x) {
+		if (l > R || r < L) return oo;
+		if (l <= L && r >= R) return st[node].hull.query(x);
+		return min(query(node << 1, l, r, L, (L + R) >> 1, x), query((node << 1) + 1, l, r, ((L + R) >> 1) + 1, R, x));
 	}
 };
 
