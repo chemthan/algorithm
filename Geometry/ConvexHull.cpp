@@ -1,36 +1,37 @@
 #include <bits/stdc++.h>
 using namespace std;
 
-const double EPS = 1e-9;
-struct Point {
-	double x, y;
-	Point() {}
-	Point(double x, double y) : x(x), y(y) {}
-	Point(const Point& p) : x(p.x), y(p.y) {}
-	bool operator < (const Point& rhs) const {return make_pair(y, x) < make_pair(rhs.y, rhs.x);}
-	bool operator == (const Point& rhs) const {return make_pair(y, x) == make_pair(rhs.y, rhs.x);}
-	Point operator + (const Point& p) const {return Point(x + p.x, y + p.y);}
-	Point operator - (const Point& p) const {return Point(x - p.x, y - p.y);}
-	Point operator * (double c) const {return Point(x * c, y * c);}
-	Point operator / (double c) const {return Point(x / c, y / c);}
+#define T double
+const T EPS = 1e-9;
+struct PT {
+	T x, y;
+	PT() {}
+	PT(T x, T y) : x(x), y(y) {}
+	PT(const PT& p) : x(p.x), y(p.y) {}
+	bool operator < (const PT& rhs) const {return make_pair(y, x) < make_pair(rhs.y, rhs.x);}
+	bool operator == (const PT& rhs) const {return make_pair(y, x) == make_pair(rhs.y, rhs.x);}
+	PT operator + (const PT& p) const {return PT(x + p.x, y + p.y);}
+	PT operator - (const PT& p) const {return PT(x - p.x, y - p.y);}
+	PT operator * (T c) const {return PT(x * c, y * c);}
+	PT operator / (T c) const {return PT(x / c, y / c);}
 };
-double cross(Point p, Point q) {return p.x * q.y - p.y * q.x;}
-double area(Point a, Point b, Point c) {return fabs(cross(a, b) + cross(b, c) + cross(c, a)) / 2;}
-double area2(Point a, Point b, Point c) {return cross(a, b) + cross(b, c) + cross(c, a);}
-double dot(Point p, Point q) {return p.x * q.x + p.y * q.y;}
-double dist(Point p, Point q) {return sqrt(dot(p - q, p - q));}
-double dist2(Point p, Point q) {return dot(p - q, p - q);}
+T cross(PT p, PT q) {return p.x * q.y - p.y * q.x;}
+T area(PT a, PT b, PT c) {return fabs(cross(a, b) + cross(b, c) + cross(c, a)) / 2;}
+T area2(PT a, PT b, PT c) {return cross(a, b) + cross(b, c) + cross(c, a);}
+T dot(PT p, PT q) {return p.x * q.x + p.y * q.y;}
+T dist(PT p, PT q) {return sqrt(dot(p - q, p - q));}
+T dist2(PT p, PT q) {return dot(p - q, p - q);}
 
 #define REMOVE_REDUNDANT
 #ifdef REMOVE_REDUNDANT
-bool between(const Point& a, const Point& b, const Point& c) {
+bool between(const PT& a, const PT& b, const PT& c) {
 	return (fabs(area2(a, b, c)) < EPS && (a.x - b.x) * (c.x - b.x) <= 0 && (a.y - b.y) * (c.y - b.y) <= 0);
 }
 #endif
-void ConvexHull(vector<Point>& pts) {
+void ConvexHull(vector<PT>& pts) {
 	sort(pts.begin(), pts.end());
 	pts.erase(unique(pts.begin(), pts.end()), pts.end());
-	vector<Point> up, dn;
+	vector<PT> up, dn;
 	for (int i = 0; i < pts.size(); i++) {
 		while (up.size() > 1 && area2(up[up.size() - 2], up.back(), pts[i]) >= 0) up.pop_back();
 		while (dn.size() > 1 && area2(dn[dn.size() - 2], dn.back(), pts[i]) <= 0) dn.pop_back();
