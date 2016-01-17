@@ -18,11 +18,8 @@ void update(int node, int l, int r, int L, int R, int x) {
 	updatelz(node, L, R);
 	if (l > R || r < L) return;
 	if (l <= L && r >= R) {
-		st[node] += (R - L + 1) * x;
-		if (L < R) {
-			lz[node << 1] += x;
-			lz[(node << 1) + 1] += x;
-		}
+		lz[node] = x;
+		updatelz(node, L, R);
 		return;
 	}
 	update(node << 1, l, r, L, (L + R) >> 1, x);
