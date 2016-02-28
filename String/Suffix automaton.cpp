@@ -2,6 +2,8 @@
 using namespace std;
 
 //O(n)
+//Problem:
+//http://codeforces.com/problemset/problem/128/B
 struct state {
 	int len, link;
 	map<char, int> nxt;
@@ -76,13 +78,15 @@ string kth(int u, int k) {
 }
 
 int main() {
-	string s = "aabcaa";
+	string s = "abcbc";
 	init();
 	for (int i = 0; i < s.size(); i++) {
 		extend(s[i]);
 	}
 	trace(0);
 	cout<<dfs(0)<<"\n"; //Total distinct substring, include empty string
-	cout<<kth(0, 15)<<"\n";
+	cout<<kth(0, 10)<<"\n";
+	state nxt = st[st[0].nxt['b']];
+	cout<<nxt.len<<"\n";
 	return 0;
 }
