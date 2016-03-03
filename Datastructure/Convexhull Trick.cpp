@@ -13,7 +13,7 @@ struct Convexhull {
 	}
 	int bad(Line ln1, Line ln2, Line ln3) {
 		return (long double) (ln1.a - ln2.a) * (ln2.b - ln3.b) >= (long double) (ln2.a - ln3.a) * (ln1.b - ln2.b);
-//		return intersect(ln1, ln2) >= intersect(ln2, ln3);
+		//return intersect(ln1, ln2) >= intersect(ln2, ln3);
 	}
 	vector<Line> hull;
 	vector<long double> pos;
@@ -58,7 +58,7 @@ struct Convexhull2 {
 	}
 	int bad(Line ln1, Line ln2, Line ln3) {
 		return (long double) (ln1.a - ln2.a) * (ln2.b - ln3.b) >= (long double) (ln2.a - ln3.a) * (ln1.b - ln2.b);
-//		return intersect(ln1, ln2) >= intersect(ln2, ln3);
+		//return intersect(ln1, ln2) >= intersect(ln2, ln3);
 	}
 	set<Line> hull;
 	set<pair<long double, Line> > pos;
@@ -188,6 +188,9 @@ struct SegmentTree {
 			update(node << 1, l, r, L, (L + R) >> 1, ln);
 			update((node << 1) + 1, l, r, ((L + R) >> 1) + 1, R, ln);
 		}
+	}
+	void update(int node, int l, int r, int L, int R, T a, T b) {
+		update(node, l, r, L, R, Line(a, b));
 	}
 	T query(int node, int i, int L, int R) {
 		if (i < L || i > R) return oo;

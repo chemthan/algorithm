@@ -2,49 +2,50 @@
 using namespace std;
 
 //MincostFlow
-//O(|V|^4 * MAX_EDGE_COST)
+//O(min(E^2*V*logV, E*logV*Flow))
+#define T long long
 #define MAXV 1010
 #define MAXE 1000010
-#define LINF 1000000000000000000LL
+#define oo ((T) 1e18)
 struct MincostFlow {
 	int n, s, t, E, adj[MAXE], next[MAXE], last[MAXV], which[MAXV];
-	long long totalCost, totalFlow, cap[MAXE], flow[MAXE], cost[MAXE], pot[MAXE], dist[MAXV];
+	T totalCost, totalFlow, cap[MAXE], flow[MAXE], cost[MAXE], pot[MAXE], dist[MAXV];
 	void init(int _n, int _s, int _t) {
 		n = _n; s = _s; t = _t;
 		memset(last, -1, sizeof(last)); E = 0;
 	}
-	void add(int u, int v, long long ca, long long co) {
+	void add(int u, int v, T ca, T co) {
 		adj[E] = v; cap[E] = ca; flow[E] = 0; cost[E] = +co; next[E] = last[u]; last[u] = E++;
 		adj[E] = u; cap[E] =  0; flow[E] = 0; cost[E] = -co; next[E] = last[v]; last[v] = E++;
 	}
 	void bellman() {
-		bool stop = false;
+		int stop = 0;
 		memset(pot, 0, sizeof(pot));
 		while (!stop) {
-			stop = true;
+			stop = 1;
 			for (int u = 0; u < n; u++) for (int e = last[u]; e != -1; e = next[e]) if (flow[e] < cap[e]) {
 				int v = adj[e];
 				if (pot[v] > pot[u] + cost[e]) {
 					pot[v] = pot[u] + cost[e];
-					stop = false;
+					stop = 0;
 				}
 			}
 		}
 	}
-	bool dijkstra() {
-		typedef pair<long long, int> node;
+	int dijkstra() {
+		typedef pair<T, int> node;
 		priority_queue<node, vector<node>, greater<node> > que;
-		for (int u = 0; u < n; u++) dist[u] = LINF;
+		for (int u = 0; u < n; u++) dist[u] = oo;
 		dist[s] = 0;
 		que.push(make_pair(0, s));
 		while (!que.empty()) {
-			long long dnow = que.top().first;
+			T dnow = que.top().first;
 			int u = que.top().second;
 			que.pop();
 			if (dnow > dist[u]) continue;
 			for (int e = last[u]; e != -1; e = next[e]) if (flow[e] < cap[e]) {
 				int v = adj[e];
-				long long dnext = dnow + cost[e] + pot[u] - pot[v];
+				T dnext = dnow + cost[e] + pot[u] - pot[v];
 				if (dist[v] > dnext) {
 					dist[v] = dnext;
 					which[v] = e;
@@ -52,13 +53,13 @@ struct MincostFlow {
 				}
 			}
 		}
-		return dist[t] < LINF;
+		return dist[t] < oo;
 	}
-	bool maxflow(long long desireFlow = LINF) {
+	int maxflow(T desireFlow = oo) {
 		totalCost = totalFlow = 0;
 		bellman();
 		while (totalFlow < desireFlow) {
-			if (!dijkstra()) return false;
+			if (!dijkstra()) return 0;
 			long long delta = desireFlow - totalFlow;
 			for (int v = t, e = which[v]; v != s; v = adj[e ^ 1], e = which[v]) delta = min(delta, cap[e] - flow[e]);
 			for (int v = t, e = which[v]; v != s; v = adj[e ^ 1], e = which[v]) {
@@ -69,7 +70,7 @@ struct MincostFlow {
 			totalCost += delta * (dist[t] - pot[s] + pot[t]);
 			for (int u = 0; u < n; u++) pot[u] += dist[u];
 		}
-		return true;
+		return 1;
 	}
 } mcf;
 
@@ -79,6 +80,6 @@ int main() {
 	mcf.add(1, 2, 1, 10);
 	mcf.add(0, 2, 1, 100);
 	mcf.maxflow();
-	printf("%lld", mcf.totalCost);
+	cout<<mcf.totalCost;
 	return 0;
 }
