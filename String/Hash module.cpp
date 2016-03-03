@@ -1,9 +1,9 @@
 #include <bits/stdc++.h>
 using namespace std;
 
-const int MAXN = 100010;
 struct HashModule {
-	int h[MAXN], pw[MAXN], rp[MAXN], mod;
+	int mod;
+	vector<int> h, pw, rp;
 	int inv(int n) {
 		int r = n, t = n, k = mod - 3;
 		while (k) {
@@ -15,12 +15,13 @@ struct HashModule {
 	}
 	void init(string s, int base, int p) {
 		mod = p;
+		h.assign(s.size(), 0); pw.assign(s.size(), 0); rp.assign(s.size(), 0);
 		pw[0] = 1;
-		for (int i = 1; i < MAXN; i++) {
+		for (int i = 1; i < s.size(); i++) {
 			pw[i] = (long long) pw[i - 1] * base % mod;
 		}
 		rp[0] = 1; rp[1] = inv(base);
-		for (int i = 1; i < MAXN; i++) {
+		for (int i = 1; i < s.size(); i++) {
 			rp[i] = (long long) rp[i - 1] * rp[1] % mod;
 		}
 		for (int i = 0; i < s.size(); i++) {
