@@ -1,6 +1,10 @@
 #include <bits/stdc++.h>
 using namespace std;
 
+//Problems
+//http://codeforces.com/problemset/problem/631/E
+//https://www.codechef.com/JAN16/problems/CYCLRACE
+//http://vn.spoj.com/problems/VOMARIO/
 #define T long long
 #define oo 1e18
 struct Convexhull {
