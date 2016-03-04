@@ -10,7 +10,7 @@ struct GridModule {
 	vector<vector<T> > dig[2];
 	void init(vector<vector<int> >& x) {
 		a = x; n = a.size();
-		if (n) m = a[0].size();
+		if (n) m = a[0].size(); else m = 0;
 		sum.resize(n);
 		for (int i = 0; i < n; i++) {
 			sum[i].clear();
