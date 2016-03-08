@@ -30,40 +30,44 @@ ostream& operator << (ostream& os, const PT& p) {
   os << "(" << p.x << "," << p.y << ")"; 
 }
 
-//Remove degenerate
-#define REMOVE_REDUNDANT
-#ifdef REMOVE_REDUNDANT
-bool between(const PT& a, const PT& b, const PT& c) {
-	return (fabs(area2(a, b, c)) < EPS && (a.x - b.x) * (c.x - b.x) <= 0 && (a.y - b.y) * (c.y - b.y) <= 0);
+RL sqr(RL x) {return x * x;}
+RL AreaTC(PT ct, RL r, PT p1, PT p2) {
+	RL a, b, c, x, y, s = cross(p1 - ct, p2 - ct) / 2;
+	a = dist(ct, p2), b = dist(ct, p1), c = dist(p1, p2);
+	if (a <= r && b <= r) {
+		return s;
+	}
+	else if (a < r && b >= r) {
+		x = (dot(p1 - p2, ct - p2) + sqrt(c * c * r * r - sqr(cross(p1 - p2, ct - p2)))) / c;
+		return asin(s * (c - x) * 2 / c / b / r) * r * r / 2 + s * x / c;
+	}
+	else if (a >= r && b < r) {
+		y = (dot(p2 - p1, ct - p1) + sqrt(c * c * r * r - sqr(cross(p2 - p1, ct - p1)))) / c;
+		return asin(s * (c - y) * 2 / c / a / r) * r * r / 2 + s * y / c;
+	}
+	else {
+		if (fabs(2 * s) >= r * c || dot(p2 - p1, ct - p1) <= 0 || dot(p1 - p2, ct - p2) <= 0) {
+			if (dot(p1 - ct, p2 - ct) < 0) {
+				if (cross(p1 - ct, p2 - ct) < 0) {
+					return (-PI - asin(s * 2 / a / b)) * r * r / 2;
+				}
+				else {
+					return (PI - asin(s * 2 / a / b)) * r * r / 2;
+				}
+			}
+			else {
+				return asin(s * 2 / a / b) * r * r / 2;
+			}
+		}
+		else {
+			x = (dot(p1 - p2, ct - p2) + sqrt(c * c * r * r - sqr(cross(p1 - p2, ct - p2)))) / c;
+			y = (dot(p2 - p1, ct - p1) + sqrt(c * c * r * r - sqr(cross(p2 - p1, ct - p1)))) / c;
+			return (asin(s * (1 - x / c) * 2 / r / b) + asin(s * (1 - y / c) * 2 / r / a)) * r * r / 2 + s * ((y + x) / c - 1);
+		}
+	}
 }
-#endif
-void ConvexHull(vector<PT>& pts) {
-	sort(pts.begin(), pts.end());
-	pts.erase(unique(pts.begin(), pts.end()), pts.end());
-	vector<PT> up, dn;
-	for (int i = 0; i < pts.size(); i++) {
-		while (up.size() > 1 && area2(up[up.size() - 2], up.back(), pts[i]) >= 0) up.pop_back();
-		while (dn.size() > 1 && area2(dn[dn.size() - 2], dn.back(), pts[i]) <= 0) dn.pop_back();
-		up.push_back(pts[i]);
-		dn.push_back(pts[i]);
-	}
-	pts = dn;
-	for (int i = up.size() - 2; i >= 1; i--) pts.push_back(up[i]);
-#ifdef REMOVE_REDUNDANT
-	if (pts.size() <= 2) return;
-	dn.clear();
-	dn.push_back(pts[0]);
-	dn.push_back(pts[1]);
-	for (int i = 2; i < pts.size(); i++) {
-		if (between(dn[dn.size() - 2], dn[dn.size() - 1], pts[i])) dn.pop_back();
-		dn.push_back(pts[i]);
-	}
-	if (dn.size() >= 3 && between(dn.back(), dn[0], dn[1])) {
-		dn[0] = dn.back();
-		dn.pop_back();
-	}
-	pts = dn;
-#endif
+RL AreaTC(PT ct, RL r, PT p1, PT p2, PT p3) {
+	return AreaTC(ct, r, p1, p2) + AreaTC(ct, r, p2, p3) + AreaTC(ct, r, p3, p1);
 }
 
 int main() {

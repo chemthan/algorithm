@@ -1,7 +1,7 @@
 #include <bits/stdc++.h>
 using namespace std;
 
-//O(|V|^2 * |E|)
+//O(V^2*E)/O(VElogV)
 #define MAXV 1010
 #define MAXE 1000010
 #define INF 1000000000
