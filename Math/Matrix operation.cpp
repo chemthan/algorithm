@@ -2,7 +2,7 @@
 using namespace std;
 
 const int MAXN = 100;
-const int MOD = 1000000007;
+#define MOD 1000000007
 struct matrix {
 	int x[MAXN][MAXN];
 	matrix() {
@@ -16,14 +16,15 @@ struct matrix {
 	matrix operator + (matrix A) {
 		matrix res;
 		for (int i = 0; i < MAXN; i++) for (int j = 0; j < MAXN; j++) {
-			res.x[i][j] = (x[i][j] + A.x[i][j]) % MOD;
+			res.x[i][j] = x[i][j] + A.x[i][j];
+			if (res.x[i][j] >= MOD) res.x[i][j] -= MOD;
 		}
 		return res;
 	}
 	matrix operator * (matrix A) {
 		matrix res;
 		for (int i = 0; i < MAXN; i++) for (int k = 0; k < MAXN; k++) for (int j = 0; j < MAXN; j++) {
-			res.x[i][j] = (res.x[i][j] + 1LL * x[i][k] * A.x[k][j]) % MOD;
+			res.x[i][j] = (res.x[i][j] + (long long) x[i][k] * A.x[k][j]) % MOD;
 		}
 		return res;
 	}
@@ -53,4 +54,3 @@ struct matrix {
 int main() {
 	return 0;
 }
-
