@@ -11,7 +11,7 @@ struct Node {
 	Node* gfail;
 	int key;
 	char val;
-	Node () {
+	Node() {
 		bfail = 0;
 		key = -1;
 	}
