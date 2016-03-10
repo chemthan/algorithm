@@ -35,14 +35,14 @@ void pushdown(node* t) {
 	node *x = t->l, *y = t->r;
 	if (t->rev) {
 		if (x) {swap(x->l, x->r); x->rev ^= 1;}
-        if (y) {swap(y->l, y->r); y->rev ^= 1;}
-        t->rev = 0;
+		if (y) {swap(y->l, y->r); y->rev ^= 1;}
+		t->rev = 0;
 	}
 	if (t->lz) {
-        if (x) updatelz(x, t->lz);
-        if (y) updatelz(y, t->lz);
-        t->lz = 0;
-    }
+		if (x) updatelz(x, t->lz);
+		if (y) updatelz(y, t->lz);
+		t->lz = 0;
+	}
 }
 void pushup(node*& t) {
 	if (!t) return;

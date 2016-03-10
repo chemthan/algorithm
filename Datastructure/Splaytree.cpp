@@ -23,6 +23,7 @@ void setchild(node* p, node* c, int l) {
 	c->p = p; l ? p->l = c : p->r = c;
 }
 void updatelz(node* x, int val) {
+	if (!x) return;
     x->lz += val;
     x->key += val;
 }
@@ -31,14 +32,14 @@ void pushdown(node* x) {
 	node *u = x->l, *v = x->r;
 	if (x->rev) {
 		if (u) {swap(u->l, u->r); u->rev ^= 1;}
-        if (v) {swap(v->l, v->r); v->rev ^= 1;}
-        x->rev = 0;
+		if (v) {swap(v->l, v->r); v->rev ^= 1;}
+		x->rev = 0;
 	}
 	if (x->lz) {
-        if (u) updatelz(u, x->lz);
-        if (v) updatelz(v, x->lz);
-        x->lz = 0;
-    }
+		if (u) updatelz(u, x->lz);
+		if (v) updatelz(v, x->lz);
+		x->lz = 0;
+	}
 }
 void pushup(node*& x) {
 	if (!x) return;
