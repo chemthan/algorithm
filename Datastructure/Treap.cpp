@@ -73,6 +73,7 @@ void insert(node*& t, int key, int prio, int pos) {
 	else if (pos <= size(t->l) + 1) insert(t->l, key, prio, pos);
 	else insert(t->r, key, prio, pos - size(t->l) - 1);
 	balance(t);
+	pushup(t);
 }
 node* find(node*& t, int pos) {
 	pushdown(t);
