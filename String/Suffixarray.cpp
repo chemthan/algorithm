@@ -52,8 +52,8 @@ int main() {
 	nlen = strlen(T);
 	T[nlen++] = '$';
 	constructSA(); computeLCP();
-	for (int i = 0; i < nlen; i++) printf("%d ", SA[i]); printf("\n");
-	for (int i = 0; i < nlen; i++) printf("%d ", RA[i]); printf("\n");
-	for (int i = 0; i < nlen; i++) printf("%d ", LCP[i]);
+	for (int i = 0; i < nlen; i++) cout<<SA[i]<<" "; cout<<"\n";
+	for (int i = 0; i < nlen; i++) cout<<RA[i]<<" "; cout<<"\n";
+	for (int i = 0; i < nlen; i++) cout<<LCP[i]<<" "; cout<<"\n";
 	return 0;
 }

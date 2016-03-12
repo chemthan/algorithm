@@ -34,6 +34,6 @@ int main() {
 	update(1, 2, 1);
 	update(2, 1, 1);
 	update(3, 3, 1);
-	printf("%d", query(2, 2));
+	cout<<query(2, 2)<<"\n";
 	return 0;
 }

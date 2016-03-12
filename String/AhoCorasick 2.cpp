@@ -3,9 +3,7 @@ using namespace std;
 
 const int MAXN = 100010;
 const int MAXC = 26;
-
 int key[MAXN], next[MAXN], ptrlist, nil;
-
 struct List {
 	int head, tail;
 	void init() {
@@ -33,17 +31,14 @@ struct List {
 		tail = other.tail;
 	}
 };
-
 int go[MAXN][MAXC], fail[MAXN], ptrtrie, que[MAXN], qsize;
 List out[MAXN];
-
 void init() {
 	nil = ptrlist = -1;
 	ptrtrie = 0;
 	memset(go[0], 0, sizeof(go[0]));
 	out[0].init();
 }
-
 void add(char s[], int len, int key) {
 	int v = 0;
 	for (int i = 0; i < len; i++) {
@@ -58,7 +53,6 @@ void add(char s[], int len, int key) {
 	}
 	out[v].add(key);
 }
-
 void build() {
 	qsize = 0;
 	for (int c = 0; c < MAXC; c++) if (go[0][c]) {
@@ -78,7 +72,6 @@ void build() {
 		}
 	}
 }
-
 void search(char s[], int len) {
 	int v = 0;
 	for (int i = 0; i < len; i++) {
@@ -87,7 +80,7 @@ void search(char s[], int len) {
 		v = go[v][c];
 		int x = out[v].head;
 		while (x != nil) {
-			printf("%d ", key[x]);
+			cout<<key[x]<<" ";
 			x = next[x];
 		}
 	}

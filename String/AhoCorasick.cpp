@@ -3,7 +3,6 @@ using namespace std;
 
 const int MAXN = 100010;
 const int MAXC = 26;
-
 struct Node {
 	Node* parent;
 	Node* child[MAXC];
@@ -16,11 +15,9 @@ struct Node {
 		key = -1;
 	}
 } node[MAXN];
-
 Node* alloc = node;
 Node* q[MAXN];
 Node* root = alloc++;
-
 Node* insert(Node* x, char* s, int key) {
 	while (*s) {
 		int c = *s - 'a';
@@ -35,7 +32,6 @@ Node* insert(Node* x, char* s, int key) {
 	x->key = key;
 	return x;
 }
-
 void pushlink(Node* root) {
 	int b = 0, e = 0;
 	q[e++] = root;
@@ -56,7 +52,6 @@ void pushlink(Node* root) {
 		}
 	}
 }
-
 void search(char* s) {
 	Node* cur = root;
 	while (*s) {
@@ -65,7 +60,7 @@ void search(char* s) {
 		Node* tmp = cur;
 		if (tmp->key == -1) tmp = tmp->gfail;
 		while (tmp) {
-			printf("%d ", tmp->key);
+			cout<<tmp->key<<" ";
 			tmp = tmp->gfail;
 		}
 		s++;

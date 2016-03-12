@@ -129,6 +129,6 @@ int main() {
 		}
 		pq.pop();
 	}
-	printf("%lld", ans);
+	cout<<ans<<"\n";
 	return 0;
 }

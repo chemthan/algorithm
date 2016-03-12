@@ -34,6 +34,8 @@ int main() {
 	strcpy(S, "stringsrandom");
 	n = strlen(S);
 	zfunction();
-	for (int i = 0; i < n; i++) printf("%d ", z[i]);
+	for (int i = 0; i < n; i++) {
+		cout<<z[i]<<" ";
+	}
 	return 0;
 }
