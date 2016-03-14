@@ -75,13 +75,13 @@ struct SuffixAutomaton {
 		return nchild[u];
 	}
 	string kth(int u, int k) {
-		if (!k--) return "";
+		if (!k) return "";
 		int tot = 0;
 		for (int i = 0; i < MAXC; i++) {
 			if (st[u].nxt[i]) {
 				int v = st[u].nxt[i];
 				if (tot + nchild[v] >= k) {
-					return char('a' + i) + kth(v, k - tot);
+					return char('a' + i) + kth(v, k - tot - 1);
 				}
 				tot += nchild[v];
 			}
@@ -154,7 +154,7 @@ int main() {
 	}
 	sa.trace(0); cout<<"\n";
 	cout<<sa.ndsubstr(0)<<"\n"; //Total distinct substring, include empty one
-	cout<<sa.kth(0, 10)<<"\n"; //kth smallest substring
+	cout<<sa.kth(0, 3)<<"\n"; //kth smallest substring
 	sa.updatesize();
 	cout<<sa.repstr("e")<<"\n"; //The number of occurrences
 	s += s;
