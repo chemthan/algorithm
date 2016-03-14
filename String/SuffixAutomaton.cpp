@@ -13,7 +13,6 @@ struct state {
 struct SuffixAutomaton {
 	state st[MAXN << 1];
 	int nsz, last;
-	set<pair<int, int> > base;
 	int cnt[MAXN << 1];
 	long long nchild[MAXN << 1];
 	void init() {
@@ -23,7 +22,6 @@ struct SuffixAutomaton {
 		st[0].nxt.clear();
 		nsz = 1; last = 0;
 		cnt[0] = nchild[0] = 0;
-		base.clear();
 	}
 	void extend(char c) {
 		int cur = nsz++;
@@ -31,7 +29,6 @@ struct SuffixAutomaton {
 		st[cur].fpos = st[cur].len - 1;
 		st[cur].nxt.clear();
 		cnt[cur] = 1; nchild[cur] = 0;
-		base.insert(make_pair(st[cur].len, cur));
 		int p;
 		for (p = last; ~p && !st[p].nxt.count(c); p = st[p].link) st[p].nxt[c] = cur;
 		if (!~p) st[cur].link = 0;
@@ -45,7 +42,6 @@ struct SuffixAutomaton {
 				st[clone].link = st[q].link;
 				st[clone].fpos = st[q].fpos;
 				cnt[clone] = 0; nchild[clone] = 0;
-				base.insert(make_pair(st[clone].len, clone));
 				for (; ~p && st[p].nxt[c] == q; p = st[p].link) st[p].nxt[c] = clone;
 				st[q].link = st[cur].link = clone;
 			}
@@ -97,8 +93,22 @@ struct SuffixAutomaton {
 		}
 	}
 	void updatesize() {
-		for (set<pair<int, int> >::reverse_iterator it = base.rbegin(); it != base.rend(); it++) {
-			cnt[st[it->second].link] += cnt[it->second];
+		vector<int> v, vis(nsz, 0);
+		queue<int> q;
+		q.push(0); vis[0] = 1;
+		while (q.size()) {
+			int u = q.front(); q.pop();
+			v.push_back(u);
+			for (int i = 0; i < MAXC; i++) {
+				if (st[u].nxt[i] && !vis[st[u].nxt[i]]) {
+					q.push(st[u].nxt[i]);
+					vis[st[u].nxt[i]] = 1;
+				}
+			}
+		}
+		for (int i = v.size() - 1; i > 0; i--) {
+			int u = v[i];
+			cnt[st[u].link] += cnt[u];
 		}
 	}
 	int repstr(string str) {
