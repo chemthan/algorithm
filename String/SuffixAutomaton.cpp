@@ -15,7 +15,7 @@ struct SuffixAutomaton {
 	int nsz, last;
 	set<pair<int, int> > base;
 	int cnt[MAXN << 1];
-	int nchild[MAXN << 1];
+	long long nchild[MAXN << 1];
 	void init() {
 		st[0].len = 0;
 		st[0].link = -1;
