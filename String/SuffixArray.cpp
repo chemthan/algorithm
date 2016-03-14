@@ -14,7 +14,7 @@ struct SuffixArray {
 	void init(char* str) {
 		strcpy(T, str);
 		nsz = strlen(T);
-		for (int i = 0; i <= nsz; i++) {
+		for (int i = 0; i < nsz; i++) {
 			RA[i] = tmpRA[i] = 0;
 			SA[i] = tmpSA[i] = 0;
 			Phi[i] = PLCP[i] = LCP[i] = 0;

@@ -172,6 +172,21 @@ int IsSimple(const vector<PT>& p) {
 	}
 	return 1;
 }
+RL Angle(PT a) {
+	RL PI = acos((RL) - 1);
+	if (a.x == 0) {
+		if (a.y > 0) return PI / 2;
+		return 3 * PI / 2;
+	}
+	if (a.y == 0) {
+		if (a.x > 0) return 0;
+		return PI;
+	}
+	RL res = atan(a.y / a.x);
+	if (a.x < 0) return res + PI;
+	if (a.y < 0) return res + 2 * PI;
+	return res;
+}
 
 int main() {
 	// expected: (-5,2)
