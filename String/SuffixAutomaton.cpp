@@ -124,26 +124,26 @@ struct SuffixAutomaton {
 SuffixAutomaton sa;
 
 string lcs(string s, string t) {
-    sa.init();
-    for (int i = 0; i < s.size(); i++) {
-        sa.extend(s[i] - 'a');
+	sa.init();
+	for (int i = 0; i < s.size(); i++) {
+		sa.extend(s[i] - 'a');
 	}
-    int v = 0, l = 0, best = 0, bestpos = 0;
-    for (int i = 0; i < t.size(); i++) {
-        while (v && ! sa.st[v].nxt.count(t[i] - 'a')) {
-            v = sa.st[v].link;
-            l = sa.st[v].len;
-        }
-        if (sa.st[v].nxt.count(t[i] - 'a')) {
-            v = sa.st[v].nxt[t[i] - 'a'];
-            l++;
-        }
-        if (best < l) {
-            best = l;
+	int v = 0, l = 0, best = 0, bestpos = 0;
+	for (int i = 0; i < t.size(); i++) {
+		while (v && ! sa.st[v].nxt.count(t[i] - 'a')) {
+			v = sa.st[v].link;
+			l = sa.st[v].len;
+		}
+		if (sa.st[v].nxt.count(t[i] - 'a')) {
+			v = sa.st[v].nxt[t[i] - 'a'];
+			l++;
+		}
+		if (best < l) {
+			best = l;
 			bestpos = i;
 		}
-    }
-    return t.substr(bestpos - best + 1, best);
+	}
+	return t.substr(bestpos - best + 1, best);
 }
 
 int main() {
