@@ -8,7 +8,7 @@ const int MAXN = 100010;
 const int MAXC = 26;
 struct state {
 	int len, link, fpos;
-	map<char, int> nxt;
+	int nxt[MAXC];
 };
 struct SuffixAutomaton {
 	state st[MAXN << 1];
@@ -19,7 +19,7 @@ struct SuffixAutomaton {
 		st[0].len = 0;
 		st[0].link = -1;
 		st[0].fpos = 0;
-		st[0].nxt.clear();
+		memset(st[0].nxt, -1, sizeof(st[0].nxt));
 		nsz = 1; last = 0;
 		cnt[0] = nchild[0] = 0;
 	}
@@ -27,10 +27,10 @@ struct SuffixAutomaton {
 		int cur = nsz++;
 		st[cur].len = st[last].len + 1;
 		st[cur].fpos = st[cur].len - 1;
-		st[cur].nxt.clear();
+		memset(st[cur].nxt, -1, sizeof(st[cur].nxt));
 		cnt[cur] = 1; nchild[cur] = 0;
 		int p;
-		for (p = last; ~p && !st[p].nxt.count(c); p = st[p].link) st[p].nxt[c] = cur;
+		for (p = last; ~p && !~st[p].nxt[c]; p = st[p].link) st[p].nxt[c] = cur;
 		if (!~p) st[cur].link = 0;
 		else {
 			int q = st[p].nxt[c];
@@ -38,7 +38,7 @@ struct SuffixAutomaton {
 			else {
 				int clone = nsz++;
 				st[clone].len = st[p].len + 1;
-				st[clone].nxt = st[q].nxt;
+				memcpy(st[clone].nxt, st[q].nxt, sizeof(st[q].nxt));
 				st[clone].link = st[q].link;
 				st[clone].fpos = st[q].fpos;
 				cnt[clone] = 0; nchild[clone] = 0;
@@ -51,7 +51,7 @@ struct SuffixAutomaton {
 	char cur[MAXN];
 	void trace(int u, int len = 0) {
 		for (int i = 0; i < MAXC; i++) {
-			if (st[u].nxt[i]) {
+			if (~st[u].nxt[i]) {
 				cur[len] = 'a' + i;
 				cur[len + 1] = 0;
 				cout<<cur<<"\n";
@@ -60,11 +60,11 @@ struct SuffixAutomaton {
 			}
 		}
 	}
-	int ndsubstr(int u) {
+	long long ndsubstr(int u) {
 		if (nchild[u]) return nchild[u];
 		nchild[u] = 1;
 		for (int i = 0; i < MAXC; i++) {
-			if (st[u].nxt[i]) {
+			if (~st[u].nxt[i]) {
 				nchild[u] += ndsubstr(st[u].nxt[i]);
 			}
 		}
@@ -74,7 +74,7 @@ struct SuffixAutomaton {
 		if (!k) return "";
 		int tot = 0;
 		for (int i = 0; i < MAXC; i++) {
-			if (st[u].nxt[i]) {
+			if (~st[u].nxt[i]) {
 				int v = st[u].nxt[i];
 				if (tot + nchild[v] >= k) {
 					return char('a' + i) + kth(v, k - tot - 1);
@@ -87,7 +87,7 @@ struct SuffixAutomaton {
 	int minshift(int u, int k) {
 		if (!k) return st[u].fpos;
 		for (int i = 0; i < MAXC; i++) {
-			if (st[u].nxt[i]) {
+			if (~st[u].nxt[i]) {
 				return minshift(st[u].nxt[i], k - 1);
 			}
 		}
@@ -100,7 +100,7 @@ struct SuffixAutomaton {
 			int u = q.front(); q.pop();
 			v.push_back(u);
 			for (int i = 0; i < MAXC; i++) {
-				if (st[u].nxt[i] && !vis[st[u].nxt[i]]) {
+				if (~st[u].nxt[i] && !vis[st[u].nxt[i]]) {
 					q.push(st[u].nxt[i]);
 					vis[st[u].nxt[i]] = 1;
 				}
@@ -115,7 +115,7 @@ struct SuffixAutomaton {
 		int idx = 0, cur = 0;
 		while (cur < str.size()) {
 			idx = st[idx].nxt[str[cur] - 'a'];
-			if (!idx) return 0;
+			if (!~idx) return 0;
 			cur++;
 		}
 		return cnt[idx];
@@ -124,7 +124,7 @@ struct SuffixAutomaton {
 		int cur = 0, vtx = 0;
 		while (cur < str.size()) {
 			vtx = st[vtx].nxt[str[cur] - 'a'];
-			if (!vtx) return -1;
+			if (!~vtx) return -1;
 			cur++;
 		}
 		return st[vtx].fpos - str.size() + 1;
@@ -140,11 +140,11 @@ string lcs(string s, string t) {
 	}
 	int v = 0, l = 0, best = 0, bestpos = 0;
 	for (int i = 0; i < t.size(); i++) {
-		while (v && ! sa.st[v].nxt.count(t[i] - 'a')) {
+		while (v && !~sa.st[v].nxt[t[i] - 'a']) {
 			v = sa.st[v].link;
 			l = sa.st[v].len;
 		}
-		if (sa.st[v].nxt.count(t[i] - 'a')) {
+		if (~sa.st[v].nxt[t[i] - 'a']) {
 			v = sa.st[v].nxt[t[i] - 'a'];
 			l++;
 		}
