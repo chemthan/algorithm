@@ -1,32 +1,40 @@
 #include <bits/stdc++.h>
 using namespace std;
 
-//O(N + M)
 int const MAXN = 100010;
-int nP;
-char P[MAXN];
-int r[MAXN];
-void KMP() {
-	r[0] = -1;
-	int cur = -1;
-	for (int i = 0; i < nP; i++) {
-		while (cur >= 0 && P[i] != P[cur]) cur = r[cur];
-		r[i + 1] = ++cur;
-	}
-}
-void search(char* T) {
-	int nT = strlen(T), cur = 0;
-	for (int i = 0; i < nT; i++) {
-		while (cur >= 0 && T[i] != P[cur]) cur = r[cur];
-		if (++cur == nP) {
-			cout<<i - cur + 1<<" ";
+struct KMP {
+	char s[MAXN];
+	int nsz, link[MAXN];
+	void init(char* str) {
+		strcpy(s, str); nsz = strlen(s);
+		int cur = link[0] = -1;
+		for (int i = 1; i < nsz; i++) {
+			while (cur >= 0 && s[i] != s[cur + 1]) cur = link[cur];
+			if (s[i] == s[cur + 1]) cur++;
+			link[i] = cur;
 		}
 	}
-}
+	vector<int> search(char* t) {
+		vector<int> res;
+		int k = strlen(t);
+		int cur = -1;
+		for (int i = 0; i < k; i++) {
+			while (cur >= 0 && t[i] != s[cur + 1]) cur = link[cur];
+			if (t[i] == s[cur + 1]) cur++;
+			if (cur == nsz - 1) {
+				res.push_back(i - nsz + 1);
+				cur = link[cur];
+			}
+		}
+		return res;
+	}
+};
+
+KMP kmp;
 
 int main() {
-	strcpy(P, "123123");
-	nP = strlen(P); KMP();
-	search((char*) "412312312312312312341231231231234"); //Expect 1 4 7 10 13 20 23 26
+	kmp.init("123123");
+	vector<int> res = kmp.search("412312312312312312341231231231234");
+	for (int i = 0; i < res.size(); i++) cout<<res[i]<<" "; //Expect 1 4 7 10 13 20 23 26
 	return 0;
 }
