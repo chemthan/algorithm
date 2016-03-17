@@ -5,7 +5,7 @@ const int MAXN = 1010;
 int n, rank[MAXN][MAXN], husband[MAXN];
 queue<int> womanlist[MAXN];
 queue<int> freemans;
-bool prefer(int woman, int newman, int herhusband) {
+int prefer(int woman, int newman, int herhusband) {
 	return rank[woman][newman] < rank[woman][herhusband];
 }
 void doit() {
