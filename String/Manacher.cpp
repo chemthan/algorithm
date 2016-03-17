@@ -3,7 +3,7 @@ using namespace std;
 
 const int MAXN = 100010;
 int d[MAXN]; //Radius odd palindrome
-int e[MAXN]; //Radios even palindrome
+int e[MAXN]; //Radius even palindrome
 int manacher(char s[], int n) {
 	int res = 0;
 	int l = 0, r = -1;
