@@ -1,6 +1,20 @@
 #include <bits/stdc++.h>
 using namespace std;
 
+//if n < 2,047, it is enough to test a = 2;
+//if n < 1,373,653, it is enough to test a = 2 and 3;
+//if n < 9,080,191, it is enough to test a = 31 and 73;
+//if n < 25,326,001, it is enough to test a = 2, 3, and 5;
+//if n < 3,215,031,751, it is enough to test a = 2, 3, 5, and 7;
+//if n < 4,759,123,141, it is enough to test a = 2, 7, and 61;
+//if n < 1,122,004,669,633, it is enough to test a = 2, 13, 23, and 1662803;
+//if n < 2,152,302,898,747, it is enough to test a = 2, 3, 5, 7, and 11;
+//if n < 3,474,749,660,383, it is enough to test a = 2, 3, 5, 7, 11, and 13;
+//if n < 341,550,071,728,321, it is enough to test a = 2, 3, 5, 7, 11, 13, and 17.
+//if n < 3,825,123,056,546,413,051, it is enough to test a = 2, 3, 5, 7, 11, 13, 17, 19, and 23.
+//if n < 18,446,744,073,709,551,616 = 264, it is enough to test a = 2, 3, 5, 7, 11, 13, 17, 19, 23, 29, 31, and 37.
+//if n < 318,665,857,834,031,151,167,461, it is enough to test a = 2, 3, 5, 7, 11, 13, 17, 19, 23, 29, 31, and 37.
+//if n < 3,317,044,064,679,887,385,961,981, it is enough to test a = 2, 3, 5, 7, 11, 13, 17, 19, 23, 29, 31, 37, and 41.
 #define T long long
 T mulmod64(T a, T b, T p) {
 	a %= p; b %= p;
@@ -22,20 +36,6 @@ T powmod64(T n, T k, T p) {
 	}
 	return r;
 }
-//if n < 2,047, it is enough to test a = 2;
-//if n < 1,373,653, it is enough to test a = 2 and 3;
-//if n < 9,080,191, it is enough to test a = 31 and 73;
-//if n < 25,326,001, it is enough to test a = 2, 3, and 5;
-//if n < 3,215,031,751, it is enough to test a = 2, 3, 5, and 7;
-//if n < 4,759,123,141, it is enough to test a = 2, 7, and 61;
-//if n < 1,122,004,669,633, it is enough to test a = 2, 13, 23, and 1662803;
-//if n < 2,152,302,898,747, it is enough to test a = 2, 3, 5, 7, and 11;
-//if n < 3,474,749,660,383, it is enough to test a = 2, 3, 5, 7, 11, and 13;
-//if n < 341,550,071,728,321, it is enough to test a = 2, 3, 5, 7, 11, 13, and 17.
-//if n < 3,825,123,056,546,413,051, it is enough to test a = 2, 3, 5, 7, 11, 13, 17, 19, and 23.
-//if n < 18,446,744,073,709,551,616 = 264, it is enough to test a = 2, 3, 5, 7, 11, 13, 17, 19, 23, 29, 31, and 37.
-//if n < 318,665,857,834,031,151,167,461, it is enough to test a = 2, 3, 5, 7, 11, 13, 17, 19, 23, 29, 31, and 37.
-//if n < 3,317,044,064,679,887,385,961,981, it is enough to test a = 2, 3, 5, 7, 11, 13, 17, 19, 23, 29, 31, 37, and 41.
 int rabin(T n) {
 	if (n == 2) return 1;
 	if (n < 2 || !(n & 1)) return 0;
