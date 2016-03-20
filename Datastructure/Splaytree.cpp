@@ -24,8 +24,8 @@ void setchild(node* p, node* c, int l) {
 }
 void updatelz(node* x, int val) {
 	if (!x) return;
-    x->lz += val;
-    x->key += val;
+	x->lz += val;
+	x->key += val;
 }
 void pushdown(node* x) {
 	if (!x) return;
