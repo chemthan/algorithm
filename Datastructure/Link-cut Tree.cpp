@@ -77,6 +77,13 @@ Node* access(Node* x) {
 	splay(x);
 	return z;
 }
+void link(Node* x, Node* y) {
+	access(y); access(x);
+	y->cnt += x->cnt;
+	updatelz(y->l, x->cnt);
+	x->p = y;
+	access(x);
+}
 void cut(Node* x) {
 	access(x);
 	x->l->root = 1;
@@ -84,13 +91,6 @@ void cut(Node* x) {
 	updatelz(x->l, -x->cnt);
 	x->l = nil;
 	pushup(x);
-}
-void link(Node* x, Node* y) {
-	access(x); access(y);
-	x->cnt += y->cnt;
-	updatelz(x->l, y->cnt);
-	y->p = x;
-	access(y);
 }
 Node* findroot(Node* x) {
 	access(x);
@@ -103,6 +103,16 @@ Node* lca(Node* x, Node* y) {
 	access(x);
 	return access(y);
 }
+void makeroot(Node* x) {
+	access(x);
+	swap(x->l, x->r);
+	x->rev ^= 1;
+}
+int connected(Node* x, Node* y) {
+    if (x == y) return 1;
+    access(x); access(y);
+    return x->p != nil;
+}
 
 const int MAXN = 100010;
 Node node[MAXN];
@@ -113,11 +123,11 @@ int main() {
 	for (int i = 1; i <= n; i++) {
 		node[i].key = i;
 	}
-	link(node + 1, node + 2);
-	link(node + 1, node + 5);
-	link(node + 2, node + 3);
-	link(node + 2, node + 4);
-	link(node + 5, node + 6);
+	link(node + 2, node + 1);
+	link(node + 5, node + 1);
+	link(node + 3, node + 2);
+	link(node + 4, node + 2);
+	link(node + 6, node + 5);
 	cout<<lca(node + 3, node + 4)->key<<"\n";
 	cout<<findroot(node + 2)->key<<"\n";
 	cut(node + 3);
