@@ -1,71 +1,100 @@
 #include <bits/stdc++.h>
 using namespace std;
 
-const int MAXN = 100010;
 struct Node {
 	Node();
-	Node *ch[2], *p;
-	int size, root, key;
-	int dir() {return this == p->ch[1];}
-	void setchild(Node* c, int d) {ch[d] = c; c->p = this;}
-	void pushup() {size = ch[0]->size + ch[1]->size + 1;}
-} node[MAXN], *nil = node + MAXN - 1;
+	Node *l, *r, *p;
+	int size, root, key, cnt;
+	int rev, lz;
+};
+Node* nil = new Node();
 Node::Node() {
-	size = 1, root = 1;
-	ch[0] = ch[1] = p = nil;
+	l = r = p = nil;
+	size = root = cnt = 1;
+	key = rev = lz = 0;
 }
-void rotate(Node* t) {
-	Node* p = t->p;
-	int d = t->dir();
-	if (!p->root) {
-		p->p->setchild(t, p->dir());
+void init() {
+	nil->size = nil->cnt = 0;
+}
+void setchild(Node* p, Node* c, int l) {
+	c->p = p; l ? p->l = c : p->r = c;
+}
+void updatelz(Node* x, int val) {
+	if (x == nil) return;
+	x->lz += val;
+	x->cnt += val;
+}
+void pushdown(Node* x) {
+	if (x == nil) return;
+	Node *u = x->l, *v = x->r;
+	if (x->rev) {
+		if (u != nil) {swap(u->l, u->r); u->rev ^= 1;}
+		if (v != nil) {swap(v->l, v->r); v->rev ^= 1;}
+		x->rev = 0;
+	}
+	if (x->lz) {
+		if (u != nil) updatelz(u, x->lz);
+		if (v != nil) updatelz(v, x->lz);
+		x->lz = 0;
+	}
+}
+void pushup(Node* x) {
+	x->size = x->l->size + x->r->size + 1;
+}
+void rotate(Node* x) {
+	Node* y = x->p;
+	int l = x->p->l == x;
+	if (!y->root) {
+		setchild(y->p, x, y->p->l == y);
 	}
 	else {
-		p->root = 0;
-		t->root = 1;
-		t->p = p->p;
+		x->root = 1;
+		y->root = 0;
+		x->p = y->p;
 	}
-	p->setchild(t->ch[!d], d);
-	t->setchild(p, !d);
-	p->pushup(); t->pushup();
+	setchild(y, l ? x->r : x->l, l);
+	setchild(x, y, !l);
+	pushup(y);
 }
-void splay(Node* t) {
-//	t->pushup();
-	while (!t->root) {
-//		if (!t->p->root) t->p->p->pushup(); t->p->pushup(), t->pushup();
-		if (!t->p->root) rotate(t->dir() == t->p->dir() ? t->p : t);
-		rotate(t);
+void splay(Node* x) {
+	pushdown(x);
+	while (!x->root) {
+		pushdown(x->p->p); pushdown(x->p); pushdown(x);
+		if (!x->p->root) rotate((x->p->l == x) == (x->p->p->l == x->p) ? x->p : x);
+		rotate(x);
 	}
+	pushup(x);
 }
 Node* access(Node* x) {
-	Node* y = nil;
-	while (x != nil) {
-		splay(x);
-		x->ch[1]->root = 1;
-		x->ch[1] = y;
-		y->root = 0;
-		x->pushup();
-		y = x;
-		x = x->p;
+	Node* z = nil;
+	for (Node* y = x; y != nil; y = y->p) {
+		splay(y);
+		y->r->root = 1;
+		y->r = z;
+		z->root = 0;
+		pushup(z = y);
 	}
-	return y;
+	splay(x);
+	return z;
 }
 void cut(Node* x) {
 	access(x);
-	splay(x);
-	x->ch[0]->root = 1;
-	x->ch[0]->p = nil;
-	x->ch[0] = nil;
+	x->l->root = 1;
+	x->l->p = nil;
+	updatelz(x->l, -x->cnt);
+	x->l = nil;
+	pushup(x);
 }
 void link(Node* x, Node* y) {
-	access(y);
-	splay(y);
+	access(x); access(y);
+	x->cnt += y->cnt;
+	updatelz(x->l, y->cnt);
 	y->p = x;
 	access(y);
 }
 Node* findroot(Node* x) {
-	x = access(x);
-	while (x->ch[0] != nil) x = x->ch[0];
+	access(x);
+	while (x->l != nil) pushdown(x), x = x->l;
 	splay(x);
 	return x;
 }
@@ -74,9 +103,9 @@ Node* lca(Node* x, Node* y) {
 	access(x);
 	return access(y);
 }
-void init() {
-	nil->size = 0;
-}
+
+const int MAXN = 100010;
+Node node[MAXN];
 
 int main() {
 	init();
@@ -90,7 +119,7 @@ int main() {
 	link(node + 2, node + 4);
 	link(node + 5, node + 6);
 	cout<<lca(node + 3, node + 4)->key<<"\n";
-	cout<<findroot(node + 3)->key<<"\n";
+	cout<<findroot(node + 2)->key<<"\n";
 	cut(node + 3);
 	cout<<findroot(node + 3)->key<<"\n";
 	return 0;
