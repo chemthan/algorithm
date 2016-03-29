@@ -2,7 +2,6 @@
 using namespace std;
 
 const int MAXN = 2000010;
-int cur;
 struct Node {
 	Node *l, *r;
 	int L, R, cnt;
@@ -14,6 +13,7 @@ Node::Node() {
 	cnt = 0;
 }
 Node* Alloc() {
+	static int cur = 0;
 	return mem + (cur++);
 }
 Node* build(int L, int R) {
