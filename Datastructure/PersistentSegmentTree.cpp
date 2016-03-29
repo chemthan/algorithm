@@ -1,8 +1,6 @@
 #include <bits/stdc++.h>
 using namespace std;
 
-//http://www.spoj.com/problems/MKTHNUM/en/
-//Persistent Segment Tree
 const int MAXN = 2000010;
 int cur;
 struct Node {
@@ -46,42 +44,13 @@ int query(Node* node, int L, int R) {
 	return query(node->l, L, R) + query(node->r, L, R);
 }
 
-int n, m;
-int a[MAXN];
-map<int, int> dc;
-int rb[MAXN];
 Node* root[MAXN];
 
-int query(Node* x, Node* y, int w) {
-	int tot = x->l->cnt - y->l->cnt;
-	if (x->L == x->R) {
-		return rb[x->L];
-	}
-	if (w <= tot) {
-		return query(x->l, y->l, w);
-	}
-	else {
-		return query(x->r, y->r, w - tot);
-	}
-}
-
 int main() {
-	ios_base::sync_with_stdio(0); cin.tie(0);
-	cin>>n>>m;
-	for (int i = 0; i < n; i++) cin>>a[i], dc[a[i]];
-	int cnt = 0;
-	for (map<int, int>::iterator it = dc.begin(); it != dc.end(); it++) {
-		it->second = cnt;
-		rb[cnt++] = it->first;
-	}
-	for (int i = 0; i < n; i++) a[i] = dc[a[i]];
+	int n = 10;
 	root[0] = build(0, n - 1);
-	for (int i = 0; i < n; i++) {
-		root[i + 1] = update(root[i], a[i], 1);
-	}
-	while (m--) {
-		int u, v, w; cin>>u>>v>>w;
-		cout<<query(root[v], root[u - 1], w)<<"\n";
-	}
+	root[1] = update(root[0], 2, 4);
+	root[2] = update(root[1], 3, 1);
+	cout<<query(root[2], 0, 3)<<"\n";
 	return 0;
 }

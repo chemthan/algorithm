@@ -2,11 +2,13 @@
 using namespace std;
 
 vector<int> dvs;
-int fmod(int n, int k, int p) {
-	if (!k) return 1;
-	if (k & 1) return 1LL * n * fmod(n, k - 1, p) % p;
-	int t = fmod(n, k >> 1, p);
-	return 1LL * t * t % p;
+int fpow(int n, int k, int p) {
+	int r = 1;
+	for (; k; k >>= 1) {
+		if (k & 1) r = (long long) r * n % p;
+		n = (long long) n * n % p;
+	}
+	return r;
 }
 int primitiveroot(int p) {
 	dvs.clear();
@@ -18,7 +20,7 @@ int primitiveroot(int p) {
 	for (int i = 2; i < p; i++) {
 		int flag = 1;
 		for (int j = 0; j < dvs.size(); j++) {
-			if (fmod(i, dvs[j], p) == 1) {
+			if (fpow(i, dvs[j], p) == 1) {
 				flag = 0;
 				break;
 			}

@@ -45,6 +45,6 @@ T chineseRemainder(int n, int p[], int r[]) {
 int main() {
 	int p[] = {2, 3, 5};
 	int r[] = {1, 2, 3};
-	cout<<chineseRemainder(3, p, r); //Expected 23
+	cout<<chineseRemainder(3, p, r); //Expect 23
 	return 0;
 }
