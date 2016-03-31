@@ -1,71 +1,108 @@
 #include <bits/stdc++.h>
 using namespace std;
 
+/*
+ * This is a simplex solver. Given m x n matrix A, m-vector b, n-vector c,
+ * finds n-vector x such that Ax <= b (component-wise)
+ * maximizing <x, c>
+ * where <x, y> is the dot product of x and y.
+ */
+typedef long double T;
+typedef vector<T> VT;
+typedef vector<VT> VVT;
+typedef vector<int> VI;
 #define EPS 1e-9
-const int MAXN = 1010;
-const int MAXM = 1010;
-double a[MAXN][MAXM], b[MAXN], c[MAXM], d[MAXN][MAXM];
-int idx[MAXN + MAXM];
-//Array all indexed from 0
-//Maximize{cx | ax <= b, x >= 0}, n: constraints, m: vars
-double simplex(double a[MAXN][MAXM], double b[MAXN], double c[MAXM], int n, int m) {
-	m++; int r = n, s = m - 1;
-	memset(d, 0, sizeof(d));
-	for (int i = 0; i < n + m; i++) idx[i] = i;
-	for (int i = 0; i < n; i++) {
-		for (int j = 0; j < m - 1; j++) d[i][j] = -a[i][j];
-		d[i][m - 1] = 1;
-		d[i][m] = b[i];
-		if (d[r][m] > d[i][m]) r = i;
+
+struct LPSolver {
+	int m, n;
+	VI B, N;
+	VVT D;
+	LPSolver(const VVT &A, const VT &b, const VT &c) : m(b.size()), n(c.size()), N(n + 1), B(m), D(m + 2, VT(n + 2)) {
+		for (int i = 0; i < m; i++) for (int j = 0; j < n; j++) D[i][j] = A[i][j];
+		for (int i = 0; i < m; i++) {
+			B[i] = n + i;
+			D[i][n] = -1;
+			D[i][n + 1] = b[i];
+		}
+		for (int j = 0; j < n; j++) {
+			N[j] = j;
+			D[m][j] = -c[j];
+		}
+		N[n] = -1;
+		D[m + 1][n] = 1;
 	}
-	for (int j = 0; j < m - 1; j++) d[n][j] = c[j];
-	d[n + 1][m - 1] = -1;
-	while (1) {
-		double dd;
-		if (r < n) {
-			int t = idx[s];
-			idx[s] = idx[r + m];
-			idx[r + m] = t;
-			d[r][s] = 1.0 / d[r][s];
-			for (int j = 0; j <= m; j++) if (j != s) d[r][j] *= -d[r][s];
-			for (int i = 0; i <= n + 1; i++) {
-				if (i != r) {
-					for (int j = 0; j <= m; j++) if (j != s) d[i][j] += d[r][j] * d[i][s];
-					d[i][s] *= d[r][s];
+
+	void Pivot(int r, int s) {
+		for (int i = 0; i < m + 2; i++) if (i != r) {
+			for (int j = 0; j < n + 2; j++) if (j != s) {
+				D[i][j] -= D[r][j] * D[i][s] / D[r][s];
+			}
+		}
+		for (int j = 0; j < n + 2; j++) if (j != s) D[r][j] /= D[r][s];
+		for (int i = 0; i < m + 2; i++) if (i != r) D[i][s] /= -D[r][s];
+		D[r][s] = 1.0 / D[r][s];
+		swap(B[r], N[s]);
+	}
+
+	int Simplex(int phase) {
+		int x = phase == 1 ? m + 1 : m;
+		while (1) {
+			int s = -1;
+			for (int j = 0; j <= n; j++) {
+				if (phase == 2 && N[j] == -1) continue;
+				if (s == -1 || D[x][j] < D[x][s] || D[x][j] == D[x][s] && N[j] < N[s]) s = j;
+			}
+			if (D[x][s] >= -EPS) return 1;
+			int r = -1;
+			for (int i = 0; i < m; i++) {
+				if (D[i][s] <= 0) continue;
+				if (r == -1 || D[i][n + 1] / D[i][s] < D[r][n + 1] / D[r][s] || D[i][n + 1] / D[i][s] == D[r][n + 1] / D[r][s] && B[i] < B[r]) r = i;
+			}
+			if (r == -1) return 0;
+			Pivot(r, s);
+		}
+	}
+	T Solve(VT& x) {
+		int r = 0;
+		for (int i = 1; i < m; i++) if (D[i][n + 1] < D[r][n + 1]) r = i;
+		if (D[r][n + 1] <= -EPS) {
+			Pivot(r, n);
+			if (!Simplex(1) || D[m + 1][n + 1] < -EPS) return -numeric_limits<T>::infinity();
+			for (int i = 0; i < m; i++) if (B[i] == -1) {
+					int s = -1;
+					for (int j = 0; j <= n; j++) {
+						if (s == -1 || D[i][j] < D[i][s] || D[i][j] == D[i][s] && N[j] < N[s]) s = j;
+					}
+					Pivot(i, s);
 				}
-			}
 		}
-		r = -1; s = -1;
-		for (int j = 0; j < m; j++) {
-			if (s < 0 || idx[s] > idx[j]) {
-				if (d[n + 1][j] > EPS || (d[n + 1][j] > -EPS && d[n][j] > EPS)) s = j;
-			}
-		}
-		if (s < 0) break;
-		for (int i = 0; i < n; i++) {
-			if (d[i][s] < -EPS) {
-				if (r < 0 || (dd = d[r][m] / d[r][s] - d[i][m] / d[i][s]) < -EPS || (dd < EPS && idx[r + m] > idx[i + m])) r = i;
-			}
-		}
-		if (r < 0) return -1; //Not bounded
+		if (!Simplex(2)) return numeric_limits<T>::infinity();
+		x = VT(n);
+		for (int i = 0; i < m; i++) if (B[i] < n) x[B[i]] = D[i][n + 1];
+		return D[m][n + 1];
 	}
-	if (d[n + 1][m] < -EPS) return -1; //Not executable
-	double ans = 0;
-	for (int i = m; i < n + m; i++) { //The missing enumerated x[i] = 0
-		if (idx[i] < m - 1) ans += d[i - m][m] * c[idx[i]];
-	}
-	return ans;
-}
+};
 
 int main() {
-	int n = 3, m = 3;
-	for (int i = 0; i < n; i++) {
-		for (int j = 0; j < m; j++) {
-			a[i][j] = i * j + 6;
-		}
-	}
-	for (int i = 0; i < n; i++) b[i] = i + 1;
-	for (int i = 0; i < m; i++) c[i] = i * i + 1;
-	cout<<fixed<<setprecision(9)<<simplex(a, b, c, n, m); //Should be 0.833333333
+	int m = 4, n = 3;
+	T _A[m][n] = {
+		{6, -1, 0},
+		{-1, -5, 0},
+		{1, 5, 1},
+		{-1, -5, -1}
+	};
+	T _b[m] = {10, -4, 5, -3};
+	T _c[n] = {1, -1, 0};
+	VVT A(m);
+	VT b(_b, _b + m);
+	VT c(_c, _c + n);
+	for (int i = 0; i < m; i++) A[i] = VT(_A[i], _A[i] + n);
+	LPSolver solver(A, b, c);
+	VT x;
+	T value = solver.Solve(x);
+	cout<<"Value: "<<value<<"\n";
+	cout<<"Solution:";
+	for (size_t i = 0; i < x.size(); i++) cout<<" "<<x[i];
+	cout<<"\n";
 	return 0;
 }
