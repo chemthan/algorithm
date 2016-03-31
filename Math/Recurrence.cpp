@@ -75,7 +75,7 @@ int main() {
 		for (int j = i + 1; j < k; j++) {
 			t = (t + (long long) a[i][j] * c[j]) % MOD;
 		}
-		d[i] = (long long) (a[i][k] - t + MOD) * fpow(a[i][i], MOD - 2) % MOD;
+		d[i] = (a[i][k] - t + MOD) % MOD;
 	}
 	for (int i = 0; i < k; i++) {
 		if (c[i] - d[i]) {

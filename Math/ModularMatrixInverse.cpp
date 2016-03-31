@@ -1,0 +1,92 @@
+#include <bits/stdc++.h>
+using namespace std;
+
+//O(n^3)
+int fpow(int n, int k, int p) {
+	int r = 1;
+	for (; k; k >>= 1) {
+		if (k & 1) r = (long long) r * n % p;
+		n = (long long) n * n % p;
+	}
+	return r;
+}
+int inv(int n, int p) {
+	return fpow(n, p - 2, p);
+}
+vector<vector<int> > MatrixInverse(vector<vector<int> > matrix, int mod) {
+	vector<vector<int> > res;
+	int i, j, k, n = matrix.size();
+	res.resize(n);
+	for (i = 0; i < n; i++) {
+		res[i].resize(n);
+		for (j = 0; j < n; j++) res[i][j] = 0;
+		res[i][i] = 1 % mod;
+	}
+	for (i = 0; i < n; i++) {
+		if (matrix[i][i] == 0) {
+			for (j = i + 1; j < n; j++) {
+				if (matrix[j][i] != 0) {
+					for (k = 0; k < n; k++) {
+						matrix[i][k] = (matrix[i][k] + matrix[j][k]) % mod;
+						res[i][k] = (res[i][k] + res[j][k]) % mod;
+					}
+					break;
+				}
+			}
+			if (j == n) {
+				res.clear();
+				return res;
+			}
+		}
+		int tmp = inv(matrix[i][i], mod);
+		for (k = 0; k < n; k++) {
+			matrix[i][k] = (long long) matrix[i][k] * tmp % mod;
+			res[i][k] = (long long) res[i][k] * tmp % mod;
+		}
+		for (j = 0; j < n; j++) {
+			if (j == i) continue;
+			tmp = matrix[j][i];
+			for (k = 0; k < n; k++) {
+				matrix[j][k] -= (long long) matrix[i][k] * tmp % mod;
+				matrix[j][k] = (matrix[j][k] % mod + mod) % mod;
+				res[j][k] -= (long long )res[i][k] * tmp % mod;
+				res[j][k] = (res[j][k] % mod + mod) % mod;
+			}
+		}
+	}
+	return res;
+}
+
+int main() {
+	srand(time(NULL));
+	int n = 100, mod = (int) 1e9 + 7;
+	vector<vector<int> > a(n, vector<int>(n, 0));
+	for (int i = 0; i < n; i++) {
+		for (int j = 0; j < n; j++) {
+			a[i][j] = rand() % mod;
+		}
+	}
+	vector<vector<int> > ia = MatrixInverse(a, mod);
+	vector<vector<int> > b(n, vector<int>(n, 0));
+	for (int i = 0; i < n; i++) {
+		for (int k = 0; k < n; k++) {
+			for (int j = 0; j < n; j++) {
+				b[i][j] = (b[i][j] + (long long) a[i][k] * ia[k][j]) % mod;
+			}
+		}
+	}
+	for (int i = 0; i < n; i++) {
+		if (b[i][i] != 1) {
+			cout<<"Wrong!\n";
+			return 0;
+		}
+		for (int j = 0; j < n; j++) {
+			if (i != j && b[i][j]) {
+				cout<<"Wrong!\n";
+				return 0;
+			}
+		}
+	}
+	cout<<"Correct!\n";
+	return 0;
+}
