@@ -6,7 +6,7 @@ typedef double T;
 typedef vector<T> VT;
 typedef vector<VT> VVT;
 #define EPS 1e-9
-VVT ModularGauss(VVT a) {
+VVT gauss(VVT a) {
 	int n = a.size(), m = a[0].size();
 	for (int i = 0; i < n - 1; i++) {
 		T dmax = 0; int idx;
@@ -43,7 +43,7 @@ int main() {
 			a[i][j] = rand();
 		}
 	}
-	a = ModularGauss(a);
+	a = gauss(a);
 	for (int i = 0; i < n; i++) {
 		for (int j = 0; j < m; j++) {
 			cout<<fixed<<setprecision(9)<<a[i][j]<<" ";
