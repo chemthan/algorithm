@@ -24,7 +24,7 @@ void gauss(int a[][MAXN], int n, int m) {
 	}
 	for (int i = 0; i < n - 1; i++) {
 		int dmax = 0, idx;
-		for (int j = i; j < m; j++) {
+		for (int j = i; j < n; j++) {
 			if (dmax < a[j][i]) {
 				dmax = a[j][i];
 				idx = j;
@@ -73,7 +73,7 @@ int main() {
 	for (int i = k - 1; i >= 0; i--) {
 		int t = 0;
 		for (int j = i + 1; j < k; j++) {
-			t = (t + (long long) a[i][j] * c[j]) % MOD;
+			t = (t + (long long) a[i][j] * d[j]) % MOD;
 		}
 		d[i] = (a[i][k] - t + MOD) % MOD;
 	}
