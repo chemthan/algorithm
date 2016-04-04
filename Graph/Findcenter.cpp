@@ -1,10 +1,9 @@
 #include <bits/stdc++.h>
 using namespace std;
 
-const int maxn = 100010;
-vector<int> adj[maxn];
-int size[maxn];
-
+const int MAXN = 100010;
+vector<int> adj[MAXN];
+int size[MAXN];
 void dfs(int u, int p) {
 	size[u] = 1;
 	for (int i = 0; i < adj[u].size(); i++) {
@@ -15,16 +14,15 @@ void dfs(int u, int p) {
 		}
 	}
 }
-
 int findcenter(int u) {
 	int p = -1; dfs(u, -1);
 	int cap = size[u] >> 1;
 	while (1) {
-		bool found = false;
+		int found = 0;
 		for (int i = 0; i < adj[u].size(); i++) {
 			int v = adj[u][i];
 			if (v != p && size[v] > cap) {
-				found = true;
+				found = 1;
 				p = u; u = v;
 				break;
 			}
