@@ -5,9 +5,9 @@ using namespace std;
 //http://codeforces.com/problemset/problem/631/E
 //https://www.codechef.com/JAN16/problems/CYCLRACE
 //http://vn.spoj.com/problems/VOMARIO/
-#define T long long
-#define oo 1e18
-struct Convexhull {
+typedef long long T;
+const T oo = (T) 1e18;
+struct ConvexhullTrick {
 	struct Line {
 		T a, b;
 		Line(T a, T b) : a(a), b(b) {}
@@ -18,10 +18,12 @@ struct Convexhull {
 	int bad(Line ln1, Line ln2, Line ln3) {
 		return (long double) (ln1.a - ln2.a) * (ln2.b - ln3.b) >= (long double) (ln2.a - ln3.a) * (ln1.b - ln2.b);
 		//return intersect(ln1, ln2) >= intersect(ln2, ln3);
+		//return (long double) (ln1.a - ln2.a) * (ln2.b - ln3.b) <= (long double) (ln2.a - ln3.a) * (ln1.b - ln2.b); //for adding in ascending order
+		//return intersect(ln1, ln2) <= intersect(ln2, ln3); //for adding in ascending order
 	}
 	vector<Line> hull;
 	vector<long double> pos;
-	Convexhull() {
+	ConvexhullTrick() {
 		pos.push_back(-oo);
 		pos.push_back(+oo);
 	}
@@ -34,16 +36,18 @@ struct Convexhull {
 		}
 		hull.push_back(ln);
 		if (hull.size() >= 2) pos.push_back(intersect(hull[hull.size() - 2], hull[hull.size() - 1]));
+		//if (hull.size() >= 2) pos.push_back(-intersect(hull[hull.size() - 2], hull[hull.size() - 1])); //for adding in ascending order
 		pos.push_back(+oo);
 	}
 	T query(T x) {
 		if (!hull.size()) return oo;
 		int k = lower_bound(pos.begin(), pos.end(), x) - pos.begin() - 1;
+		//int k = upper_bound(pos.begin(), pos.end(), -x) - pos.begin() - 1; //for adding in ascending order
 		return hull[k].a * x + hull[k].b;
 	}
 };
 
-struct Convexhull2 {
+struct ConvexhullTrick2 {
 	struct Line {
 		T a, b;
 		Line(T a = 0, T b = 0) : a(a), b(b) {}
@@ -134,7 +138,7 @@ struct Convexhull2 {
 };
 
 const int maxn = 100010;
-Convexhull st[4 * maxn];
+ConvexhullTrick st[4 * maxn];
 void update(int node, int i, int L, int R, T a, T b) {
 	if (i < L || i > R) return;
 	st[node].add(a, b);
@@ -211,12 +215,12 @@ struct SegmentTree {
 int main() {
 	srand(time(NULL));
 	for (int test = 0; test < 1000; test++) {
-		Convexhull convexhull;
-		Convexhull2 convexhull2;
+		ConvexhullTrick cht;
+		ConvexhullTrick2 cht2;
 		vector<pair<long double, long double> > v, _v;
 		for (int i = 0; i < 1000; i++) {
 			v.push_back(make_pair(rand() * rand(), rand() * rand()));
-			convexhull2.add(v.back().first, v.back().second);
+			cht2.add(v.back().first, v.back().second);
 		}
 		sort(v.begin(), v.end());
 		for (int i = 0; i < v.size(); i++) {
@@ -224,12 +228,17 @@ int main() {
 		}
 		v = _v;
 		for (int i = v.size() - 1; i >= 0; i--) {
-			convexhull.add(v[i].first, v[i].second);
+			cht.add(v[i].first, v[i].second);
 		}
 		T x = rand();
-		T a = convexhull.query(x);
-		T b = convexhull2.query(x);
-		if (a != b) cout<<a<<" "<<b<<"\n";
+		T a = cht.query(x);
+		T b = cht2.query(x);
+		if (a != b) {
+			cout<<test<<"\n";
+			cout<<"Wrong!\n";
+			return 0;
+		}
 	}
+	cout<<"Correct!\n";
 	return 0;
 }
