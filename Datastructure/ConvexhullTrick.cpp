@@ -42,7 +42,7 @@ struct ConvexhullTrick {
 	T query(T x) {
 		if (!hull.size()) return oo;
 		int k = lower_bound(pos.begin(), pos.end(), x) - pos.begin() - 1;
-		//int k = upper_bound(pos.begin(), pos.end(), -x) - pos.begin() - 1; //for adding in ascending order
+		//int k = lower_bound(pos.begin(), pos.end(), -x) - pos.begin() - 1; //for adding in ascending order
 		return hull[k].a * x + hull[k].b;
 	}
 };
@@ -223,6 +223,7 @@ int main() {
 			cht2.add(v.back().first, v.back().second);
 		}
 		sort(v.begin(), v.end());
+		//reverse(v.begin(), v.end());
 		for (int i = 0; i < v.size(); i++) {
 			if (!i || v[i].first != v[i - 1].first) _v.push_back(v[i]);
 		}
@@ -234,7 +235,6 @@ int main() {
 		T a = cht.query(x);
 		T b = cht2.query(x);
 		if (a != b) {
-			cout<<test<<"\n";
 			cout<<"Wrong!\n";
 			return 0;
 		}
