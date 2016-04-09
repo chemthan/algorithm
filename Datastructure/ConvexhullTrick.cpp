@@ -51,14 +51,14 @@ struct ConvexhullTrick2 {
 	struct Line {
 		T a, b;
 		Line(T a = 0, T b = 0) : a(a), b(b) {}
-		bool operator < (const Line& oth) const {
-			return make_pair(-a, b) < make_pair(-oth.a, oth.b);
+		bool operator < (const Line& rhs) const {
+			return make_pair(-a, b) < make_pair(-rhs.a, rhs.b);
 		}
-		bool operator == (const Line& oth) const {
-			return make_pair(a, b) == make_pair(oth.a, oth.b);
+		bool operator == (const Line& rhs) const {
+			return make_pair(a, b) == make_pair(rhs.a, rhs.b);
 		}
-		bool operator != (const Line& oth) const {
-			return make_pair(a, b) != make_pair(oth.a, oth.b);
+		bool operator != (const Line& rhs) const {
+			return make_pair(a, b) != make_pair(rhs.a, rhs.b);
 		}
 	};
 	long double intersect(Line ln1, Line ln2) {
