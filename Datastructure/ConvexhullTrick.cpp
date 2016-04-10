@@ -1,12 +1,19 @@
 #include <bits/stdc++.h>
 using namespace std;
 
-//Problems
-//http://codeforces.com/problemset/problem/631/E
-//https://www.codechef.com/JAN16/problems/CYCLRACE
-//http://vn.spoj.com/problems/VOMARIO/
+/*Problems
+1. http://codeforces.com/contest/631/problem/E
+2. http://codeforces.com/contest/660/problem/F
+3. http://codeforces.com/gym/100739/problem/K
+4. http://codeforces.com/contest/455/problem/E
+5. https://www.codechef.com/problems/CYCLRACE
+6. http://vn.spoj.com/problems/VOMARIO/Problems
+*/
 typedef long long T;
 const T oo = (T) 1e18;
+
+//O(n, qlogn)
+//Adding lines in descending/ascending order by a
 struct ConvexhullTrick {
 	struct Line {
 		T a, b;
@@ -47,7 +54,9 @@ struct ConvexhullTrick {
 	}
 };
 
-struct ConvexhullTrick2 {
+//O(nlogn, qlogn)
+//Adding lines in arbitrary order
+struct ArbitraryConvexhullTrick {
 	struct Line {
 		T a, b;
 		Line(T a = 0, T b = 0) : a(a), b(b) {}
@@ -137,8 +146,9 @@ struct ConvexhullTrick2 {
 	}
 };
 
-const int maxn = 100010;
-ConvexhullTrick st[4 * maxn];
+//O(logn) for updating, O(logn^2) for query
+const int MAXN = 100010;
+ConvexhullTrick st[4 * MAXN];
 void update(int node, int i, int L, int R, T a, T b) {
 	if (i < L || i > R) return;
 	st[node].add(a, b);
@@ -152,7 +162,8 @@ T query(int node, int l, int r, int L, int R, T x) {
 	return min(query(node << 1, l, r, L, (L + R) >> 1, x), query((node << 1) + 1, l, r, ((L + R) >> 1) + 1, R, x));
 }
 
-struct SegmentTree {
+//O(logn) for updating, query
+struct LineSegmentTree {
 	struct Line {
 		T a, b;
 		Line() {a = 0; b = oo;}
@@ -161,7 +172,7 @@ struct SegmentTree {
 			return a * x + b;
 		}
 	};
-	Line st[4 * maxn];
+	Line st[4 * MAXN];
 	void update(int node, int l, int r, int L, int R, Line ln) {
 		int M = (L + R) >> 1;
 		if (l > R || r < L) return;
@@ -216,25 +227,23 @@ int main() {
 	srand(time(NULL));
 	for (int test = 0; test < 1000; test++) {
 		ConvexhullTrick cht;
-		ConvexhullTrick2 cht2;
-		vector<pair<long double, long double> > v, _v;
+		ArbitraryConvexhullTrick acht;
+		vector<pair<long double, long double> > v1, v2;
 		for (int i = 0; i < 1000; i++) {
-			v.push_back(make_pair(rand() * rand(), rand() * rand()));
-			cht2.add(v.back().first, v.back().second);
+			v1.push_back(make_pair(rand() * rand(), rand() * rand()));
+			acht.add(v1.back().first, v1.back().second);
 		}
-		sort(v.begin(), v.end());
-		//reverse(v.begin(), v.end());
-		for (int i = 0; i < v.size(); i++) {
-			if (!i || v[i].first != v[i - 1].first) _v.push_back(v[i]);
+		sort(v1.begin(), v1.end());
+		//reverse(v1.begin(), v1.end());
+		for (int i = 0; i < v1.size(); i++) {
+			if (!i || v1[i].first != v1[i - 1].first) v2.push_back(v1[i]);
 		}
-		v = _v;
-		for (int i = v.size() - 1; i >= 0; i--) {
-			cht.add(v[i].first, v[i].second);
+		v1 = v2;
+		for (int i = v1.size() - 1; i >= 0; i--) {
+			cht.add(v1[i].first, v1[i].second);
 		}
 		T x = rand();
-		T a = cht.query(x);
-		T b = cht2.query(x);
-		if (a != b) {
+		if (cht.query(x) != acht.query(x)) {
 			cout<<"Wrong!\n";
 			return 0;
 		}
