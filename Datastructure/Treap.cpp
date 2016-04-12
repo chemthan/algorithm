@@ -1,7 +1,7 @@
 #include <bits/stdc++.h>
 using namespace std;
 
-const int INF = (int) 1e9;
+const int oo = (int) 1e9;
 struct node {
 	int key, prio, size;
 	node *l, *r;
@@ -114,7 +114,7 @@ void erase(node*& t, int pos) {
 	else erase(t->r, pos - size(t->l) - 1);
 }
 void split(node* t, int pos, node*& l, node*& r) {
-	insert(t, -1, INF, pos);
+	insert(t, -1, oo, pos);
 	l = t->l; r = t->r;
 	delete t;
 }
