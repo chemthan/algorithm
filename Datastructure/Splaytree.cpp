@@ -13,7 +13,7 @@ Problems:
 struct Node {
 	Node();
 	Node *l, *r, *p;
-	int size, key, cnt;
+	int size, key;
 	int rev, lz;
 };
 Node* nil = new Node();
@@ -23,7 +23,7 @@ Node::Node() {
 }
 void init() {
 	nil->l = nil->r = nil->p = nil;
-	nil->size = nil->cnt = 0;
+	nil->size = 0;
 }
 int isrt(Node* x) {
 	return x->p == nil || (x->p->l != x && x->p->r != x);
@@ -76,7 +76,7 @@ void splay(Node* x) {
 	pushup(x);
 }
 
-const int MAXN = 100010;
+const int MAXN = 100010; //Be careful
 struct SplayTree {
 	Node mem[MAXN], *root;
 	int cur;
