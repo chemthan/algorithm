@@ -1,246 +1,201 @@
 #include <bits/stdc++.h>
 using namespace std;
 
+/*
+Complexity: amortized O(logn) per operation
+Problems:
+1. http://codeforces.com/gym/100796/problem/J
+2. http://codeforces.com/problemset/problem/650/E
+3. https://www.codechef.com/problems/SUMBITS
+4. https://www.codechef.com/problems/BRCKMT
+5. https://www.codechef.com/problems/FURGRAPH
+*/
+
 struct Node {
+	Node();
 	Node *l, *r, *p;
-	int key, size;
+	int size, key, cnt;
 	int rev, lz;
-	Node(int key = 0) : key(key) {
-		l = r = p = 0;
-		size = 1;
-		rev = lz = 0;
-	}
-	~Node() {
-		if (l) delete l;
-		if (r) delete r;
-		if (p) delete p;
-	}
-} *root;
-int size(Node* x) {
-	return x ? x->size : 0;
+};
+Node* nil = new Node();
+Node::Node() {
+	l = r = p = nil;
+	size = 1; key = rev = lz = 0;
+}
+void init() {
+	nil->l = nil->r = nil->p = nil;
+	nil->size = nil->cnt = 0;
+}
+int isrt(Node* x) {
+	return x->p == nil || (x->p->l != x && x->p->r != x);
 }
 void setchild(Node* p, Node* c, int l) {
 	c->p = p; l ? p->l = c : p->r = c;
 }
 void updatelz(Node* x, int val) {
-	if (!x) return;
+	if (x == nil) return;
 	x->lz += val;
 	x->key += val;
 }
 void pushdown(Node* x) {
-	if (!x) return;
+	if (x == nil) return;
 	Node *u = x->l, *v = x->r;
 	if (x->rev) {
-		if (u) {swap(u->l, u->r); u->rev ^= 1;}
-		if (v) {swap(v->l, v->r); v->rev ^= 1;}
+		if (u != nil) {swap(u->l, u->r); u->rev ^= 1;}
+		if (v != nil) {swap(v->l, v->r); v->rev ^= 1;}
 		x->rev = 0;
 	}
 	if (x->lz) {
-		if (u) updatelz(u, x->lz);
-		if (v) updatelz(v, x->lz);
+		if (u != nil) updatelz(u, x->lz);
+		if (v != nil) updatelz(v, x->lz);
 		x->lz = 0;
 	}
 }
-void pushup(Node*& x) {
-	if (!x) return;
-	x->size = size(x->l) + size(x->r) + 1;
+void pushup(Node* x) {
+	x->size = x->l->size + x->r->size + 1;
 }
-void lrotate(Node* x) {
-	Node* y = x->r;
-	if (y) {
-		x->r = y->l;
-		if (y->l) y->l->p = x;
-		y->p = x->p;
+void rotate(Node* x) {
+	Node* y = x->p;
+	int l = x->p->l == x;
+	if (!isrt(y)) {
+		setchild(y->p, x, y->p->l == y);
 	}
-	if (!x->p) root = y;
-	else if (x == x->p->l) x->p->l = y;
-	else x->p->r = y;
-	if (y) y->l = x;
-	x->p = y;
-	pushup(x); pushup(y);
-}
-void rrotate(Node* x) {
-	Node* y = x->l;
-	if (y) {
-		x->l = y->r;
-		if (y->r) y->r->p = x;
-		y->p = x->p;
+	else {
+		x->p = y->p;
 	}
-	if (!x->p) root = y;
-	else if (x == x->p->l) x->p->l = y;
-	else x->p->r = y;
-	if (y) y->r = x;
-	x->p = y;
-	pushup(x); pushup(y);
+	setchild(y, l ? x->r : x->l, l);
+	setchild(x, y, !l);
+	pushup(y);
 }
 void splay(Node* x) {
-	while (x->p) {
-		if (!x->p->p) {
-			if (x->p->l == x) rrotate(x->p);
-			else lrotate(x->p);
-		}
-		else if (x->p->l == x && x->p->p->l == x->p) {
-			rrotate(x->p->p);
-			rrotate(x->p);
-		}
-		else if (x->p->r == x && x->p->p->r == x->p) {
-			lrotate(x->p->p);
-			lrotate(x->p);
-		}
-		else if (x->p->l == x && x->p->p->r == x->p) {
-			rrotate(x->p);
-			lrotate(x->p);
-		}
-		else {
-			lrotate(x->p);
-			rrotate(x->p);
-		}
-	}
-}
-void replace(Node* u, Node* v) {
-	if (!u->p) root = v;
-	else if (u == u->p->l) u->p->l = v;
-	else u->p->r = v;
-	if (v) v->p = u->p;
-}
-Node* minsubtree(Node* u) {
-	while (u->l) u = u->l;
-	return u;
-}
-Node* maxsubtree(Node* u) {
-	while (u->r) u = u->r;
-	return u;
-}
-void insert(int key) {
-	Node* z = root;
-	Node* p = 0;
-	while (z) {
-		pushdown(z);
-		p = z;
-		if (z->key < key) z = z->r;
-		else z = z->l;
-	}
-	z = new Node(key);
-	z->p = p;
-	if (!p) root = z;
-	else if (p->key < z->key) p->r = z;
-	else p->l = z;
-	splay(z);
-}
-Node* find(int key) {
-	Node* z = root;
-	while (z) {
-		pushdown(z);
-		if (z->key < key) z = z->r;
-		else if (key < z->key) z = z->l;
-		else return z;
-	}
-	return 0;
-}
-void erase(int key) {
-	Node* z = find(key);
-	if (!z) return;
-	splay(z);
-	pushdown(z);
-	if (!z->l) replace(z, z->r);
-	else if (!z->r) replace(z, z->l);
-	else {
-		Node* y = minsubtree(z->r);
-		if (y->p != z) {
-			replace(y, y->r);
-			y->r = z->r;
-			y->r->p = y;
-		}
-		replace(z, y);
-		y->l = z->l;
-		y->l->p = y;
-	}
-	delete z;
-}
-Node* join(Node* x, Node* y) {
-	if (!x) return y;
-	if (!y) return x;
-	pushdown(y);
-	while (1) {
-		pushdown(x);
-		if (!x->r) break;
-		x = x->r;
-	}
-	splay(x);
-	setchild(x, y, 0);
-	pushup(x);
-	return x;
-}
-void split(int i, Node*& x, Node*& y) {
-	if (!i) {
-		x = 0;
-		y = root;
-		return;
-	}
-	Node* z = find(i);
-	splay(z);
-	y = z->r; y->p = 0;
-	x = z; x->r = 0;
-	pushup(x);
-}
-Node* find(Node* x, int pos) {
-	while (1) {
-		pushdown(x);
-		int k = x->l ? x->l->size + 1 : 1;
-		if (pos == k) return x;
-		if (pos < k) x = x->l;
-		else {x = x->r; pos -= k;}
-	}
-	return 0;
-}
-void split(Node* x, int pos, Node*& l, Node*& r) {
-	if (pos == 0) {
-		l = 0;
-		r = x;
-		return;
-	}
-	Node* y = find(x, pos);
-	splay(y);
-	if (r = y->r) r->p = 0;
-	if (l = y) {l->r = 0; pushup(l);}
-}
-void split(Node* t, int pos1, int pos2, Node*& t1, Node*& t2, Node*& t3) {
-	split(t, pos1 - 1, t1, t2);
-	split(t2, pos2 - pos1 + 1, t2, t3);
-}
-void reverse(int l, int r) {
-	Node *x, *y, *z, *t;
-	split(root, r, t, z);
-	split(t, l - 1, x, y);
-	if (y) {
-		swap(y->l, y->r);
-		y->rev ^= 1;
-	}
-	root = join(join(x, y), z);
-}
-void update(int l, int r, int val) {
-	Node *x, *y, *z;
-	split(root, l, r, x, y, z);
-	updatelz(y, val);
-	root = join(join(x, y), z);
-}
-void trace(Node* x) {
-	if (!x) return;
 	pushdown(x);
-	trace(x->l);
-	cout<<x->key<<" ";
-	trace(x->r);
-}
-void trace() {
-	trace(root);
-	cout<<"\n";
+	while (!isrt(x)) {
+		pushdown(x->p->p); pushdown(x->p); pushdown(x);
+		if (!isrt(x->p)) rotate((x->p->l == x) == (x->p->p->l == x->p) ? x->p : x);
+		rotate(x);
+	}
+	pushup(x);
 }
 
+const int MAXN = 100010;
+struct SplayTree {
+	Node mem[MAXN], *root;
+	int cur;
+	SplayTree() {
+		root = nil; cur = 0;
+		init();
+	}
+	Node* alloc(int key) {
+		mem[cur].key = key;
+		return mem + (cur++);
+	}
+	Node* insert(Node* x, int key) {
+		Node* p = nil;
+		while (x != nil) {
+			pushdown(x);
+			p = x;
+			if (x->key < key) x = x->r;
+			else x = x->l;
+		}
+		x = alloc(key);
+		x->p = p;
+		if (p == nil) {
+			root = x;
+		}
+		else if (p->key < x->key) p->r = x;
+		else p->l = x;
+		splay(x);
+		return root = x;
+	}
+	Node* insert(int key) {
+		return insert(root, key);
+	}
+	Node* findkey(Node* x, int key) {
+		while (x) {
+			pushdown(x);
+			if (x->key < key) x = x->r;
+			else if (key < x->key) x = x->l;
+			else return x;
+		}
+		return nil;
+	}
+	Node* findkey(int key) {
+		return findkey(root, key);
+	}
+	Node* findpos(Node* x, int pos) {
+		while (1) {
+			pushdown(x);
+			int k = x->l ? x->l->size + 1 : 1;
+			if (pos == k) return x;
+			else if (pos < k) x = x->l;
+			else {x = x->r; pos -= k;}
+		}
+		return nil;
+	}
+	Node* findpos(int pos) {
+		return findpos(root, pos);
+	}
+	Node* join(Node* x, Node* y) {
+		if (x == nil) return root = y;
+		if (y == nil) return root = x;
+		pushdown(y);
+		while (1) {
+			pushdown(x);
+			if (x->r == nil) break;
+			x = x->r;
+		}
+		splay(x);
+		setchild(x, y, 0);
+		pushup(x);
+		return root = x;
+	}
+	void split(Node* x, int pos, Node*& l, Node*& r) {
+		if (!pos) {l = nil; r = x; return;}
+		Node* y = findpos(x, pos);
+		splay(y);
+		if ((r = y->r) != nil) r->p = nil;
+		if ((l = y) != nil) {l->r = nil; pushup(l);}
+	}
+	void split(Node* t, int pos1, int pos2, Node*& t1, Node*& t2, Node*& t3) {
+		split(t, pos1 - 1, t1, t2);
+		split(t2, pos2 - pos1 + 1, t2, t3);
+	}
+	void reverse(int l, int r) {
+		Node *x, *y, *z, *t;
+		split(root, r, t, z);
+		split(t, l - 1, x, y);
+		if (y) {
+			swap(y->l, y->r);
+			y->rev ^= 1;
+		}
+		join(join(x, y), z);
+	}
+	void update(int l, int r, int val) {
+		Node *x, *y, *z;
+		split(root, l, r, x, y, z);
+		updatelz(y, val);
+		join(join(x, y), z);
+	}
+	void trace(Node* x) {
+		if (x == nil) return;
+		pushdown(x);
+		trace(x->l);
+		cout<<x->key<<" ";
+		trace(x->r);
+	}
+	void trace() {
+		trace(root);
+		cout<<"\n";
+	}
+} slt;
+
 int main() {
-	insert(3); insert(4); insert(5);
-	reverse(1, 2);
-	trace();
-	update(1, 3, 1);
-	trace();
+	slt.insert(3); slt.insert(4); slt.insert(5);
+	slt.reverse(1, 2);
+	slt.trace();
+	slt.update(1, 3, 1);
+	slt.trace();
+	slt.update(2, 3, 2);
+	slt.trace();
 	return 0;
 }
