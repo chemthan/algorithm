@@ -1,75 +1,83 @@
 #include <bits/stdc++.h>
 using namespace std;
 
-int add(int a, int b, int p = (int) 1e9 + 7) {return a + b - (a + b >= p) * p;}
-int sub(int a, int b, int p = (int) 1e9 + 7) {return a - b + (a - b < 0) * p;}
-int mul(int a, int b, int p = (int) 1e9 + 7) {return ((long long) a * b) % p;}
-int fpow(int a, int k, int p = (int) 1e9 + 7) {int r = 1; while (k) {if (k & 1) r = mul(r, a, p); k >>= 1; a = mul(a, a, p);} return r;}
-int inv(int a, int p = (int) 1e9 + 7) {return fpow(a, p - 2, p);}
-const int PRIME[3] = {1004535809, 1007681537, 1012924417}; //2 ^ 20 * {958, 961, 966}
-const int gen[3] = {3, 3, 5}; //primitive roots
-const int MAXN = 1 << 20;
-int fa[MAXN];
-int fb[MAXN];
-int fd[3][MAXN];
-int prv[MAXN];
-int nxt[MAXN];
-int roots[MAXN];
-void fft(int a[], int k, int w, int p) {
-	for (int i = 0; i < (1 << k); i++) prv[i] = nxt[i] = roots[i] = 0;
-	int high = -1;
-	for (int i = 1; i < (1 << k); i++) {
-		if (!(i & (i - 1))) high++;
-		prv[i] = prv[i ^ (1 << high)];
-		prv[i] |= (1 << (k - 1 - high));
+const int P1 = 998244353, P2 = 995622913;
+const long long M1 = 397550359381069386LL, M2 = 596324591238590904LL;
+const long long MM = 993874950619660289LL;
+const int maxn = 1 << 18;
+int E1, E2, F1, F2, I1, I2;
+int A[maxn << 1], B[maxn << 1], C[maxn << 1];
+int X[maxn], Y[maxn];
+long long mul(long long a, long long b, long long p) {
+	a %= p; b %= p;
+	long long r = 0;
+	for (; b; b >>= 1) {
+		if (b & 1) r = (r + a) % p;
+		a = (a + a) % p;
 	}
-	for (int i = 0; i < (1 << k); i++) prv[i] = a[prv[i]];
-	roots[0] = 1;
-	for (int i = 1; i < (1 << k); i++) roots[i] = mul(roots[i - 1], w, p);
-	for (int len = 1; len < (1 << k); len <<= 1) {
-		int rstep = (1 << k) / (len << 1);
-		for (int pdest = 0; pdest < (1 << k); ) {
-			int p1 = pdest;
-			for (int i = 0; i < len; i++) {
-				int val = mul(roots[i * rstep], prv[p1 + len], p);
-				nxt[pdest] = add(prv[p1], val, p);
-				nxt[pdest + len] = sub(prv[p1], val, p);
-				pdest++;
-				p1++;
-			}
-			pdest += len;
-		}
-		for (int i = 0; i < (1 << k); i++) swap(prv[i], nxt[i]);
-	}
-	for (int i = 0; i < (1 << k); i++) a[i] = prv[i];
+	return r;
 }
-void multiply(int a[], int b[], int c[], int na, int nb, int mod = (int) 1e9 + 7) {
-	int len = na + nb - 1;
-	int k = 0; while ((1 << k) <= 2 * max(na, nb)) k++;
-	for (int r = 0; r < 3; r++) {
-		for (int i = 0; i < (1 << k); i++) fa[i] = fb[i] = 0;
-		for (int i = 0; i < na; i++) fa[i] = a[i];
-		for (int i = 0; i < nb; i++) fb[i] = b[i];
-		int p = PRIME[r];
-		int w = fpow(gen[r], (p - 1) / (1 << k), p);
-		fft(fa, k, w, p);
-		fft(fb, k, w, p);
-		for (int i = 0; i < (1 << k); i++) fd[r][i] = mul(fa[i], fb[i], p);
-		fft(fd[r], k, inv(w, p), p);
-		int rem = inv(1 << k, p);
-		for (int i = 0; i < (1 << k); i++) {
-			fd[r][i] = mul(fd[r][i], rem, p);
+long long fpow(long long n, long long k, int p) {
+	long long r = 1;
+	for (; k; k >>= 1) {
+		if (k & 1) r = r * n % p;
+		n = n * n % p;
+	}
+	return r;
+}
+int CRT(int x1, int x2, int p) {
+	return (mul(M1, x1, MM) + mul(M2, x2, MM)) % MM % p;
+}
+void NTT(int *A, int PM, int PW, int n) {
+	for (int m = n, h; h = m / 2, m >= 2; PW = 1LL * PW * PW % PM, m = h) {
+		for (int i = 0, w = 1; i < h; i++, w = 1LL * w * PW % PM) {
+			for (int j = i; j < n; j += m) {
+				int k = j + h, x = (A[j] - A[k] + PM) % PM;
+				A[j] += A[k];
+				A[j] %= PM;
+				A[k] = 1LL * w * x % PM;
+			}
 		}
 	}
-	for (int i = 0; i < len; i++) {
-		long long cur = (long long) mul(sub(fd[1][i], fd[0][i], PRIME[1]), inv(PRIME[0], PRIME[1]), PRIME[1]) * PRIME[0] + fd[0][i];
-		long long cur2 = mul(sub(fd[2][i], cur % PRIME[2], PRIME[2]), inv(mul(PRIME[0], PRIME[1], PRIME[2]), PRIME[2]), PRIME[2]);
-		cur2 = add(mul(cur2 % mod, mul(PRIME[0], PRIME[1], mod), mod), cur % mod, mod);
-		c[i] = cur2;
+	for (int i = 0, j = 1; j < n - 1; j++) {
+		for (int k = n / 2; k > (i ^= k); k /= 2);
+		if (j < i) swap(A[i], A[j]);
 	}
+}
+int init(int n) {
+	int k = 1, N = 2, p;
+	while (N < n) {N <<= 1; k++;}
+	assert(k <= 19);
+	p = 7 * 17;
+	for (int i = 1; i <= 23 - k; i++) p *= 2;
+	E1 = fpow(3, p, P1);
+	F1 = fpow(E1, P1 - 2, P1);
+	I1 = fpow(N, P1 - 2, P1);
+	p = 9 * 211;
+	for (int i = 1; i <= 19 - k; i++) p *= 2;
+	E2 = fpow(5, p, P2);
+	F2 = fpow(E2, P2 - 2, P2);
+	I2 = fpow(N, P2 - 2, P2);
+	return N;
+}
+void mul(int* a, int* b, int* c, int n, int p) {
+	int N = init(n);
+	memcpy(X, a, sizeof(*a) * n); memcpy(Y, b, sizeof(*b) * n);
+	memset(A, 0, sizeof(*A) * N); memset(B, 0, sizeof(*B) * N);
+	memset(C, 0, sizeof(*C) * N); memset(c, 0, sizeof(*c) * N);
+	memcpy(A, X, sizeof(*X) * n); memcpy(B, Y, sizeof(*Y) * n);
+	NTT(A, P1, E1, N); NTT(B, P1, E1, N);
+	for (int i = 0; i < N; i++) C[i] = (long long) A[i] * B[i] % P1;
+	NTT(C, P1, F1, N);
+	for (int i = 0; i < N; i++) C[i] = (long long) C[i] * I1 % P1;
+	NTT(X, P2, E2, N); NTT(Y, P2, E2, N);
+	for (int i = 0; i < N; i++) c[i] = (long long) X[i] * Y[i] % P2;
+	NTT(c, P2, F2, N);
+	for (int i = 0; i < N; i++) c[i] = (long long) c[i] * I2 % P2;
+	for (int i = 0; i < N; i++) c[i] = CRT(C[i], c[i], p);
+	for (int i = n; i < N; i++) c[i] = 0;
 }
 
-const int maxn = 1 << 19;
 int a[maxn];
 int b[maxn];
 int c[maxn << 1];
@@ -78,9 +86,9 @@ int d[maxn << 1];
 int main() {
 	srand(time(NULL));
 	int n = 1000, p = (int) 1e8 + 7;
-	for (int i = 0; i < n; i++) a[i] = rand() * rand() % 1000000000;
-	for (int i = 0; i < n; i++) b[i] = rand() * rand() % 1000000000;
-	multiply(a, b, c, n, n, p);
+	for (int i = 0; i < n; i++) a[i] = rand() * rand() % 10000;
+	for (int i = 0; i < n; i++) b[i] = rand() * rand() % 10000;
+	mul(a, b, c, n << 1, p);
 	for (int i = 0; i < n; i++) {
 		for (int j = 0; j < n; j++) {
 			d[i + j] = (d[i + j] + 1LL * a[i] * b[j]) % p;
