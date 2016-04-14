@@ -38,7 +38,7 @@ void multiply(int a[], int b[], long long c[], int na, int nb) {
 }
 const int K = 2;
 cplex ap[K][MAXN << 1], bp[K][MAXN << 1], cc[MAXN << 1];
-void multiply2(int a[], int b[], int c[], int na, int nb, int mod = (int) 1e9 + 7) {
+void modularmultiply(int a[], int b[], int c[], int na, int nb, int mod = (int) 1e9 + 7) {
 	int n = 1; while (n < na + nb) n <<= 1;
 	int base = (int) pow(mod, 1.0 / K) + 1;
 	for (int i = 0; i < n; i++) {
@@ -78,7 +78,7 @@ int main() {
 	int na = 10000, nb = 10000;
 	for (int i = 0; i < na; i++) a[i] = rand() * rand() % 1000000000;
 	for (int i = 0; i < nb; i++) b[i] = rand() * rand() % 1000000000;
-	multiply2(a, b, c, na, nb);
+	modularmultiply(a, b, c, na, nb);
 	for (int i = 0; i < na; i++) {
 		for (int j = 0; j < nb; j++) {
 			d[i + j] += (long long) a[i] * b[j];
