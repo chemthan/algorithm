@@ -1,6 +1,10 @@
 #include <bits/stdc++.h>
 using namespace std;
 
+/*Problem
+1. http://codeforces.com/problemset/problem/434/C
+2. https://www.codechef.com/problems/MSDBIN
+*/
 const int MAXN = 100010;
 const int MAXC = 26;
 struct Node {
@@ -43,7 +47,8 @@ void pushlink(Node* root) {
 		if (x == root || x->parent == root) {
 			x->bfail = root;
 			x->gfail = 0;
-		} else {
+		}
+		else {
 			x->bfail = x->parent->bfail;
 			while (x->bfail != root && !x->bfail->child[x->val]) x->bfail = x->bfail->bfail;
 			if (x->bfail->child[x->val]) x->bfail = x->bfail->child[x->val];
@@ -55,8 +60,9 @@ void pushlink(Node* root) {
 void search(char* s) {
 	Node* cur = root;
 	while (*s) {
-		while (!cur->child[*s - 'a']) cur = cur->bfail;
+		while (cur != root && !cur->child[*s - 'a']) cur = cur->bfail;
 		cur = cur->child[*s - 'a'];
+		if (!cur) break;
 		Node* tmp = cur;
 		if (tmp->key == -1) tmp = tmp->gfail;
 		while (tmp) {
