@@ -110,7 +110,7 @@ struct SplayTree {
 		return insert(root, key);
 	}
 	Node* findkey(Node* x, int key) {
-		while (x) {
+		while (x != nil) {
 			pushdown(x);
 			if (x->key < key) x = x->r;
 			else if (key < x->key) x = x->l;
