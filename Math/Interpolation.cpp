@@ -39,7 +39,7 @@ int interpolation(int x, int k) {
 			res = (res + (long long) pref[i - 1] * suff[i + 1] % MOD * rfac[i - 1] % MOD * rfac[k - i] % MOD * a[i]) % MOD;
 		}
 		else {
-			res = (res - (long long) pref[i - 1] * suff[i + 1] % MOD * rfac[i - 1] % MOD * rfac[k - i] % MOD * a[i] + MOD) % MOD;
+			res = (res - (long long) pref[i - 1] * suff[i + 1] % MOD * rfac[i - 1] % MOD * rfac[k - i] % MOD * a[i] % MOD + MOD) % MOD;
 		}
 	}
 	return res;
