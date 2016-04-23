@@ -1,7 +1,7 @@
 #include <bits/stdc++.h>
 using namespace std;
 
-//Complexity: O(V^2*E) / O(VElogV)
+//Complexity: O(V^2*E) / O(min(V^2/3,E^1/2)E)
 typedef int T;
 #define MAXV 100010
 #define MAXE 1000010

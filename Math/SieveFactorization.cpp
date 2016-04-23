@@ -2,14 +2,14 @@
 using namespace std;
 
 const int MAXN = 100010;
-bool flag[MAXN];
+int fl[MAXN];
 int sp[MAXN];
 void Sieve() {
 	for (int i = 2; i < MAXN; i += 2) sp[i] = 2;
-	for (int i = 3; i < MAXN; i += 2) if (!flag[i]) {
+	for (int i = 3; i < MAXN; i += 2) if (!fl[i]) {
 		sp[i] = i;
-		for (int j = i; 1LL * i * j < MAXN; j += 2) if (!flag[i * j]) {
-			flag[i * j] = 1;
+		for (int j = i; (long long) i * j < MAXN; j += 2) if (!fl[i * j]) {
+			fl[i * j] = 1;
 			sp[i * j] = i;
 		}
 	}
@@ -27,8 +27,7 @@ int Euler(int n) {
 
 int main() {
 	Sieve();
-	printf("%d\n", sp[101 * 103]);
-	printf("%d", Euler(12345));
+	cout<<sp[101 * 103]<<"\n";
+	cout<<Euler(12345)<<"\n";
 	return 0;
 }
-

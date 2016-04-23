@@ -13,12 +13,14 @@ void build() {
 			prime[++nprime] = i;
 			t[i] = nprime;
 		}
-		for(int j = 1; j <= t[i] && 1LL * i * prime[j] < MAXN; j++) t[i * prime[j]] = j;
+		for(int j = 1; j <= t[i] && (long long) i * prime[j] < MAXN; j++) t[i * prime[j]] = j;
 	}
 }
 
 int main() {
 	build();
-	for (int i = 1; i <= 100; i++) printf("%d\n", prime[i]);
+	for (int i = 1; i <= 100; i++) {
+		cout<<prime[i]<<"\n";
+	}
 	return 0;
 }
