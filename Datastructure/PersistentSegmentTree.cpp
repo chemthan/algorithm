@@ -12,12 +12,12 @@ Node::Node() {
 	L = R = -1;
 	cnt = 0;
 }
-Node* Alloc() {
+Node* alloc() {
 	static int cur = 0;
 	return mem + (cur++);
 }
 Node* build(int L, int R) {
-	Node* node = Alloc();
+	Node* node = alloc();
 	node->L = L; node->R = R;
 	if (L == R) return node;
 	node->l = build(L, (L + R) >> 1);
@@ -26,7 +26,7 @@ Node* build(int L, int R) {
 }
 Node* update(Node* node, int i, int val) {
 	if (node->L > i || node->R < i) return node;
-	Node* x = Alloc();
+	Node* x = alloc();
 	x->L = node->L; x->R = node->R;
 	x->l = node->l; x->r = node->r;
 	if (node->L == node->R) {
