@@ -42,15 +42,15 @@ int lca(int u, int v) {
 	return p[u][0];
 }
 void hld(int u) {
-	if (hchain[nchain] == -1) hchain[nchain] = u;
+	if (!~hchain[nchain]) hchain[nchain] = u;
 	ichain[u] = nchain;
 	pib[u] = nbase++;
 	int tmp = -1;
 	for (int i = 0; i < adj[u].size(); i++) {
 		int v = adj[u][i];
-		if (v != p[u][0]) {if (tmp == -1 || size[v] > size[tmp]) tmp = v;}
+		if (v != p[u][0] && (!~tmp || size[v] > size[tmp])) tmp = v;
 	}
-	if (tmp != -1) hld(tmp);
+	if (~tmp) hld(tmp);
 	for (int i = 0; i < adj[u].size(); i++) {
 		int v = adj[u][i];
 		if (v != p[u][0] && v != tmp) {nchain++; hld(v);}
