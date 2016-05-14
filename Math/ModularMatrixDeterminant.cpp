@@ -1,7 +1,7 @@
 #include <bits/stdc++.h>
 using namespace std;
 
-//O(n^3)
+//Complexity: O(n^3)
 int fpow(int n, int k, int p) {
 	int r = 1;
 	for (; k; k >>= 1) {
@@ -26,8 +26,8 @@ int MatrixDeterminant(vector<vector<int> > a, vector<int>& r, int mod) {
 			}
 			if (j == n) return 0;
 		}
-		int tmp = a[i][i];
-		for (k = 0; k < m; k++) a[i][k] = (long long) a[i][k] * inv(tmp, mod) % mod;
+		int tmp = a[i][i], itmp = inv(tmp, mod);
+		for (k = 0; k < m; k++) a[i][k] = (long long) a[i][k] * itmp % mod;
 		res = (long long) res * tmp % mod;
 		for (j = 0; j < n; j++) {
 			if (j == i) continue;
@@ -58,12 +58,9 @@ int main() {
 		for (int j = 0; j < n; j++) {
 			t = (t + (long long) a[i][j] * r[j]) % mod;
 		}
-		if (t != a[i][n]) {
-			cout<<"Wrong!\n";
-			return 0;
-		}
+		assert(t == a[i][n]);
 	}
-	cout<<"Determinant: "<<det<<"\n";;
+	cout<<"Determinant: "<<det<<"\n";
 	cout<<"Solution: ";
 	for (int i = 0; i < n; i++) {
 		cout<<r[i]<<" ";

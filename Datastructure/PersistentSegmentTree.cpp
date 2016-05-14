@@ -40,7 +40,7 @@ Node* update(Node* node, int i, int val) {
 }
 int query(Node* node, int L, int R) {
 	if (node->L > R || node->R < L) return 0;
-	if (node->L <= L && node->R >= R) return node->cnt;
+	if (node->L >= L && node->R <= R) return node->cnt;
 	return query(node->l, L, R) + query(node->r, L, R);
 }
 

@@ -2,11 +2,11 @@
 using namespace std;
 
 const int MAXN = 1010;
-int n, rank[MAXN][MAXN], husband[MAXN];
+int n, rate[MAXN][MAXN], husband[MAXN];
 queue<int> womanlist[MAXN];
 queue<int> freemans;
 int prefer(int woman, int newman, int herhusband) {
-	return rank[woman][newman] < rank[woman][herhusband];
+	return rate[woman][newman] < rate[woman][herhusband];
 }
 void doit() {
 	memset(husband, -1, sizeof(husband));
@@ -46,7 +46,7 @@ int main() {
 	for (int woman = 0; woman < n; woman++) {
 		for (int i = 0; i < n; i++) {
 			int man; scanf("%d", &man); man--;
-			rank[woman][man] = i;
+			rate[woman][man] = i;
 		}
 	}
 	doit();
