@@ -1,7 +1,7 @@
 import java.io.*;
 import java.util.*;
 
-public class Template {
+public class Main {
 	
 	static PrintWriter out;
 	
