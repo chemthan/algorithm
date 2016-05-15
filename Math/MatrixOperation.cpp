@@ -1,10 +1,11 @@
 #include <bits/stdc++.h>
 using namespace std;
 
-const int MAXN = 100;
-#define MOD 1000000007
 struct matrix {
+	static const int MAXN = 100;
+	static const int MOD = (int) 1e9 + 7;
 	int x[MAXN][MAXN];
+	
 	matrix() {
 		memset(x, 0, sizeof(x));
 	}
@@ -44,10 +45,21 @@ struct matrix {
 	}
 	friend matrix sumpower(matrix A, long long k) {
 		if (k == 1) return A;
-		if (k & 1) return (A ^ k) + sumpower(A, k - 1);
-		k >>= 1;
-		matrix T = sumpower(A, k);
-		return T + (T * (A ^ k));
+		vector<int> bit;
+		while (k) {
+			bit.push_back(k & 1);
+			k >>= 1;
+		}
+		matrix res = A, tmp = A;
+		for (int i = bit.size() - 2; i >= 0; i--) {
+			res = res + (res * tmp);
+			tmp = tmp * tmp;
+			if (bit[i] & 1) {
+				tmp = tmp * A;
+				res = res + tmp;
+			}
+		}
+		return res;
 	}
 };
 

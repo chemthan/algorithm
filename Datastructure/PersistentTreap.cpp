@@ -85,8 +85,7 @@ struct PersistentTreap {
 		return root = merge(merge(splitLkey(root, key), alloc(key, nil, nil)), splitRkey(root, key));
 	}
 	Node* remove(int x, int y) {
-		int l = root->size;
-		return root = merge(splitL(root, x - 1), splitR(root, l - y));
+		return root = merge(splitL(root, x - 1), splitR(root, root->size - y));
 	}
 };
 
