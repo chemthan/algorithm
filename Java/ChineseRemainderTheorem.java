@@ -4,11 +4,15 @@ static class ChineseRemainderTheorem {
 	public int[] r;
 	public int[][] inv;
 
-	public ChineseRemainderTheorem(int[] p) {
-		this.n = p.length;
+	public ChineseRemainderTheorem(int[] p, int[] r) {
+		n = p.length;
 		this.p = new int[n];
 		this.r = new int[n];
 		this.inv = new int[n][n];
+		for (int i = 0; i < n; i++) {
+			this.p[i] = p[i];
+			this.r[i] = r[i];
+		}
 		for (int i = 0; i < n; i++) {
 			for (int j = i + 1; j < n; j++) {
 				inv[i][j] = BigInteger.valueOf(p[i]).modInverse(BigInteger.valueOf(p[j])).intValue();
