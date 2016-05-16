@@ -39,7 +39,7 @@ static class Matrix {
 		}
 		return res;
 	}
-	static public Matrix sumpower(Matrix A, long k) {
+	public Matrix sumpower(Matrix A, long k) {
 		if (k == 1) return A;
 		ArrayList<Integer> bit = new ArrayList<>();
 		while (k > 0) {
