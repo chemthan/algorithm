@@ -25,10 +25,10 @@ int size(node*& t) {
 int prio(node*& t) {
 	return t ? t->prio : -1;
 }
-void updatelz(node* t, int val){
+void updatelz(node* t, int val) {
 	if (!t) return;
-    t->lz += val;
-    t->key += val;
+	t->lz += val;
+	t->key += val;
 }
 void pushdown(node* t) {
 	if (!t) return;

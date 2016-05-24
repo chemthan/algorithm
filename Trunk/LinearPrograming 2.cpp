@@ -7,7 +7,7 @@ const int MAXM = 1010;
 double a[MAXN][MAXM], b[MAXN], c[MAXM], d[MAXN][MAXM];
 int idx[MAXN + MAXM];
 //Array all indexed from 0
-//Maximize{cx | ax <= b, x >= 0}, n: constraints, m: vars
+//Maximize {cx | ax <= b, x >= 0}, n: constraints, m: vars
 double simplex(double a[MAXN][MAXM], double b[MAXN], double c[MAXM], int n, int m) {
 	m++; int r = n, s = m - 1;
 	memset(d, 0, sizeof(d));
