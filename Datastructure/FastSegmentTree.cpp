@@ -37,7 +37,7 @@ int query(int l, int r, int n) {
 	int res = (int) 1e9;
 	for (; l < r; l >>= 1, r >>= 1) {
 		if (l & 1) res = min(res, st[l++]);
-		if (r & 1) res = min(st[--r], res);
+		if (r & 1) res = min(res, st[--r]);
 	}
 	return res;
 }

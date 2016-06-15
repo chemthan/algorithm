@@ -15,7 +15,7 @@ void build() {
 	}
 }
 int query(int a, int b) {
-	int l = __lg(b - a);
+	int l = a == b ? 0 : __lg(b - a);
 	return min(f[a][l], f[b - (1 << l) + 1][l]);
 }
 
