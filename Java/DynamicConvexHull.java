@@ -14,7 +14,7 @@ public class Main {
 			con.insert(new Point(u, v));
 
 		}
-		System.out.println(con.Area2()); //Expected 12283172902
+		System.out.println(con.Area2()); //Expected 8433900701
 	}
 
 	final static boolean RED = false;
@@ -573,11 +573,11 @@ public class Main {
 				return 0;
 			}
 			long res = 0;
-			if (root.uhull.root != null) {
+			if (root.uhull != null && root.uhull.root != null) {
 				res += root.uhull.root.sumcross;
 			}
-			if (root.dhull.root != null) {
-				res += root.uhull.root.sumcross;
+			if (root.dhull != null && root.dhull.root != null) {
+				res += root.dhull.root.sumcross;
 			}
 			return Math.abs(res);
 		}

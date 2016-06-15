@@ -1,11 +1,17 @@
 #include <bits/stdc++.h>
 using namespace std;
 
-//Source https://github.com/yunchi/Dynamic_Convex_Hull
+const int RED = 0;
+const int BLACK = 1;
+const int LEFT = 0;
+const int RIGHT = 1;
+
 struct Point {
-	long long x, y;
-	Point() {x = y = 0;}
-	Point(long long x, long long y) : x(x), y(y) {}
+	int x, y;
+	Point() {
+		x = y = 0;
+	}
+	Point(int x, int y) : x(x), y(y) {}
 	Point(const Point& rhs) : x(rhs.x), y(rhs.y) {}
 	int operator == (const Point& rhs) const {
 		return make_pair(x, y) == make_pair(rhs.x, rhs.y);
@@ -26,875 +32,376 @@ struct Point {
 		return make_pair(x, y) >= make_pair(rhs.x, rhs.y);
 	}
 	long long cross(Point rhs) {
-		return x * rhs.y - y * rhs.x;
+		return (long long) x * rhs.y - (long long) y * rhs.x;
 	}
-} nil;
-
-void init() {
-	nil.x = nil.y = (int) 1e9;
-}
-
-const int RED = 0;
-const int BLACK = 1;
-const int LEFT = 0;
-const int RIGHT = 1;
+};
 
 struct Node {
-	Point ex, mn, mx;
-	Node *left, *right, *lMax;
-	int color, isLeaf;
-	long long sumcross;
-	Node() {
-		ex = mn = mx = nil;
-		left = right = lMax = NULL;
-		color = isLeaf = 0;
-		sumcross = 0;
-	}
-	Node(Point p) {
-		isLeaf = 1;
-		color = BLACK;
-		ex = mn = mx = p;
-		left = right = lMax = NULL;
-		lMax = this;
-		sumcross = 0;
-	}
-	Node(Node* lMax, Node* left, Node* right) {
-		this->ex = this->mn = this->mx = nil;
-		this->isLeaf = 0;
-		this->color = RED;
-		this->lMax = lMax;
-		this->left = left;
-		this->right = right;
-		this->sumcross = 0;
-		pushup();
-	}
-	Node(Point p, Node* leftLeaf, Node* rightLeaf) {
-		//assert((leftLeaf == NULL || leftLeaf->isLeaf) && (rightLeaf == NULL || rightLeaf->isLeaf));
-		this->ex = this->mn = this->mx = p;
-		this->isLeaf = 1;
-		this->color = BLACK;
-		this->lMax = this;
-		this->left = leftLeaf;
-		this->right = rightLeaf;
-		this->sumcross = 0;
-	}
-	void pushup() {
-		Node *left = this->left, *right = this->right;
-		this->mn = this->mx = nil;
-		this->sumcross = 0;
-		if (left != NULL) {
-			if (this->mn == nil || (left->mn != nil && this->mn > left->mn)) {
-				this->mn = left->mn;
-			}
-			if (this->mx == nil || (left->mx != nil && this->mx < left->mx)) {
-				this->mx = left->mx;
-			}
-			this->sumcross += left->sumcross;
+		Point key;
+		Node *parent, *left, *right;
+		Node *maxNode, *minNode, *prv, *nxt;
+		long long sumcross;
+		Node(Point key) {
+			this->key = key;
+			parent = left = right = 0;
+			maxNode = minNode = this;
+			prv = nxt = 0;
+			sumcross = 0;
 		}
-		if (right != NULL) {
-			if (this->mn == nil || (right->mn != nil && this->mn > right->mn)) {
-				this->mn = right->mn;
-			}
-			if (this->mx == nil || (right->mx != nil && this->mx < right->mx)) {
-				this->mx = right->mx;
-			}
-			this->sumcross += right->sumcross;
+		int isRoot() {
+			return parent == 0 || (parent->left != this && parent->right != this);
 		}
-		if (left != NULL && right != NULL && left->mx != nil && right->mn != nil) {
-			this->sumcross += left->mx.cross(right->mn);
+		void pushup() {
+			if (left != 0 && right != 0) {
+				minNode = left->minNode;
+				maxNode = right->maxNode;
+				sumcross = left->sumcross + right->sumcross + left->maxNode->key.cross(key) + key.cross(right->minNode->key);
+			}
+			else if (left != 0) {
+				minNode = left->minNode;
+				maxNode = this;
+				sumcross = left->sumcross + left->maxNode->key.cross(key);
+			}
+			else if (right != 0) {
+				minNode = this;
+				maxNode = right->maxNode;
+				sumcross = right->sumcross + key.cross(right->minNode->key);
+			}
+			else {
+				minNode = maxNode = this;
+				sumcross = 0;
+			}
 		}
-	}
 };
 
-struct TopTree {
-	Node* root;
-	int size;
-	TopTree() {
-		root = NULL;
-		size = 0;
-	}
-	int getSize() {
-		return size;
-	}
-	static Node* rotateLeft(Node* n) {
-		//assert(n != NULL);
-		//assert(!n->isLeaf && !n->right->isLeaf && n->right->color == RED);
-		Node* tempNode = n->right;
-		int tempColor = n->color;
-		n->right = tempNode->left;
-		n->color = tempNode->color;
-		tempNode->left = n;
-		tempNode->color = tempColor;
-		n->pushup(); tempNode->pushup();
-		return tempNode;
-	}
-	static Node* rotateRight(Node* n) {
-		//assert(n != NULL);
-		//assert(!n->isLeaf && !n->left->isLeaf && n->left->color == RED);
-		Node* tempNode = n->left;
-		int tempColor = n->color;
-		n->left = tempNode->right;
-		n->color = tempNode->color;
-		tempNode->right = n;
-		tempNode->color = tempColor;
-		n->pushup(); tempNode->pushup();
-		return tempNode;
-	}
-	static void flipTripleColor(Node* n) {
-		//assert(n != NULL);
-		//assert(!n->isLeaf && !n->left->isLeaf && !n->right->isLeaf);
-		n->color = !n->color;
-		n->left->color = !n->left->color;
-		n->right->color = !n->right->color;
-	}
-	static Node* fixUp(Node* n) {
-		//assert(n != NULL);
-		if (n->isLeaf) {
-			return n;
+struct CQueue {
+		Node* root;
+		CQueue() {
+			root = 0;
 		}
-		if (n->left->color == BLACK && n->right->color == RED) {
-			n = rotateLeft(n);
+		CQueue(Point key) {
+			root = new Node(key);
 		}
-		else {
-			if (n->left->color == RED && n->left->left->color == RED) {
-				//assert(n->right->color == BLACK);
-				n = rotateRight(n);
-			}
-			if (n->left->color == RED && n->right->color == RED) {
-				flipTripleColor(n);
-			}
+		CQueue(Node* root) {
+			this->root = root;
 		}
-		return n;
-	}
-	Node* addLeaf(Point p, Node* leftLeaf, Node* rightLeaf) {
-		//assert(p != nil);
-		//assert((leftLeaf == NULL || leftLeaf->isLeaf) && (rightLeaf == NULL || rightLeaf->isLeaf));
-		Node* n = new Node(p);
-		size++;
-		return n;
-	}
-	void removeLeaf(Node* n) {
-		//assert(n != NULL && n->isLeaf);
-		size--;
-		//assert(size >= 0);
-		delete n;
-	}
-	Node* insertAt(Node* n, Point p) {
-		//assert(n != NULL);
-		if (p <= n->lMax->ex) {
-			if (n->isLeaf) {
-				if (p == n->ex) {
-					n->ex = n->mn = n->mx = p;
+		static void setchild(Node* p, Node* c, int isLeftChild) {
+			if (~isLeftChild) {
+				if (isLeftChild) {
+					p->left = c;
 				}
 				else {
-					Node* nNew = addLeaf(p, n->left, n);
-					n = new Node(nNew, nNew, n);
+					p->right = c;
 				}
 			}
-			else {
-				n->left = insertAt(n->left, p);
-				//n->pushup();
+			if (c != 0) {
+				c->parent = p;
 			}
 		}
-		else {
-			if (n->isLeaf) {
-				Node* nNew = addLeaf(p, n, n->right);
-				n = new Node(n, n, nNew);
-			}
-			else {
-				n->right = insertAt(n->right, p);
-				//n->pushup();
-			}
+		static void rotate(Node* x) {
+			Node* p = x->parent;
+			Node* g = p->parent;
+			int isRootP = p->isRoot();
+			int leftChildX = (x == p->left);
+			setchild(g, x, !isRootP ? p == g->left : -1);
+			setchild(p, leftChildX ? x->right : x->left, leftChildX);
+			setchild(x, p, !leftChildX);
+			p->pushup();
 		}
-		n = fixUp(n);
-		return n;
-	}
-	Node* deleteAt(Node* n, Point p) {
-		//assert(n != NULL);
-		//assert(!n->isLeaf);
-		//assert(n->color == RED || n->left->color == RED);
-		if (p <= n->lMax->ex) {
-			if (n->left->isLeaf) {
-				if (p != n->left->ex) {
-					return n;
-				}
-				else {
-					//assert(n->color == RED);
-					//assert(n->right->isLeaf);
-					removeLeaf(n->left);
-					//n->pushup();
-					return n->right;
-				}
+		static void splay(Node* x) {
+			if (!x) return;
+			while (!x->isRoot()) {
+				Node* p = x->parent;
+				Node* g = p->parent;
+				if (!p->isRoot())
+					g->pushup();
+				p->pushup();
+				x->pushup();
+				if (!p->isRoot())
+					rotate((x == p->left) == (p == g->left) ? p : x);
+				rotate(x);
 			}
-			if (p == n->lMax->ex) {
-				//assert(!n->left->isLeaf);
-				Node* tempNode = n->left;
-				while (!tempNode->right->isLeaf) {
-					tempNode = tempNode->right;
-				}
-				n->lMax = tempNode->lMax;
-			}
-			if (n->left->color == RED || n->left->left->color == RED) {
-				n->left = deleteAt(n->left, p);
-				//n->pushup();
-			}
-			else {
-				//assert(!n->right->isLeaf);
-				//assert(n->color == RED);
-				flipTripleColor(n);
-				n->left = deleteAt(n->left, p);
-				//n->pushup();
-				if (n->left->color == RED) {
-					flipTripleColor(n);
-				}
-				else if (n->right->left->color == BLACK) {
-					n = rotateLeft(n);
-				} 
-				else {
-					n->right = rotateRight(n->right);
-					//n->pushup();
-					n = rotateLeft(n);
-					flipTripleColor(n);
-				}
-			}
+			x->pushup();
 		}
-		else {
-			if (n->right->isLeaf) {
-				if (p != n->right->ex) {
-					return n;
-				}
-				else {
-					removeLeaf(n->right);
-					//n->pushup();
-					n->left->color = BLACK;
-					return n->left;
-				}
+		Node* insert(Node* x, Point key) {
+			Node* p = 0;
+			while (x != 0) {
+				p = x;
+				if (x->key < key) x = x->right;
+				else x = x->left;
 			}
-			else if (n->right->left->color == RED) {
-				n->right = deleteAt(n->right, p);
-				//n->pushup();
+			x = new Node(key);
+			x->parent = p;
+			if (p == 0) {
+				root = x;
 			}
-			else if (n->color == RED) {
-				//assert(n->left->color == BLACK);
-				flipTripleColor(n);
-				n->right = deleteAt(n->right, p);
-				//n->pushup();
-				if (n->right->color == RED) {
-					flipTripleColor(n);
-				}
-				else if (n->left->left->color == RED) {
-					n = rotateRight(n);
-					flipTripleColor(n);
-				}
+			else if (p->key < x->key) p->right = x;
+			else p->left = x;
+			splay(x);
+			return root = x;
+		}
+		Node* findkey(Node* x, Point key) {
+			while (x != 0) {
+				if (x->key < key) x = x->right;
+				else if (x->key > key) x = x->left;
+				else return x;
 			}
-			else {
-				//assert(n->left->color == RED);
-				n = rotateRight(n);
-				n->right = deleteAt(n->right, p);
-				//n->pushup();
-				if (n->right->color == RED) {
-					n = rotateLeft(n);
-				}
-			}
-		}
-		return n;
-	}
-	Point search(Point p) {
-		if (root == NULL) {
-			return nil;
-		}
-		Node* n = root;
-		while (!n->isLeaf) {
-			if (p == n->lMax->ex) {
-				return n->lMax->ex;
-			}
-			else if (p < n->lMax->ex) {
-				n = n->left;
-			}
-			else {
-				n = n->right;
-			}
-		}
-		if (p != n->ex) {
-			return nil;
-		}
-		else {
-			return n->ex;
-		}
-	}
-	void insert(Point p) {
-		if (root == NULL) {
-			root = new Node(p);
-			size = 1;
-		}
-		else {
-			root = insertAt(root, p);
-			//root->pushup();
-			if (root->color == RED) {
-				root->color = BLACK;
-			}
-		}
-	}
-	void remove(Point p) {
-		if (root == NULL) {
-			return;
-		}
-		else if (root->isLeaf) {
-			if (p == root->ex) {
-				root = NULL;
-				size = 0;
-			}
-			return;
-		}
-		else {
-			if (root->left->color == BLACK && root->right->color == BLACK) {
-				root->color = RED;
-			}
-			root = deleteAt(root, p);
-			//root->pushup();
-			if (root->color == RED) {
-				root->color = BLACK;
-			}
-			return;
-		}
-	}
-};
-
-struct CQueue : TopTree {
-	int height;
-	Node *minNode, *maxNode;
-	CQueue() {
-		root = NULL;
-		height = -1;
-		minNode = NULL;
-		maxNode = NULL;
-	}
-	CQueue(Point p) {
-		root = new Node(p);
-		height = 0;
-		minNode = root;
-		maxNode = root;
-	}
-	CQueue(Node* root, int height, Node* minNode, Node* maxNode) {
-		this->root = root;
-		this->height = height;
-		this->minNode = minNode;
-		this->maxNode = maxNode;
-	}
-	void shallowCopy(CQueue* rhs) {
-		if (rhs == NULL) {
-			return;
-		}
-		else {
-			this->root = rhs->root;
-			this->height = rhs->height;
-			this->minNode = rhs->minNode;
-			this->maxNode = rhs->maxNode;
-		}
-	}
-	int getSize() {
-		if (minNode == NULL) {
 			return 0;
 		}
-		else {
-			Node* tempNode = minNode;
-			int i = 1;
-			while (tempNode->right != NULL) {
-				i++;
-				tempNode = tempNode->right;
+		static Node* join(Node* x, Node* y) {
+			if (!x) return y;
+			if (!y) return x;
+			while (1) {
+				if (x->right == 0) break;
+				x = x->right;
 			}
-			return i;
-		}
-	}
-	Node* addLeaf(Point p, Node* leftLeaf, Node* rightLeaf) {
-		//assert((leftLeaf == NULL || leftLeaf->isLeaf) && (rightLeaf == NULL || rightLeaf->isLeaf));
-		Node* n = new Node(p, leftLeaf, rightLeaf);
-		if (n->left != NULL) {
-			n->left->right = n;
-		}
-		else {
-			minNode = n;
-		}
-		if (n->right != NULL) {
-			n->right->left = n;
-		}
-		else {
-			maxNode = n;
-		}
-		return n;
-	}
-	void removeLeaf(Node* n) {
-		//assert(n->isLeaf);
-		if (n->left != NULL) {
-			n->left->right = n->right;
-		}
-		else {
-			minNode = n->right;
-		}
-		if (n->right != NULL) {
-			n->right->left = n->left;
-		}
-		else {
-			maxNode = n->left;
-		}
-		delete n;
-	}
-	void insert(Point p) {
-		if (root == NULL) {
-			root = minNode = maxNode = new Node(p);
-			height = 0;
-		}
-		else {
-			root = insertAt(root, p);
-			//root->pushup();
-			if (root->color == RED) {
-				root->color = BLACK;
-				height++;
+			splay(x);
+			setchild(x, y, false);
+			if (x != 0 && y != 0) {
+				x->maxNode->nxt = y->minNode;
+				y->minNode->prv = x->maxNode;
 			}
+			x->pushup();
+			return x;
 		}
-	}
-	void remove(Point p) {
-		if (root == NULL) {
-			return;
+		static CQueue* concatenate(CQueue* x, CQueue* y) {
+			if (x == 0) return y;
+			if (y == 0) return x;
+			return new CQueue(join(x->root, y->root));
 		}
-		else if (root->isLeaf) {
-			if (p == root->ex) {
-				root = minNode = maxNode = NULL;
-				height = -1;
-			}
+		friend CQueue* concatenate(CQueue* x, CQueue* y) {
+			if (x == 0) return y;
+			if (y == 0) return x;
+			return new CQueue(join(x->root, y->root));
 		}
-		else {
-			if (root->left->color == BLACK && root->right->color == BLACK) {
-				root->color = RED;
-				height--;
-			}
-			root = deleteAt(root, p);
-			if (root->color == RED) {
-				root->color = BLACK;
-				height++;
-			}
-		}
-	}
-	static Node* glueTree(Node* lN, Node* rN, int lH, int rH, Node* lMax) {
-		//assert(!(lN->color == RED && rN->color == RED));
-		if (lN == NULL) {
-			//rN->pushup();
-			return rN;
-		}
-		else if (rN == NULL) {
-			//lN->pushup();
-			return lN;
-		}
-		else if (lH == rH) {
-			//assert(lN->color == BLACK && rN->color == BLACK);
-			return new Node(lMax, lN, rN);
-		}
-		else if (lH > rH) {
-			lN->right = glueTree(lN->right, rN, lH - 1, rH, lMax);
-			lN->pushup();
-			lN = fixUp(lN);
-			return lN;
-		}
-		else {
-			if (rN->left->color == RED) {
-				rN->left = glueTree(lN, rN->left, lH, rH, lMax);
-				rN->pushup();
-				rN = fixUp(rN);
-			}
-			else {
-				rN->left = glueTree(lN, rN->left, lH, rH - 1, lMax);
-				rN->pushup();
-			}
-			return rN;
-		}
-	}
-	friend CQueue* concatenate(CQueue* qLeft, CQueue* qRight) {
-		if (qLeft == NULL || qLeft->height == -1) {
-			return qRight;
-		}
-		else if (qRight == NULL || qRight->height == -1) {
-			return qLeft;
-		}
-		qLeft->maxNode->right = qRight->minNode;
-		qRight->minNode->left = qLeft->maxNode;
-		int newHeight = max(qLeft->height, qRight->height);
-		Node* newRoot = glueTree(qLeft->root, qRight->root, qLeft->height, qRight->height, qLeft->maxNode);
-		newRoot->pushup();
-		if (newRoot->color == RED) {
-			newRoot->color = BLACK;
-			newHeight++;
-		}
-		return new CQueue(newRoot, newHeight, qLeft->minNode, qRight->maxNode);
-	}
-	static void cutAt(Node* n) {
-		//assert(n == NULL || n->isLeaf);
-		if (n != NULL && n->right != NULL) {
-			n->right->left = NULL;
-			delete n->right->left;
-			n->right = NULL;
-			delete n->right;
-		}
-	}
-	static void splitAt(Node* n, int h, Point p, CQueue* qLeft, CQueue* qRight) {
-		//assert(p != nil && n != NULL);
-		//assert(qLeft != NULL && qRight != NULL);
-		//assert(n->color == BLACK);
-		if (n->isLeaf) {
-			if (p < n->ex) {
-				qRight->root = n;
-				qRight->minNode = n;
-				qRight->height = 0;
-				qLeft->maxNode = n->left;
-				cutAt(n->left);
-			}
-			else {
-				qLeft->root = n;
-				qLeft->maxNode = n;
-				qLeft->height = 0;
-				qRight->minNode = n->right;
-				cutAt(n);
-			}
-		}
-		else {
-			if (p == n->lMax->ex) {
-				qLeft->root = n->left;
-				qLeft->height = h - 1;
-				qLeft->maxNode = n->lMax;
-				if (qLeft->root->color == RED) {
-					qLeft->root->color = BLACK;
-					qLeft->height++;
+		CQueue* split(Point p, int returnLoR, int inclusive) {
+			Node *qLeft = 0, *qRight = 0;
+			Node* y = findkey(root, p);
+			if (y == 0) {
+				Node *x = insert(root, p);
+				if ((qLeft = x->left) != 0) {
+					qLeft->parent = 0;
+					qLeft->maxNode->nxt = 0;
 				}
-				qRight->root = n->right;
-				qRight->height = h - 1;
-				qRight->minNode = n->lMax->right;
-				cutAt(n->lMax);
-			}
-			else if (p < n->lMax->ex) {
-				if (n->left->color == RED) {
-					n->left->color = BLACK;
-					splitAt(n->left, h, p, qLeft, qRight);
+				if ((qRight = x->right) != 0) {
+					qRight->parent = 0;
+					qRight->minNode->prv = 0;
 				}
-				else {
-					splitAt(n->left, h - 1, p, qLeft, qRight);
-				}
-				int tempHeight = qRight->height;
-				qRight->root = glueTree(qRight->root, n->right, qRight->height, h - 1, n->lMax);
-				//qRight->root->pushup();
-				qRight->height = max(tempHeight, h - 1);
-				if (qRight->root->color == RED) {
-					qRight->root->color = BLACK;
-					qRight->height++;
-				}
-			}
-			else {
-				splitAt(n->right, h - 1, p, qLeft, qRight);
-				if (n->left->color == RED) {
-					n->left->color = BLACK;
-					qLeft->root = glueTree(n->left, qLeft->root, h, qLeft->height, n->lMax);
-					//qLeft->root->pushup();
-					qLeft->height = h;
+			} else {
+				splay(y);
+				if ((returnLoR == LEFT && inclusive) || (returnLoR == RIGHT && !inclusive)) {
+					if ((qRight = y->right) != 0) {
+						qRight->parent = 0;
+						qRight->minNode->prv = 0;
+					}
+					if ((qLeft = y) != 0) {
+						qLeft->right = 0;
+						qLeft->nxt = 0;
+						qLeft->pushup();
+					}
 				} else {
-					qLeft->root = glueTree(n->left, qLeft->root, h - 1, qLeft->height, n->lMax);
-					//qLeft->root->pushup();
-					qLeft->height = h - 1;
-				}
-				if (qLeft->root->color == RED) {
-					qLeft->root->color = BLACK;
-					qLeft->height++;
-				}
-			}
-		}
-	}
-	CQueue* split(Point p, int returnLoR, int inclusive) {
-		CQueue* qLeft = new CQueue();
-		CQueue* qRight = new CQueue();
-		if (root == NULL) {
-			return qLeft;
-		}
-		else if (p < minNode->ex || (p == minNode->ex && !inclusive)) {
-			if (returnLoR == RIGHT) {
-				qRight->shallowCopy(this);
-				this->shallowCopy(qLeft);
-				return qRight;
-			}
-			else {
-				return qLeft;
-			}
-		}
-		else if (p > maxNode->ex || (p == maxNode->ex && inclusive)) {
-			if (returnLoR == RIGHT) {
-				return qRight;
-			}
-			else {
-				qLeft->shallowCopy(this);
-				this->shallowCopy(qRight);
-				return qLeft;
-			}
-		}
-		else {
-			Node* itr = root;
-			while (!itr->isLeaf) {
-				if (p <= itr->lMax->ex) {
-					itr = itr->left;
-				}
-				else {
-					itr = itr->right;
-				}
-			}
-			if (p == itr->ex) {
-				if (inclusive) {
-					p = itr->ex;
-				}
-				else {
-					p = itr->left->ex;
-				}
-			}
-			else if (p < itr->ex) {
-				p = itr->left->ex;
-			}
-			else {
-				p = itr->ex;
-			}
-		}
-		qLeft->minNode = this->minNode;
-		qRight->maxNode = this->maxNode;
-		splitAt(this->root, this->height, p, qLeft, qRight);
-		if (returnLoR == RIGHT) {
-			this->shallowCopy(qLeft);
-			return qRight;
-		}
-		else {
-			this->shallowCopy(qRight);
-			return qLeft;
-		}
-
-	}
-};
-
-struct SubHull : CQueue {
-	SubHull() : CQueue() {}
-	SubHull(Point c) : CQueue(c) {}
-	SubHull(CQueue* q) : CQueue(q->root, q->height, q->minNode, q->maxNode) {}
-	friend SubHull* bridge(SubHull* lHull, SubHull* rHull) {
-		//assert(lHull != NULL && rHull != NULL);
-		//assert(lHull->root != NULL && rHull->root != NULL);
-		Node* lItr = lHull->root;
-		Node* rItr = rHull->root;
-		int done = 0;
-		double middleX = (lHull->maxNode->ex.x + rHull->minNode->ex.x) / 2.0;
-		while (!done) {
-			double t = computeSlope(lItr->lMax, rItr->lMax);
-			int iL = determineCase(lItr->lMax, t);
-			int iR = determineCase(rItr->lMax, t);
-			switch (iL) {
-			case -1:
-				switch (iR) {
-				case -1:
-					rItr = rItr->right;
-					break;
-				case 0:
-					lItr = lItr->right;
-					if (!rItr->isLeaf && rItr->right != NULL) {
-						rItr = rItr->right;
+					if ((qLeft = y->left) != 0) {
+						qLeft->parent = 0;
+						qLeft->maxNode->nxt = 0;
 					}
-					break;
-				case +1:
-					double lHeight = lItr->lMax->ex.y + computeSlope(lItr->lMax, lItr->lMax->right) * (middleX - lItr->lMax->ex.x);
-					double rHeight = rItr->lMax->ex.y + computeSlope(rItr->lMax->left, rItr->lMax) * (middleX - rItr->lMax->ex.x);
-					if (lHeight <= rHeight) {
-						rItr = rItr->left;
+					if ((qRight = y) != 0) {
+						qRight->left = 0;
+						qRight->prv = 0;
+						qRight->pushup();
 					}
-					else {
-						lItr = lItr->right;
-					}
-					break;
 				}
-				break;
-			case 0:
-				switch (iR) {
-				case -1:
-					if (!lItr->isLeaf && lItr->left != NULL) {
-						lItr = lItr->left;
-					}
-					rItr = rItr->right;
-					break;
-				case 0:
-					lItr = lItr->lMax;
-					rItr = rItr->lMax;
-					done = 1;
-					break;
-				case +1:
-					if (!lItr->isLeaf && lItr->left != NULL) {
-						lItr = lItr->left;
-					}
-					rItr = rItr->left;
-					break;
-				}
-				break;
-			case +1:
-				switch (iR) {
-				case -1:
-					lItr = lItr->left;
-					rItr = rItr->right;
-					break;
-				case 0:
-					lItr = lItr->left;
-					if (!rItr->isLeaf && rItr->right != NULL) {
-						rItr = rItr->right;
-					}
-					break;
-				case +1:
-					lItr = lItr->left;
-					break;
-				}
-				break;
+			}
+			if (returnLoR == LEFT) {
+				root = qRight;
+				return new CQueue(qLeft);
+			} else {
+				root = qLeft;
+				return new CQueue(qRight);
 			}
 		}
-		//assert(sanityCheck(lHull, rHull, lItr, rItr));
-		//assert(lItr != NULL && rItr != NULL);
-		return new SubHull(concatenate(lHull->split(lItr->ex, LEFT, 1), rHull->split(rItr->ex, RIGHT, 0)));
-	}
-	static double computeSlope(Node* leftN, Node* rightN) {
-		//assert(leftN != NULL && rightN != NULL);
-		//assert(leftN->isLeaf && rightN->isLeaf);
-		if (rightN->ex.x - leftN->ex.x == 0) {
-			if (rightN->ex.y - leftN->ex.y > 0) return 1e9;
-			return -1e9;
+		friend CQueue* bridge(CQueue* lHull, CQueue* rHull) {
+			Node* lItr = lHull->root;
+			Node* rItr = rHull->root;
+			int done = 0;
+			int middleX = lHull->root->maxNode->key.x + rHull->root->minNode->key.x;
+			while (!done) {
+				int iL = determineCase(lItr, lItr->key, rItr->key);
+				int iR = determineCase(rItr, lItr->key, rItr->key);
+				switch (iL) {
+					case -1:
+						switch (iR) {
+							case -1:
+								rItr = rItr->right;
+								break;
+							case 0:
+								lItr = lItr->right;
+								break;
+							case +1:
+								double lHeight = 2 * lItr->key.y + computeSlope(lItr->key, lItr->nxt->key) * (middleX - 2 * lItr->key.x);
+								double rHeight = 2 * rItr->key.y + computeSlope(rItr->prv->key, rItr->key) * (middleX - 2 * rItr->key.x);
+								if (lHeight <= rHeight) {
+									rItr = rItr->left;
+								} else {
+									lItr = lItr->right;
+								}
+								break;
+						}
+						break;
+					case 0:
+						switch (iR) {
+							case -1:
+								rItr = rItr->right;
+								break;
+							case 0:
+								done = true;
+								break;
+							case +1:
+								rItr = rItr->left;
+								break;
+						}
+						break;
+					case +1:
+						switch (iR) {
+							case -1:
+								lItr = lItr->left;
+								rItr = rItr->right;
+								break;
+							case 0:
+								lItr = lItr->left;
+								break;
+							case +1:
+								lItr = lItr->left;
+								break;
+						}
+						break;
+				}
+			}
+			return concatenate(lHull->split(lItr->key, LEFT, true), rHull->split(rItr->key, RIGHT, true));
 		}
-		return ((double) (rightN->ex.y - leftN->ex.y)) / ((double) (rightN->ex.x - leftN->ex.x));
-	}
-	static int determineCase(Node* n, double t) {
-		//assert(n != NULL);
-		//assert(n->isLeaf);
-		int leftAbove = 1, rightAbove = 0;
-		if ((n->left != NULL) && computeSlope(n->left, n) < t) {
-			leftAbove = 0;
+		static double computeSlope(Point pleft, Point pright) {
+			if (pright.x - pleft.x == 0) {
+				if (pright.y - pleft.y > 0) return 1e9;
+				return -1e9;
+			}
+			return ((double) (pright.y - pleft.y)) / (pright.x - pleft.x);
 		}
-		if ((n->right != NULL) && computeSlope(n, n->right) > t) {
-			rightAbove = 1;
-		}
-		if (leftAbove && rightAbove) {
+		static int check(Point a, Point b, Point c, Point d) {
+			long long x = (long long) (b.y - a.y) * (d.x - c.x);
+			long long y = (long long) (d.y - c.y) * (b.x - a.x);
+			if (x == y) return 0;
+			if (x > y) return 1;
 			return -1;
 		}
-		else if (!leftAbove && !rightAbove) {
-			return +1;
+		static int determineCase(Node* n, Point s, Point t) {
+			int leftAbove = 1;
+			int rightAbove = 0;
+			if ((n->prv != 0) && check(n->prv->key, n->key, s, t) < 0) {
+				leftAbove = 0;
+			}
+			if ((n->nxt != 0) && check(n->key, n->nxt->key, s, t) > 0) {
+				rightAbove = 1;
+			}
+			if (leftAbove && rightAbove) {
+				return -1;
+			}
+			else if (!leftAbove && !rightAbove) {
+				return +1;
+			}
+			else {
+				return 0;
+			}
 		}
-		else {
-			//assert(leftAbove && !rightAbove);
-			return 0;
-		}
-	}
-	static int sanityCheck(SubHull* lHull, SubHull* rHull, Node* lPtr, Node* rPtr) {
-		double t = computeSlope(lPtr, rPtr);
-		if (lPtr->left != NULL && computeSlope(lPtr->left, lPtr) < t) {
-			return 0;
-		}
-		if (lPtr->right != NULL && computeSlope(lPtr, lPtr->right) > t) {
-			return 0;
-		}
-		if (rPtr->left != NULL && computeSlope(rPtr->left, rPtr) < t) {
-			return 0;
-		}
-		if (rPtr->right != NULL && computeSlope(rPtr, rPtr->right) > t) {
-			return 0;
-		}
-		return 1;
-	}
-	void printHull() {
-		if (root == NULL) {
-			return;
-		}
-		Node* n = minNode;
-		while (n != NULL) {
-			cout<<"("<<n->ex.x<<","<<n->ex.y<<")\n";
-			n = n->right;
-		}
-	}
 };
 
-struct CNode : Node {
+struct CNode {
+	int isLeaf, color;
 	CNode *left, *right, *lMax;
-	SubHull* hull;
-	CNode(Point c) {
+	Point px;
+	CQueue *uhull, *dhull;
+	CNode(Point p) {
 		this->isLeaf = 1;
 		this->color = BLACK;
-		this->ex = this->mn = this->mx = c;
+		this->px = p;
 		this->lMax = this;
-		this->hull = new SubHull(c);
+		uhull = new CQueue(p);
+		dhull = new CQueue(Point(-p.x, -p.y));
 	}
 	CNode(CNode *lMax, CNode *left, CNode *right) {
 		this->isLeaf = 0;
 		this->color = RED;
-		this->lMax = lMax;
 		this->left = left;
 		this->right = right;
-		this->hull = NULL;
-		this->hull = bridge(left->hull, right->hull);
+		this->lMax = lMax;
+		uhull = bridge(left->uhull, right->uhull);
+		dhull = bridge(right->dhull, left->dhull);
 	}
-	CNode(Point c, CNode *leftLeaf, CNode *rightLeaf) {
+	CNode(Point p, CNode *leftLeaf, CNode *rightLeaf) {
 		//assert((leftLeaf == NULL || leftLeaf->isLeaf) && (rightLeaf == NULL || rightLeaf->isLeaf));
 		this->isLeaf = 1;
 		this->color = BLACK;
-		this->ex = c;
-		this->lMax = this;
+		this->px = p;
 		this->left = leftLeaf;
 		this->right = rightLeaf;
-		this->hull = new SubHull(c);
+		this->lMax = this;
+		uhull = new CQueue(p);
+		dhull = new CQueue(Point(-p.x, -p.y));
 	}
 };
 
 struct DynamicConvexHull {
 	CNode* root;
-	int size;
-	DynamicConvexHull() {root = NULL; size = 0;}
-	static void DOWN(CNode* n) {
-		//assert(n != NULL);
-		//assert(!n->isLeaf);
-		n->left->hull = new SubHull(concatenate(n->hull->split(n->lMax->ex, LEFT, 1), n->left->hull));
-		n->right->hull = new SubHull(concatenate(n->right->hull, n->hull));
+	DynamicConvexHull() {
+		root = 0;
 	}
-	static void UP(CNode* n) {
+	static void Down(CNode* n) {
 		//assert(n != NULL);
 		//assert(!n->isLeaf);
-		n->hull = bridge(n->left->hull, n->right->hull);
+		n->left->uhull = concatenate(n->uhull->split(n->lMax->px, LEFT, 1), n->left->uhull);
+		n->right->uhull = concatenate(n->right->uhull, n->uhull);
+		n->right->dhull = concatenate(n->dhull->split(Point(-n->lMax->px.x, -n->lMax->px.y), LEFT, 0), n->right->dhull);
+		n->left->dhull = concatenate(n->left->dhull, n->dhull);
+	}
+	static void Up(CNode* n) {
+		//assert(n != NULL);
+		//assert(!n->isLeaf);
+		n->uhull = bridge(n->left->uhull, n->right->uhull);
+		n->dhull = bridge(n->right->dhull, n->left->dhull);
 	}
 	static CNode* rotateLeft(CNode* n) {
 		//assert(n != NULL);
 		//assert(!n->isLeaf && !n->right->isLeaf && n->right->color == RED);
-		DOWN(n);
+		Down(n);
 		CNode* tempCNode = n->right;
 		int tempColor = n->color;
-		DOWN(tempCNode);
+		Down(tempCNode);
 		n->right = tempCNode->left;
 		n->color = tempCNode->color;
-		UP(n);
+		Up(n);
 		tempCNode->left = n;
 		tempCNode->color = tempColor;
-		UP(tempCNode);
+		Up(tempCNode);
 		return tempCNode;
 	}
 	static CNode* rotateRight(CNode* n) {
 		//assert(n != NULL);
 		//assert(!n->isLeaf && !n->left->isLeaf && n->left->color == RED);
-		DOWN(n);
+		Down(n);
 		CNode* tempCNode = n->left;
 		int tempColor = n->color;
-		DOWN(tempCNode);
+		Down(tempCNode);
 		n->left = tempCNode->right;
 		n->color = tempCNode->color;
-		UP(n);
+		Up(n);
 		tempCNode->right = n;
 		tempCNode->color = tempColor;
-		UP(tempCNode);
+		Up(tempCNode);
 		return tempCNode;
 	}
-	CNode* addLeaf(Point c, CNode* nLeft, CNode* nRight) {
-		size++;
-		return new CNode(c);
+	CNode* addLeaf(Point p, CNode* nLeft, CNode* nRight) {
+		return new CNode(p);
 	}
-	void removeLeaf(Node* n) {
-		size--;
-		delete n;
+	void removeLeaf(CNode* n) {
+		
 	}
 	static void flipTripleColor(CNode* n) {
 		//assert(n != NULL);
@@ -924,10 +431,9 @@ struct DynamicConvexHull {
 	}
 	CNode* insertAt(CNode* n, Point p) {
 		//assert(n != NULL);
-		if (p <= n->lMax->ex) {
+		if (p <= n->lMax->px) {
 			if (n->isLeaf) {
-				if (p == n->ex) {
-					n->ex = n->mn = n->mx = p;
+				if (p == n->px) {
 				}
 				else {
 					CNode* nNew = addLeaf(p, n->left, n);
@@ -935,9 +441,9 @@ struct DynamicConvexHull {
 				}
 			}
 			else {
-				DOWN(n);
+				Down(n);
 				n->left = insertAt(n->left, p);
-				UP(n);
+				Up(n);
 			}
 		}
 		else {
@@ -946,9 +452,9 @@ struct DynamicConvexHull {
 				n = new CNode(n, n, nNew);
 			}
 			else {
-				DOWN(n);
+				Down(n);
 				n->right = insertAt(n->right, p);
-				UP(n);
+				Up(n);
 			}
 		}
 		n = fixUp(n);
@@ -958,21 +464,21 @@ struct DynamicConvexHull {
 		//assert(n != NULL);
 		//assert(!n->isLeaf);
 		//assert(n->color == RED || n->left->color == RED);
-		if (p <= n->lMax->ex) {
+		if (p <= n->lMax->px) {
 			if (n->left->isLeaf) {
-				if (p != n->left->ex) {
+				if (p != n->left->px) {
 					return n;
 				}
 				else {
 					//assert(n->color == RED);
 					//assert(n->right->isLeaf);
-					DOWN(n);
+					Down(n);
 					removeLeaf(n->left);
 					return n->right;
 				}
 			}
-			DOWN(n);
-			if (p == n->lMax->ex) {
+			Down(n);
+			if (p == n->lMax->px) {
 				//assert(!n->left->isLeaf);
 				CNode* tempCNode = n->left;
 				while (!tempCNode->right->isLeaf) {
@@ -982,23 +488,23 @@ struct DynamicConvexHull {
 			}
 			if (n->left->color == RED || n->left->left->color == RED) {
 				n->left = deleteAt(n->left, p);
-				UP(n);
+				Up(n);
 			}
 			else {
 				//assert(!n->right->isLeaf);
 				flipTripleColor(n);
 				n->left = deleteAt(n->left, p);
 				if (n->left->color == RED) {
-					UP(n);
+					Up(n);
 					flipTripleColor(n);
 				}
 				else if (n->right->left->color == BLACK) {
-					UP(n);
+					Up(n);
 					n = rotateLeft(n);
 				}
 				else {
 					n->right = rotateRight(n->right);
-					UP(n);
+					Up(n);
 					n = rotateLeft(n);
 					flipTripleColor(n);
 				}
@@ -1006,27 +512,27 @@ struct DynamicConvexHull {
 		}
 		else {
 			if (n->right->isLeaf) {
-				if (p != n->right->ex) {
+				if (p != n->right->px) {
 					return n;
 				}
 				else {
-					DOWN(n);
+					Down(n);
 					removeLeaf(n->right);
 					n->left->color = BLACK;
 					return n->left;
 				}
 			}
 			else if (n->right->left->color == RED) {
-				DOWN(n);
+				Down(n);
 				n->right = deleteAt(n->right, p);
-				UP(n);
+				Up(n);
 			}
 			else if (n->color == RED) {
 				//assert(n->left->color == BLACK);
 				flipTripleColor(n);
-				DOWN(n);
+				Down(n);
 				n->right = deleteAt(n->right, p);
-				UP(n);
+				Up(n);
 				if (n->right->color == RED) {
 					flipTripleColor(n);
 				}
@@ -1038,9 +544,9 @@ struct DynamicConvexHull {
 			else {
 				//assert(n->left->color == RED);
 				n = rotateRight(n);
-				DOWN(n);
+				Down(n);
 				n->right = deleteAt(n->right, p);
-				UP(n);
+				Up(n);
 				if (n->right->color == RED) {
 					n = rotateLeft(n);
 				}
@@ -1049,9 +555,8 @@ struct DynamicConvexHull {
 		return n;
 	}
 	void insert(Point p) {
-		if (root == NULL) {
+		if (root == 0) {
 			root = new CNode(p);
-			size = 1;
 		}
 		else {
 			root = insertAt(root, p);
@@ -1061,13 +566,12 @@ struct DynamicConvexHull {
 		}
 	}
 	void remove(Point p) {
-		if (root == NULL) {
+		if (root == 0) {
 			return;
 		}
 		else if (root->isLeaf) {
-			if (p == root->ex) {
-				root = NULL;
-				size = 0;
+			if (p == root->px) {
+				root = 0;
 			}
 		}
 		else {
@@ -1080,8 +584,31 @@ struct DynamicConvexHull {
 			}
 		}
 	}
+	long long Area2() {
+			if (root == 0) {
+				return 0;
+			}
+			long long res = 0;
+			if (root->uhull != 0 && root->uhull->root != 0) {
+				res += root->uhull->root->sumcross;
+			}
+			if (root->dhull != 0 && root->dhull->root != 0) {
+				res += root->dhull->root->sumcross;
+			}
+			return abs(res);
+		}
 };
 
 int main() {
+	DynamicConvexHull con;
+	int seed = 0;
+	for (int i = 0; i < 1000; i++) {
+		seed = (seed * 1001 + 100621) % 999983;
+		int u = seed & ((1 << 16) - 1);
+		seed = (seed * 1001 + 100621) % 999983;
+		int v = seed & ((1 << 16) - 1);
+		con.insert(Point(u, v));
+	}
+	cout<<con.Area2()<<"\n"; //Expected 8433900701
 	return 0;
 }
