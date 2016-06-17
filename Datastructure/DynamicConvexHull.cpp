@@ -37,280 +37,280 @@ struct Point {
 };
 
 struct Node {
-		Point key;
-		Node *parent, *left, *right;
-		Node *maxNode, *minNode, *prv, *nxt;
-		long long sumcross;
-		Node(Point key) {
-			this->key = key;
-			parent = left = right = 0;
-			maxNode = minNode = this;
-			prv = nxt = 0;
+	Point key;
+	Node *parent, *left, *right;
+	Node *maxNode, *minNode, *prv, *nxt;
+	long long sumcross;
+	Node(Point key) {
+		this->key = key;
+		parent = left = right = 0;
+		maxNode = minNode = this;
+		prv = nxt = 0;
+		sumcross = 0;
+	}
+	int isRoot() {
+		return parent == 0 || (parent->left != this && parent->right != this);
+	}
+	void pushup() {
+		if (left != 0 && right != 0) {
+			minNode = left->minNode;
+			maxNode = right->maxNode;
+			sumcross = left->sumcross + right->sumcross + left->maxNode->key.cross(key) + key.cross(right->minNode->key);
+		}
+		else if (left != 0) {
+			minNode = left->minNode;
+			maxNode = this;
+			sumcross = left->sumcross + left->maxNode->key.cross(key);
+		}
+		else if (right != 0) {
+			minNode = this;
+			maxNode = right->maxNode;
+			sumcross = right->sumcross + key.cross(right->minNode->key);
+		}
+		else {
+			minNode = maxNode = this;
 			sumcross = 0;
 		}
-		int isRoot() {
-			return parent == 0 || (parent->left != this && parent->right != this);
-		}
-		void pushup() {
-			if (left != 0 && right != 0) {
-				minNode = left->minNode;
-				maxNode = right->maxNode;
-				sumcross = left->sumcross + right->sumcross + left->maxNode->key.cross(key) + key.cross(right->minNode->key);
-			}
-			else if (left != 0) {
-				minNode = left->minNode;
-				maxNode = this;
-				sumcross = left->sumcross + left->maxNode->key.cross(key);
-			}
-			else if (right != 0) {
-				minNode = this;
-				maxNode = right->maxNode;
-				sumcross = right->sumcross + key.cross(right->minNode->key);
-			}
-			else {
-				minNode = maxNode = this;
-				sumcross = 0;
-			}
-		}
+	}
 };
 
 struct CQueue {
-		Node* root;
-		CQueue() {
-			root = 0;
-		}
-		CQueue(Point key) {
-			root = new Node(key);
-		}
-		CQueue(Node* root) {
-			this->root = root;
-		}
-		static void setchild(Node* p, Node* c, int isLeftChild) {
-			if (~isLeftChild) {
-				if (isLeftChild) {
-					p->left = c;
-				}
-				else {
-					p->right = c;
-				}
+	Node* root;
+	CQueue() {
+		root = 0;
+	}
+	CQueue(Point key) {
+		root = new Node(key);
+	}
+	CQueue(Node* root) {
+		this->root = root;
+	}
+	static void setchild(Node* p, Node* c, int isLeftChild) {
+		if (~isLeftChild) {
+			if (isLeftChild) {
+				p->left = c;
 			}
-			if (c != 0) {
-				c->parent = p;
+			else {
+				p->right = c;
 			}
 		}
-		static void rotate(Node* x) {
+		if (c != 0) {
+			c->parent = p;
+		}
+	}
+	static void rotate(Node* x) {
+		Node* p = x->parent;
+		Node* g = p->parent;
+		int isRootP = p->isRoot();
+		int leftChildX = (x == p->left);
+		setchild(g, x, !isRootP ? p == g->left : -1);
+		setchild(p, leftChildX ? x->right : x->left, leftChildX);
+		setchild(x, p, !leftChildX);
+		p->pushup();
+	}
+	static void splay(Node* x) {
+		if (!x) return;
+		while (!x->isRoot()) {
 			Node* p = x->parent;
 			Node* g = p->parent;
-			int isRootP = p->isRoot();
-			int leftChildX = (x == p->left);
-			setchild(g, x, !isRootP ? p == g->left : -1);
-			setchild(p, leftChildX ? x->right : x->left, leftChildX);
-			setchild(x, p, !leftChildX);
+			if (!p->isRoot())
+				g->pushup();
 			p->pushup();
-		}
-		static void splay(Node* x) {
-			if (!x) return;
-			while (!x->isRoot()) {
-				Node* p = x->parent;
-				Node* g = p->parent;
-				if (!p->isRoot())
-					g->pushup();
-				p->pushup();
-				x->pushup();
-				if (!p->isRoot())
-					rotate((x == p->left) == (p == g->left) ? p : x);
-				rotate(x);
-			}
 			x->pushup();
+			if (!p->isRoot())
+				rotate((x == p->left) == (p == g->left) ? p : x);
+			rotate(x);
 		}
-		Node* insert(Node* x, Point key) {
-			Node* p = 0;
-			while (x != 0) {
-				p = x;
-				if (x->key < key) x = x->right;
-				else x = x->left;
+		x->pushup();
+	}
+	Node* insert(Node* x, Point key) {
+		Node* p = 0;
+		while (x != 0) {
+			p = x;
+			if (x->key < key) x = x->right;
+			else x = x->left;
+		}
+		x = new Node(key);
+		x->parent = p;
+		if (p == 0) {
+			root = x;
+		}
+		else if (p->key < x->key) p->right = x;
+		else p->left = x;
+		splay(x);
+		return root = x;
+	}
+	Node* findkey(Node* x, Point key) {
+		while (x != 0) {
+			if (x->key < key) x = x->right;
+			else if (x->key > key) x = x->left;
+			else return x;
+		}
+		return 0;
+	}
+	static Node* join(Node* x, Node* y) {
+		if (!x) return y;
+		if (!y) return x;
+		while (1) {
+			if (x->right == 0) break;
+			x = x->right;
+		}
+		splay(x);
+		setchild(x, y, false);
+		if (x != 0 && y != 0) {
+			x->maxNode->nxt = y->minNode;
+			y->minNode->prv = x->maxNode;
+		}
+		x->pushup();
+		return x;
+	}
+	static CQueue* concatenate(CQueue* x, CQueue* y) {
+		if (x == 0) return y;
+		if (y == 0) return x;
+		return new CQueue(join(x->root, y->root));
+	}
+	friend CQueue* concatenate(CQueue* x, CQueue* y) {
+		if (x == 0) return y;
+		if (y == 0) return x;
+		return new CQueue(join(x->root, y->root));
+	}
+	CQueue* split(Point p, int returnLoR, int inclusive) {
+		Node *qLeft = 0, *qRight = 0;
+		Node* y = findkey(root, p);
+		if (y == 0) {
+			Node *x = insert(root, p);
+			if ((qLeft = x->left) != 0) {
+				qLeft->parent = 0;
+				qLeft->maxNode->nxt = 0;
 			}
-			x = new Node(key);
-			x->parent = p;
-			if (p == 0) {
-				root = x;
+			if ((qRight = x->right) != 0) {
+				qRight->parent = 0;
+				qRight->minNode->prv = 0;
 			}
-			else if (p->key < x->key) p->right = x;
-			else p->left = x;
-			splay(x);
-			return root = x;
-		}
-		Node* findkey(Node* x, Point key) {
-			while (x != 0) {
-				if (x->key < key) x = x->right;
-				else if (x->key > key) x = x->left;
-				else return x;
-			}
-			return 0;
-		}
-		static Node* join(Node* x, Node* y) {
-			if (!x) return y;
-			if (!y) return x;
-			while (1) {
-				if (x->right == 0) break;
-				x = x->right;
-			}
-			splay(x);
-			setchild(x, y, false);
-			if (x != 0 && y != 0) {
-				x->maxNode->nxt = y->minNode;
-				y->minNode->prv = x->maxNode;
-			}
-			x->pushup();
-			return x;
-		}
-		static CQueue* concatenate(CQueue* x, CQueue* y) {
-			if (x == 0) return y;
-			if (y == 0) return x;
-			return new CQueue(join(x->root, y->root));
-		}
-		friend CQueue* concatenate(CQueue* x, CQueue* y) {
-			if (x == 0) return y;
-			if (y == 0) return x;
-			return new CQueue(join(x->root, y->root));
-		}
-		CQueue* split(Point p, int returnLoR, int inclusive) {
-			Node *qLeft = 0, *qRight = 0;
-			Node* y = findkey(root, p);
-			if (y == 0) {
-				Node *x = insert(root, p);
-				if ((qLeft = x->left) != 0) {
-					qLeft->parent = 0;
-					qLeft->maxNode->nxt = 0;
-				}
-				if ((qRight = x->right) != 0) {
+		} else {
+			splay(y);
+			if ((returnLoR == LEFT && inclusive) || (returnLoR == RIGHT && !inclusive)) {
+				if ((qRight = y->right) != 0) {
 					qRight->parent = 0;
 					qRight->minNode->prv = 0;
 				}
+				if ((qLeft = y) != 0) {
+					qLeft->right = 0;
+					qLeft->nxt = 0;
+					qLeft->pushup();
+				}
 			} else {
-				splay(y);
-				if ((returnLoR == LEFT && inclusive) || (returnLoR == RIGHT && !inclusive)) {
-					if ((qRight = y->right) != 0) {
-						qRight->parent = 0;
-						qRight->minNode->prv = 0;
-					}
-					if ((qLeft = y) != 0) {
-						qLeft->right = 0;
-						qLeft->nxt = 0;
-						qLeft->pushup();
-					}
-				} else {
-					if ((qLeft = y->left) != 0) {
-						qLeft->parent = 0;
-						qLeft->maxNode->nxt = 0;
-					}
-					if ((qRight = y) != 0) {
-						qRight->left = 0;
-						qRight->prv = 0;
-						qRight->pushup();
-					}
+				if ((qLeft = y->left) != 0) {
+					qLeft->parent = 0;
+					qLeft->maxNode->nxt = 0;
+				}
+				if ((qRight = y) != 0) {
+					qRight->left = 0;
+					qRight->prv = 0;
+					qRight->pushup();
 				}
 			}
-			if (returnLoR == LEFT) {
-				root = qRight;
-				return new CQueue(qLeft);
-			} else {
-				root = qLeft;
-				return new CQueue(qRight);
-			}
 		}
-		friend CQueue* bridge(CQueue* lHull, CQueue* rHull) {
-			Node* lItr = lHull->root;
-			Node* rItr = rHull->root;
-			int done = 0;
-			int middleX = lHull->root->maxNode->key.x + rHull->root->minNode->key.x;
-			while (!done) {
-				int iL = determineCase(lItr, lItr->key, rItr->key);
-				int iR = determineCase(rItr, lItr->key, rItr->key);
-				switch (iL) {
-					case -1:
-						switch (iR) {
-							case -1:
-								rItr = rItr->right;
-								break;
-							case 0:
-								lItr = lItr->right;
-								break;
-							case +1:
-								double lHeight = 2 * lItr->key.y + computeSlope(lItr->key, lItr->nxt->key) * (middleX - 2 * lItr->key.x);
-								double rHeight = 2 * rItr->key.y + computeSlope(rItr->prv->key, rItr->key) * (middleX - 2 * rItr->key.x);
-								if (lHeight <= rHeight) {
-									rItr = rItr->left;
-								} else {
-									lItr = lItr->right;
-								}
-								break;
-						}
-						break;
-					case 0:
-						switch (iR) {
-							case -1:
-								rItr = rItr->right;
-								break;
-							case 0:
-								done = true;
-								break;
-							case +1:
-								rItr = rItr->left;
-								break;
-						}
-						break;
-					case +1:
-						switch (iR) {
-							case -1:
-								lItr = lItr->left;
-								rItr = rItr->right;
-								break;
-							case 0:
-								lItr = lItr->left;
-								break;
-							case +1:
-								lItr = lItr->left;
-								break;
-						}
-						break;
+		if (returnLoR == LEFT) {
+			root = qRight;
+			return new CQueue(qLeft);
+		} else {
+			root = qLeft;
+			return new CQueue(qRight);
+		}
+	}
+	friend CQueue* bridge(CQueue* lHull, CQueue* rHull) {
+		Node* lItr = lHull->root;
+		Node* rItr = rHull->root;
+		int done = 0;
+		int middleX = lHull->root->maxNode->key.x + rHull->root->minNode->key.x;
+		while (!done) {
+			int iL = determineCase(lItr, lItr->key, rItr->key);
+			int iR = determineCase(rItr, lItr->key, rItr->key);
+			switch (iL) {
+			case -1:
+				switch (iR) {
+				case -1:
+					rItr = rItr->right;
+					break;
+				case 0:
+					lItr = lItr->right;
+					break;
+				case +1:
+					double lHeight = 2 * lItr->key.y + computeSlope(lItr->key, lItr->nxt->key) * (middleX - 2 * lItr->key.x);
+					double rHeight = 2 * rItr->key.y + computeSlope(rItr->prv->key, rItr->key) * (middleX - 2 * rItr->key.x);
+					if (lHeight <= rHeight) {
+						rItr = rItr->left;
+					} else {
+						lItr = lItr->right;
+					}
+					break;
 				}
+				break;
+			case 0:
+				switch (iR) {
+				case -1:
+					rItr = rItr->right;
+					break;
+				case 0:
+					done = true;
+					break;
+				case +1:
+					rItr = rItr->left;
+					break;
+				}
+				break;
+			case +1:
+				switch (iR) {
+				case -1:
+					lItr = lItr->left;
+					rItr = rItr->right;
+					break;
+				case 0:
+					lItr = lItr->left;
+					break;
+				case +1:
+					lItr = lItr->left;
+					break;
+				}
+				break;
 			}
-			return concatenate(lHull->split(lItr->key, LEFT, true), rHull->split(rItr->key, RIGHT, true));
 		}
-		static double computeSlope(Point pleft, Point pright) {
-			if (pright.x - pleft.x == 0) {
-				if (pright.y - pleft.y > 0) return 1e9;
-				return -1e9;
-			}
-			return ((double) (pright.y - pleft.y)) / (pright.x - pleft.x);
+		return concatenate(lHull->split(lItr->key, LEFT, true), rHull->split(rItr->key, RIGHT, true));
+	}
+	static double computeSlope(Point pleft, Point pright) {
+		if (pright.x - pleft.x == 0) {
+			if (pright.y - pleft.y > 0) return 1e9;
+			return -1e9;
 		}
-		static int check(Point a, Point b, Point c, Point d) {
-			long long x = (long long) (b.y - a.y) * (d.x - c.x);
-			long long y = (long long) (d.y - c.y) * (b.x - a.x);
-			if (x == y) return 0;
-			if (x > y) return 1;
+		return ((double) (pright.y - pleft.y)) / (pright.x - pleft.x);
+	}
+	static int check(Point a, Point b, Point c, Point d) {
+		long long x = (long long) (b.y - a.y) * (d.x - c.x);
+		long long y = (long long) (d.y - c.y) * (b.x - a.x);
+		if (x == y) return 0;
+		if (x > y) return 1;
+		return -1;
+	}
+	static int determineCase(Node* n, Point s, Point t) {
+		int leftAbove = 1;
+		int rightAbove = 0;
+		if ((n->prv != 0) && check(n->prv->key, n->key, s, t) < 0) {
+			leftAbove = 0;
+		}
+		if ((n->nxt != 0) && check(n->key, n->nxt->key, s, t) > 0) {
+			rightAbove = 1;
+		}
+		if (leftAbove && rightAbove) {
 			return -1;
 		}
-		static int determineCase(Node* n, Point s, Point t) {
-			int leftAbove = 1;
-			int rightAbove = 0;
-			if ((n->prv != 0) && check(n->prv->key, n->key, s, t) < 0) {
-				leftAbove = 0;
-			}
-			if ((n->nxt != 0) && check(n->key, n->nxt->key, s, t) > 0) {
-				rightAbove = 1;
-			}
-			if (leftAbove && rightAbove) {
-				return -1;
-			}
-			else if (!leftAbove && !rightAbove) {
-				return +1;
-			}
-			else {
-				return 0;
-			}
+		else if (!leftAbove && !rightAbove) {
+			return +1;
 		}
+		else {
+			return 0;
+		}
+	}
 };
 
 struct CNode {
@@ -401,7 +401,7 @@ struct DynamicConvexHull {
 		return new CNode(p);
 	}
 	void removeLeaf(CNode* n) {
-		
+
 	}
 	static void flipTripleColor(CNode* n) {
 		//assert(n != NULL);
@@ -585,18 +585,18 @@ struct DynamicConvexHull {
 		}
 	}
 	long long Area2() {
-			if (root == 0) {
-				return 0;
-			}
-			long long res = 0;
-			if (root->uhull != 0 && root->uhull->root != 0) {
-				res += root->uhull->root->sumcross;
-			}
-			if (root->dhull != 0 && root->dhull->root != 0) {
-				res += root->dhull->root->sumcross;
-			}
-			return abs(res);
+		if (root == 0) {
+			return 0;
 		}
+		long long res = 0;
+		if (root->uhull != 0 && root->uhull->root != 0) {
+			res += root->uhull->root->sumcross;
+		}
+		if (root->dhull != 0 && root->dhull->root != 0) {
+			res += root->dhull->root->sumcross;
+		}
+		return abs(res);
+	}
 };
 
 int main() {
