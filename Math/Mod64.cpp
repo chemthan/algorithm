@@ -1,7 +1,7 @@
 #include <bits/stdc++.h>
 using namespace std;
 
-#define T long long
+typedef long long T;
 T mulmod64(T a, T b, T p) {
 	a %= p; b %= p;
 	T r = 0;
@@ -12,6 +12,11 @@ T mulmod64(T a, T b, T p) {
 		a = a * base % p;
 	}
 	return r;
+    /*T q = T((long double) a * b / p);
+    T r = a * b - q * p;
+    while (r < 0) r += p;
+    while (r >= p) r -= p;
+    return r;*/
 }
 T powmod64(T n, T k, T p) {
 	if (!n) return 0;
