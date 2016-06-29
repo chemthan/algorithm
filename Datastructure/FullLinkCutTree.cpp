@@ -3,7 +3,7 @@ using namespace std;
 
 //Index from 1
 struct FullLinkCutTree {
-	static const int maxn = 500010;
+	static const int maxn = 100010;
 	static const int oo = (int) 1e9;
 	
 	struct Edge {
@@ -14,7 +14,7 @@ struct FullLinkCutTree {
 		struct Flag {
 			int mul, add;
 			Flag() : mul(1) {}
-			Flag(int mul, int add) : mul(mul),add(add) {}
+			Flag(int mul, int add) : mul(mul), add(add) {}
 			int exist() {
 				return add || (mul - 1);
 			}
@@ -132,7 +132,7 @@ struct FullLinkCutTree {
 		if (p == nil) return;
 		for (int i = 0; i < 4; i++) updatelz(p->s[i]);
 		p->initval();
-		for (int i = 0; i < 2; i++) p->cI += p->s[i]->cI , p->tI += p->s[i]->tI;
+		for (int i = 0; i < 2; i++) p->cI += p->s[i]->cI, p->tI += p->s[i]->tI;
 		for (int i = 0; i < 4; i++) p->aI += p->s[i]->aI;
 		for (int i = 2; i < 4; i++) p->tI += p->s[i]->aI;
 	}
@@ -259,14 +259,10 @@ struct FullLinkCutTree {
 		makeroot(root);
 		return ans;
 	}
-	Node::Info asktree(int u) {
-		access(node + u);
-		int val = node[u].val;
-		Node::Info ans = Node::Info(val, val, val, 0);
-		for (int i = 2; i < 4; i++) updatelz(node[u].s[i]) , ans += node[u].s[i]->aI;
-		return ans;
+	void alterchain(int u, int v, int mul, int add) {
+		chain(u, v, mul, add);
 	}
-	void treealter(int u, int mul, int add) {
+	void altertree(int u, int mul, int add) {
 		access(node + u);
 		node[u].val = node[u].val * mul + add;
 		for (int i = 2; i < 4; i++) {
@@ -274,6 +270,13 @@ struct FullLinkCutTree {
 			node[u].s[i]->cF += Node::Flag(mul, add);
 		}
 		update(node + u);
+	}
+	Node::Info asktree(int u) {
+		access(node + u);
+		int val = node[u].val;
+		Node::Info ans = Node::Info(val, val, val, 0);
+		for (int i = 2; i < 4; i++) updatelz(node[u].s[i]), ans += node[u].s[i]->aI;
+		return ans;
 	}
 	int sumchain(int u, int v) {
 		return chain(u, v, 1, 0).sum;
@@ -283,9 +286,6 @@ struct FullLinkCutTree {
 	}
 	int maxchain(int u, int v) {
 		return chain(u, v, 1, 0).max;
-	}
-	void alterchain(int u, int v, int mul, int add) {
-		chain(u, v, mul, add);
 	}
 	int mintree(int u) {
 		return asktree(u).min;
