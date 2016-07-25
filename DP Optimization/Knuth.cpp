@@ -2,7 +2,7 @@
 using namespace std;
 
 /*
-* Complexity: O(NM)
+* Complexity: O(N^2)
 * f[i][j] = f[i][k] + f[k][j] + c[i][j], i < k < j
 * a[i][j] = min(k | i < k < j && f[i][j] = f[i][k] + f[k][j] + c[i][j]
 * Sufficient condition: a[i][j - 1] <= a[i][j] <= a[i + 1][j] or
@@ -11,11 +11,10 @@ using namespace std;
 
 const int oo = (int) 1e9;
 const int MAXN = 1010;
-const int MAXM = 1010;
 int n;
-int f[MAXN][MAXM];
-int c[MAXN][MAXM];
-int a[MAXN][MAXM];
+int f[MAXN][MAXN];
+int c[MAXN][MAXN];
+int a[MAXN][MAXN];
 
 void knuth() {
 	for (int i = 0; i < n; i++) {
