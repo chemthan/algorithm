@@ -4,7 +4,7 @@ using namespace std;
 /*
 * Complexity: O(N^2)
 * f[i][j] = f[i][k] + f[k][j] + c[i][j], i < k < j
-* a[i][j] = min(k | i < k < j && f[i][j] = f[i][k] + f[k][j] + c[i][j]
+* a[i][j] = min(k | i < k < j && f[i][j] = f[i][k] + f[k][j] + c[i][j])
 * Sufficient condition: a[i][j - 1] <= a[i][j] <= a[i + 1][j] or
 * c[a][c] + c[b][d] <= c[a][d] + c[b][c] (quadrangle inequality) and c[b][c] <= C[a][d] (monotonicity), a <= b <= c <= d
 */
