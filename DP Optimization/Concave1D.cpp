@@ -10,7 +10,7 @@ using namespace std;
 * 1. http://codeforces.com/problemset/problem/319/C
 */
 
-const int ar[][18] = {
+const int ar[9][18] = {
 	{25, 21, 13, 10, 20, 13, 19, 35, 37, 41, 58, 66, 82, 99, 124, 133, 156, 178},
 	{42, 35, 26, 20, 29, 21, 25, 37, 36, 39, 56, 64, 76, 91, 116, 125, 146, 164},
 	{57, 48, 35, 28, 33, 24, 28, 40, 37, 37, 54, 61, 72, 83, 107, 113, 131, 146},
@@ -30,8 +30,8 @@ T f[MAXN];
 T g[MAXN];
 int h[MAXN];
 
-T D(int i) {return f[i];}
-T W(int i, int j) {return ar[i][j];}
+T D(int i) {return f[i];} //Need to modify
+T W(int i, int j) {return ar[i][j];} //Need to modify
 T B(int i, int j) {return D(i) + W(i, j);}
 T lookup(int j, int i) {if (!i) return g[j + c]; return B(i + r - 1, j + c);}
 
@@ -78,6 +78,7 @@ void solve() {
 		}
 	}*/
 	r = 0, c = 1;
+	f[0] = 0; //Need to modify
 	fill_n(g, n, +oo);
 	while (c < n) {
 		int p = min(2 * c - r, n - 1);

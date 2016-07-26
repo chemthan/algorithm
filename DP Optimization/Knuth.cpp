@@ -6,7 +6,7 @@ using namespace std;
 * f[i][j] = f[i][k] + f[k][j] + c[i][j], i < k < j
 * a[i][j] = min(k | i < k < j && f[i][j] = f[i][k] + f[k][j] + c[i][j])
 * Sufficient condition: a[i][j - 1] <= a[i][j] <= a[i + 1][j] or
-* c[a][c] + c[b][d] <= c[a][d] + c[b][c] (quadrangle inequality) and c[b][c] <= C[a][d] (monotonicity), a <= b <= c <= d
+* c[x][z] + c[y][t] <= c[x][t] + c[y][z] (quadrangle inequality) and c[y][z] <= c[x][t] (monotonicity), x <= y <= z <= t
 */
 
 const int oo = (int) 1e9;
