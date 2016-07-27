@@ -3,10 +3,10 @@ using namespace std;
 
 /*
 * SMAWK algorithm
-* Find row minimal for a totally monotone matrix A[][] in linear time
+* Find row minimal for a totally monotone matrix a[][] in linear time
 * Matrix a[][] is totally monotone iff for any 0 <= i1 < i2 < n, 0 <= j1 < j2 < m
-* a[i2][j1] < [i2][j2] => A[i1][j1] < A[i1][j2]
-* a[i2][j1] = [i2][j2] => A[i1][j1] <= A[i1][j2]
+* a[i2][j1] < a[i2][j2] => a[i1][j1] < a[i1][j2]
+* a[i2][j1] = a[i2][j2] => a[i1][j1] <= a[i1][j2]
 */
 
 int a[9][18] = {
@@ -73,9 +73,8 @@ void SMAWK(int n, int m, int row_minima[]) {
 	}
 }
 
-int best[100];
-
 int main() {
+	int best[9];
 	SMAWK(9, 18, best);
 	return 0;
 }
