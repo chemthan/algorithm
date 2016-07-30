@@ -2,7 +2,6 @@
 using namespace std;
 
 const int MAXN = 100000 + 10;
-const int LOGN = 20;
 int n;
 vector<int> adj[MAXN];
 int size[MAXN];
