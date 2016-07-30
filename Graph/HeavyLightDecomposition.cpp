@@ -2,7 +2,6 @@
 using namespace std;
 
 const int MAXN = 100000 + 10;
-const int LOGN = 20;
 int n;
 vector<int> adj[MAXN];
 int size[MAXN];
@@ -12,9 +11,8 @@ int num[MAXN];
 int head[MAXN];
 int cnt;
 
-int query(int l, int r, int n) {return 0;} //Need to modify
 void upd(int l, int r, int n, int val) {} //Need to modify
-
+int query(int l, int r, int n) {return 0;} //Need to modify
 void dfs1(int u, int dad = -1) {
 	size[u] = 1;
 	for (int i = 0; i < adj[u].size(); i++) {
@@ -26,7 +24,6 @@ void dfs1(int u, int dad = -1) {
 		}
 	}
 }
-
 void dfs2(int u, int h, int dad = -1) {
 	num[u] = cnt++, head[u] = h;
 	pair<int, int> best = make_pair(-1, -1);
@@ -46,18 +43,27 @@ void dfs2(int u, int h, int dad = -1) {
 		}
 	}
 }
-
+void upd(int u, int v, int val) {
+	int hu = head[u], hv = head[v];
+	while (hu != hv) {
+		if (lev[hu] < lev[hv]) swap(u, v), swap(hu, hv);
+		upd(num[hu], num[u], n, val);
+		u = p[hu], hu = head[u];
+	}
+	if (lev[u] > lev[v]) swap(u, v);
+	upd(num[u], num[v], n, val);
+}
 int query(int u, int v) {
-    int res = 0;
-    int hu = head[u], hv = head[v];
-    while (hu != hv) {
-        if (lev[hu] < lev[hv]) swap(u, v), swap(hu, hv);
-        res += query(num[hu], num[u]);
-        u = p[hu], hu = head[u];
-    }
-    if (lev[u] > lev[v]) swap(u, v);
-    res += query(num[u], num[v]);
-    return res;
+	int res = 0;
+	int hu = head[u], hv = head[v];
+	while (hu != hv) {
+		if (lev[hu] < lev[hv]) swap(u, v), swap(hu, hv);
+		res += query(num[hu], num[u], n);
+		u = p[hu], hu = head[u];
+	}
+	if (lev[u] > lev[v]) swap(u, v);
+	res += query(num[u], num[v], n); //query(num[u] + 1, num[v]) for edge path
+	return res;
 }
 
 int main() {
