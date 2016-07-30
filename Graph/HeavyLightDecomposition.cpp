@@ -51,7 +51,7 @@ void upd(int u, int v, int val) {
 		u = p[hu], hu = head[u];
 	}
 	if (lev[u] > lev[v]) swap(u, v);
-	upd(num[u], num[v], n, val);
+	upd(num[u], num[v], n, val); //upd(num[u] + 1, num[v]) for edge path
 }
 int query(int u, int v) {
 	int res = 0;
