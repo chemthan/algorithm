@@ -1,72 +1,63 @@
 #include <bits/stdc++.h>
 using namespace std;
 
-const int maxn = 100010;
-const int maxe = 20;
+const int MAXN = 100000 + 10;
+const int LOGN = 20;
 int n;
-vector<int> adj[maxn];
-int nchain, nbase;
-int hchain[maxn];
-int ichain[maxn];
-int size[maxn];
-int pib[maxn];
-int lev[maxn];
-int p[maxn][maxe];
-int tin[maxn];
-int tou[maxn];
-int tms;
+vector<int> adj[MAXN];
+int size[MAXN];
+int lev[MAXN];
+int p[MAXN];
+int num[MAXN];
+int head[MAXN];
+int cnt;
 
-void init() {
-	memset(p, 0, sizeof(p)); memset(lev, 0, sizeof(lev));
-	memset(hchain, -1, sizeof(hchain)); memset(ichain, -1, sizeof(ichain)); memset(pib, -1, sizeof(pib));
-	tms = -1; nchain = nbase = 0;
-}
-void dfs(int u, int dad = -1) {
-	tin[u] = ++tms;
+int query(int l, int r, int n) {return 0;} //Need to modify
+void upd(int l, int r, int n, int val) {} //Need to modify
+
+void dfs1(int u, int dad = -1) {
 	size[u] = 1;
-	for (int i = 1; i < maxe; i++) p[u][i] = p[p[u][i - 1]][i - 1];
 	for (int i = 0; i < adj[u].size(); i++) {
 		int v = adj[u][i];
 		if (v != dad) {
-			p[v][0] = u; lev[v] = lev[u] + 1;
-			dfs(v, u); size[u] += size[v];
+			p[v] = u, lev[v] = lev[u] + 1;
+			dfs1(v, u);
+			size[u] += size[v];
 		}
 	}
-	tou[u] = tms;
 }
-int lca(int u, int v) {
-	if (lev[u] < lev[v]) swap(u, v);
-	if (tin[v] <= tin[u] && tou[v] >= tou[u]) return v;
-	for (int i = maxe - 1; i >= 0; i--) if (lev[p[u][i]] >= lev[v]) u = p[u][i];
-	for (int i = maxe - 1; i >= 0; i--) if (p[u][i] != p[v][i]) {u = p[u][i]; v = p[v][i];}
-	return p[u][0];
-}
-void hld(int u) {
-	if (!~hchain[nchain]) hchain[nchain] = u;
-	ichain[u] = nchain;
-	pib[u] = nbase++;
-	int tmp = -1;
+
+void dfs2(int u, int h, int dad = -1) {
+	num[u] = cnt++, head[u] = h;
+	pair<int, int> best = make_pair(-1, -1);
 	for (int i = 0; i < adj[u].size(); i++) {
 		int v = adj[u][i];
-		if (v != p[u][0] && (!~tmp || size[v] > size[tmp])) tmp = v;
-	}
-	if (~tmp) hld(tmp);
-	for (int i = 0; i < adj[u].size(); i++) {
-		int v = adj[u][i];
-		if (v != p[u][0] && v != tmp) {nchain++; hld(v);}
-	}
-}
-void update(int u, int a) {
-	int uchain = ichain[u], achain = ichain[a];
-	while (1) {
-		if (uchain == achain) {
-			//update(1, pib[a] + 1, pib[u], 0, n - 1);
-			return;
+		if (v != dad) {
+			best = max(best, make_pair(lev[v], v));
 		}
-		//update(1, pib[hchain[uchain]], pib[u], 0, n - 1);
-		u = p[hchain[uchain]][0];
-		uchain = ichain[u];
 	}
+	if (~best.second) {
+		dfs2(best.second, h, u);
+	}
+	for (int i = 0; i < adj[u].size(); i++) {
+		int v = adj[u][i];
+		if (v != dad && v != best.second) {
+			dfs2(v, v, u);
+		}
+	}
+}
+
+int query(int u, int v) {
+    int res = 0;
+    int hu = head[u], hv = head[v];
+    while (hu != hv) {
+        if (lev[hu] < lev[hv]) swap(u, v), swap(hu, hv);
+        res += query(num[hu], num[u]);
+        u = p[hu], hu = head[u];
+    }
+    if (lev[u] > lev[v]) swap(u, v);
+    res += query(num[u], num[v]);
+    return res;
 }
 
 int main() {
