@@ -1,8 +1,8 @@
 #include <bits/stdc++.h>
 using namespace std;
 
-const int MAGIC = 320;
 struct Query {
+	static const int MAGIC = 320;
 	int l, r, a;
 	int idx, ans;
 	Query() {l = r = 0, a = -1;}
@@ -11,7 +11,6 @@ struct Query {
 		return r < rhs.r;
 	}
 };
-
 const int MAXN = 100000 + 10;
 const int LOGN = 20;
 int n, q;
