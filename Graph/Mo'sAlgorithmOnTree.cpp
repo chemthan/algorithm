@@ -3,8 +3,7 @@ using namespace std;
 
 struct Query {
 	static const int MAGIC = 320;
-	int l, r, a;
-	int idx, ans;
+	int l, r, a, idx;
 	Query() {l = r = 0, a = -1;}
 	int operator < (const Query& rhs) {
 		if (l / MAGIC != rhs.l / MAGIC) return l / MAGIC < rhs.l / MAGIC;
@@ -91,7 +90,7 @@ int main() {
 		while (r < query[i].r) deal(idx[++r]);
 		while (r > query[i].r) deal(idx[r--]);
 		if (~query[i].a) deal(query[i].a);
-		//query[i].ans
+		//get ans
 		if (~query[i].a) deal(query[i].a);
 	}
 	return 0;
