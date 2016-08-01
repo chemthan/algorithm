@@ -114,7 +114,10 @@ struct SplayTree {
 			pushdown(x);
 			if (x->key < key) x = x->r;
 			else if (key < x->key) x = x->l;
-			else return x;
+			else {
+				splay(x);
+				return root = x;
+			}
 		}
 		return nil;
 	}
@@ -125,7 +128,10 @@ struct SplayTree {
 		while (1) {
 			pushdown(x);
 			int k = x->l ? x->l->size + 1 : 1;
-			if (pos == k) return x;
+			if (pos == k) {
+				splay(x);
+				return root = x;
+			}
 			else if (pos < k) x = x->l;
 			else {x = x->r; pos -= k;}
 		}
@@ -151,7 +157,6 @@ struct SplayTree {
 	void split(Node* x, int pos, Node*& l, Node*& r) {
 		if (!pos) {l = nil; r = x; return;}
 		Node* y = findpos(x, pos);
-		splay(y);
 		if ((r = y->r) != nil) r->p = nil;
 		if ((l = y) != nil) {l->r = nil; pushup(l);}
 	}
