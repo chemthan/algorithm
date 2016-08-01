@@ -180,6 +180,10 @@ int query(vii& hor, vii& ver) {
 }
 
 void solve() {
+	if (fopen("optics.in", "r")) {
+		freopen("optics.in", "r", stdin);
+		freopen("optics.out", "w", stdout);
+	}
 	cin >> n;
 	cin >> x[n] >> y[n], dc[x[n]], dc[y[n]];
 	FOR(i, 0, n) cin >> x[i] >> y[i] >> d[i], dc[x[i]], dc[y[i]];

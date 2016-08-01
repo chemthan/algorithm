@@ -243,6 +243,10 @@ int s[maxn];
 int t[maxn];
 
 void solve() {
+	if (fopen("boarding.in", "r")) {
+		freopen("boarding.in", "r", stdin);
+		freopen("boarding.out", "w", stdout);
+	}
 	cin >> n;
 	FOR(i, 0, n) cin >> s[i] >> t[i];
 	FOR(i, 0, n << 1) {

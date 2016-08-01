@@ -44,7 +44,7 @@ const int maxn = 250 + 10;
 const int maxm = 25000 + 10;
 int n, m;
 vector<pair<int, int> > adj[maxn];
-int w[maxn];
+int w[maxm];
 long long d[maxn];
 pair<int, int> from[maxn];
 
@@ -71,6 +71,10 @@ long long dijktra() {
 }
 
 void solve() {
+	if (fopen("rblock.in", "r")) {
+		freopen("rblock.in", "r", stdin);
+		freopen("rblock.out", "w", stdout);
+	}
 	cin >> n >> m;
 	FOR(i, 0, m) {
 		int u, v; cin >> u >> v >> w[i]; u--; v--;
