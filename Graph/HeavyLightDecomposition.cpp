@@ -30,7 +30,7 @@ void dfs2(int u, int h, int dad = -1) {
 	for (int i = 0; i < adj[u].size(); i++) {
 		int v = adj[u][i];
 		if (v != dad) {
-			best = max(best, make_pair(lev[v], v));
+			best = max(best, make_pair(size[v], v));
 		}
 	}
 	if (~best.second) {
