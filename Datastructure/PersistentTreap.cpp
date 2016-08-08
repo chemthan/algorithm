@@ -57,6 +57,7 @@ Node* split(Node* x, int pos1, int pos2) {
 }
 int depth(Node* x) {
 	if (x == nil) return 0;
+	pushdown(x);
 	return 1 + max(depth(x->l), depth(x->r));
 }
 void trace(Node* x) {

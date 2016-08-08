@@ -1,11 +1,12 @@
 #include <bits/stdc++.h>
 using namespace std;
 
-#define RL long double
-#define EPS 1e-12
+#define RL double
+#define EPS 1e-9
+const RL PI = acos(-1);
 struct PT {
 	RL x, y;
-	PT() {}
+	PT() : x(0), y(0) {}
 	PT(RL x, RL y) : x(x), y(y) {}
 	PT(const PT& p) : x(p.x), y(p.y) {}
 	bool operator < (const PT& rhs) const {return make_pair(y, x) < make_pair(rhs.y, rhs.x);}
