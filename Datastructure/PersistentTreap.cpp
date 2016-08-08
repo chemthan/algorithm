@@ -41,11 +41,13 @@ Node* join(Node* l, Node* r) {
 }
 Node* splitL(Node* x, int pos) {
 	if (x == nil || !pos) return nil;
+	pushdown(x);
 	if (x->l->size >= pos) return splitL(x->l, pos);
 	return newNode(x->key, x->l, splitL(x->r, pos - x->l->size - 1));
 }
 Node* splitR(Node* x, int pos) {
 	if (x == nil || !pos) return nil;
+	pushdown(x);
 	if (x->r->size >= pos) return splitR(x->r, pos);
 	return newNode(x->key, splitR(x->l, pos - 1 - x->r->size), x->r);
 }
