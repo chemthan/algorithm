@@ -1,161 +1,106 @@
 #include <bits/stdc++.h>
 using namespace std;
 
-const int oo = (int) 1e9;
-struct node {
-	int key, prio, size;
-	node *l, *r;
-	int rev, lz;
-	node() {}
-	node(int key, int prio, node* l, node* r) : key(key), prio(prio), l(l), r(r) {
-		size = 1;
-		if (l) size += l->size;
-		if (r) size += r->size;
-		rev = lz = 0;
-	}
-} *root;
-int randprio() {
+const int MAXN = 100000 + 10;
+int ptr;
+struct Node {
+	Node *l, *r;
+	int key, size, rev;
+} mem[MAXN], *nil = mem + (ptr++);
+void init() {
+	nil->l = nil->r = nil;
+	nil->size = 0;
+}
+int rd() {
 	static int seed = 0;
 	seed = (seed * 1001 + 100621) % 999983;
 	return seed;
 }
-int size(node*& t) {
-	return t ? t->size : 0;
+void pushup(Node* x) {
+	if (x == nil) return;
+	x->size = x->l->size + 1 + x->r->size;
 }
-int prio(node*& t) {
-	return t ? t->prio : -1;
-}
-void updatelz(node* t, int val) {
-	if (!t) return;
-	t->lz += val;
-	t->key += val;
-}
-void pushdown(node* t) {
-	if (!t) return;
-	node *x = t->l, *y = t->r;
-	if (t->rev) {
-		if (x) {swap(x->l, x->r); x->rev ^= 1;}
-		if (y) {swap(y->l, y->r); y->rev ^= 1;}
-		t->rev = 0;
-	}
-	if (t->lz) {
-		if (x) updatelz(x, t->lz);
-		if (y) updatelz(y, t->lz);
-		t->lz = 0;
+void pushdown(Node* x) {
+	if (x == nil) return;
+	if (x->rev) {
+		Node* u = x->l;
+		Node* v = x->r;
+		if (u != nil) swap(u->l, u->r), u->rev ^= 1;
+		if (v != nil) swap(v->l, v->r), v->rev ^= 1;
+		x->rev = 0;
 	}
 }
-void pushup(node*& t) {
-	if (!t) return;
-	t->size = size(t->l) + size(t->r) + 1;
+Node* newNode(int key, Node* l = nil, Node* r = nil) {
+	Node* x = mem + (ptr++);
+	x->l = l, x->r = r, x->key = key;
+	x->rev = 0;
+	pushup(x);
+	return x;
 }
-void lrotate(node*& t) {
-	node* l = t->l;
-	t->l = l->r; l->r = t;
-	t = l; pushup(t->r); pushup(t);
-}
-void rrotate(node*& t) {
-	node* r = t->r;
-	t->r = r->l; r->l = t;
-	t = r; pushup(t->l); pushup(t);
-}
-void balance(node*& t) {
-	if (prio(t->l) > t->prio) lrotate(t);
-	else if (prio(t->r) > t->prio) rrotate(t);
-}
-void insert(node*& t, int key, int prio, int pos) {
-	if (!t) {
-		t = new node(key, prio, 0, 0);
-		return;
-	}
-	pushdown(t);
-	t->size++;
-	if (pos > size(t)) insert(t->r, key, prio, pos);
-	else if (pos <= size(t->l) + 1) insert(t->l, key, prio, pos);
-	else insert(t->r, key, prio, pos - size(t->l) - 1);
-	balance(t);
-	pushup(t);
-}
-node* find(node*& t, int pos) {
-	pushdown(t);
-	if (pos == size(t->l) + 1) return t;
-	if (pos <= size(t->l)) return find(t->l, pos);
-	return find(t->r, pos - size(t->l) - 1);
-}
-node* join(node* l, node* r) {
-	pushdown(l); pushdown(r);
-	if (!l) return r;
-	if (!r) return l;
-	node* res;
-	if (l->prio < r->prio) {
-		node* t = join(l, r->l);
-		res = new node(r->key, r->prio, t, r->r);
-		delete r;
+Node* join(Node* l, Node* r) {
+	if (l == nil) return r;
+	if (r == nil) return l;
+	if (rd() % (l->size + r->size) < l->size) {
+		pushdown(l);
+		l->r = join(l->r, r);
+		pushup(l);
+		return l;
 	}
 	else {
-		node* t = join(l->r, r);
-		res = new node(l->key, l->prio, l->l, t);
-		delete l;
+		pushdown(r);
+		r->l = join(l, r->l);
+		pushup(r);
+		return r;
 	}
-	pushup(res);
-	return res;
 }
-void erase(node*& t, int pos) {
-	pushdown(t);
-	if (pos == size(t->l) + 1) {
-		if (!t->l && !t->r) {
-			delete t;
-			t = 0;
-		}
-		else t = join(t->l, t->r);
-		return;
+pair<Node*, Node*> split(Node* x, int pos) {
+	if (x == nil || !pos) return make_pair(nil, x);
+	pushdown(x);
+	if (x->l->size >= pos) {
+		pair<Node*, Node*> res = split(x->l, pos);
+		x->l = res.second;
+		pushup(x);
+		return make_pair(res.first, x);
 	}
-	t->size--;
-	if (pos <= size(t->l)) erase(t->l, pos);
-	else erase(t->r, pos - size(t->l) - 1);
+	pair<Node*, Node*> res = split(x->r, pos - x->l->size - 1);
+	x->r = res.first;
+	pushup(x);
+	return make_pair(x, res.second);
 }
-void split(node* t, int pos, node*& l, node*& r) {
-	insert(t, -1, oo, pos);
-	l = t->l; r = t->r;
-	delete t;
+void split(Node* x, Node*& t1, Node*& t2, Node*& t3, int pos1, int pos2) {
+	pair<Node*, Node*> res = split(x, pos2);
+	t3 = res.second;
+	res = split(res.first, pos1 - 1);
+	t1 = res.first, t2 = res.second;
 }
-void split(node* t, int pos1, int pos2, node*& t1, node*& t2, node*& t3) {
-	split(t, pos1, t1, t2);
-	split(t2, pos2 - pos1 + 2, t2, t3);
+void reverse(Node*& x, int l, int r) {
+	Node *t1, *t2, *t3;
+	split(x, t1, t2, t3, l, r);
+	swap(t2->l, t2->r), t2->rev ^= 1;
+	x = join(join(t1, t2), t3);
 }
-void reverse(int l, int r) {
-	node *x, *y, *z;
-	split(root, l, r, x, y, z);
-	if (y) {
-		y->rev ^= 1;
-		swap(y->l, y->r);
-	}
-	root = join(join(x, y), z);
+int depth(Node* x) {
+	if (x == nil) return 0;
+	return 1 + max(depth(x->l), depth(x->r));
 }
-void update(int l, int r, int val) {
-	node *x, *y, *z;
-	split(root, l, r, x, y, z);
-	updatelz(y, val);
-	root = join(join(x, y), z);
-}
-void trace(node* t) {
-	if (!t) return;
-	pushdown(t);
-	trace(t->l);
-	cout<<t->key<<" ";
-	trace(t->r);
-}
-void trace() {
-	trace(root);
-	cout<<"\n";
+void trace(Node* x) {
+	if (x == nil) return;
+	pushdown(x);
+	trace(x->l);
+	cout << x->key << " ";
+	trace(x->r);
 }
 
 int main() {
-	for (int i = 1; i < 10; i++) {
-		insert(root, i, randprio(), i);
+	init();
+	Node* root = nil;
+	for (int i = 1; i <= 100000; i++) {
+		root = join(root, newNode(i));
 	}
-	cout<<size(root->l)<<" "<<size(root->r)<<"\n";
-	trace();
-	reverse(1, 4);
-	trace();
+	Node *x, *y, *z;
+	split(root, x, y, z, 3, 8);
+	trace(y); cout << "\n";
+	root = join(join(x, y), z);
+	cout << depth(root) << "\n";
 	return 0;
 }

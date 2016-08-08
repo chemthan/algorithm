@@ -24,7 +24,7 @@ void dfs1(int u, int dad = -1) {
 		}
 	}
 }
-void dfs2(int u, int h, int dad = -1) {
+void dfs2(int u, int h = 0, int dad = -1) {
 	num[u] = cnt++, head[u] = h;
 	pair<int, int> best = make_pair(-1, -1);
 	for (int i = 0; i < adj[u].size(); i++) {
