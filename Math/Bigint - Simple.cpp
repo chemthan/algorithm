@@ -53,6 +53,20 @@ Bigint operator / (Bigint a, int m) {
 int operator % (Bigint a, int m) {
 	return divmod(a, m).second;
 }
+Bigint operator * (const Bigint& a, const Bigint& b) {
+	Bigint res;
+	res.data.assign(a.data.size() + b.data.size(), 0);
+	for (int i = 0; i < a.data.size(); i++) {
+		long long carry = 0;
+		for (int j = 0; j < b.data.size() || carry > 0; j++) {
+			long long s = res[i + j] + carry + (long long) a.data[i] * (j < b.data.size() ? (long long) b.data[j] : 0);
+			res[i + j] = s % BASE;
+			carry = s / BASE;
+		}
+	}
+	res.trim();
+	return res;
+}
 ostream& operator << (ostream& stream, const Bigint& a) {
 	stream << (a.data.empty() ? 0 : a.data.back());
 	for (int i = (int) a.data.size() - 2; i >= 0; i--) stream << setw(NBLOCK) << setfill('0') << a.data[i];

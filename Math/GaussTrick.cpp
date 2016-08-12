@@ -7,7 +7,7 @@ void add(int x, vector<int>& v) {
 	}
 	if (!x) return;
 	for (int i = 0; i < v.size(); i++) {
-		if (x & - x & v[i]) v[i] ^= x;
+		if (x & -x & v[i]) v[i] ^= x;
 	}
 	v.push_back(x);
 }
@@ -18,6 +18,6 @@ int main() {
 	add(2, v);
 	add(3, v);
 	add(4, v);
-	cout<<v.size()<<"\n";
+	cout << v.size() << "\n";
 	return 0;
 }
