@@ -14,7 +14,7 @@ T best;
 
 int cmpX(const pair<int, int>& a, const pair<int, int>& b) {return a.first < b.first;}
 int cmpY(const pair<int, int>& a, const pair<int, int>& b) {return a.second < b.second;}
-T dist(int x, int y, int z, int t) {return (T) (x - z) * (x - z) + (T) (y - t) * (y - t);} //Euclidian distance
+T dist(int x, int y, int z, int t) {return (T) (x - z) * (x - z) + (T) (y - t) * (y - t);} //Euclidean distance
 //T dist(int x, int y, int z, int t) {return abs(x - z) + abs(y - t);} //Manhattan distance
 
 void build(int l, int r, int divX, pair<int, int> p[]) {
