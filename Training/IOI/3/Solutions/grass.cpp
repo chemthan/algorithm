@@ -40,41 +40,92 @@ inline void submod(int& a, int val, int p = MOD) {if ((a = (a - val)) < 0) a += 
 inline int mult(int a, int b, int p = MOD) {return (ll) a * b % p;}
 inline int inv(int a, int p = MOD) {return fpow(a, p - 2, p);}
 
-const int maxn = 20;
-int n, l;
-int d[maxn];
-vi g[maxn];
-int f[1 << maxn];
+const int maxn = 100000 + 10;
+int n, m;
+vi adj[maxn];
+vi radj[maxn];
+int vis[maxn];
+vi ver;
+int cnt;
+int com[maxn];
+int tot[maxn];
+int f[maxn];
+int g[maxn];
 
-void solve() {
-	if (fopen("movie.in", "r")) {
-		freopen("movie.in", "r", stdin);
-		freopen("movie.out", "w", stdout);
-	}
-	cin >> n >> l;
-	FOR(i, 0, n) {
-		int k; cin >> d[i] >> k;
-		FOR(j, 0, k) {
-			int x; cin >> x;
-			g[i].pb(x);
+void dfs1(int u) {
+	vis[u] = 1;
+	FOR(i, 0, sz(adj[u])) {
+		int v = adj[u][i];
+		if (!vis[v]) {
+			dfs1(v);
 		}
 	}
-	FOR(msk, 1, 1 << n) {
-		FOR(i, 0, n) if (bit(msk, i)) {
-			int msk2 = msk ^ (1 << i);
-			int k = upper_bound(all(g[i]), f[msk2]) - g[i].begin() - 1;
-			if (~k) {
-				chkmax(f[msk], g[i][k] + d[i]);
+	ver.pb(u);
+}
+
+void dfs2(int u, int cnt) {
+	vis[u] = 1, tot[com[u] = cnt]++;
+	FOR(i, 0, sz(radj[u])) {
+		int v = radj[u][i];
+		if (!vis[v]) {
+			dfs2(v, cnt);
+		}
+	}
+}
+
+void solve() {
+	if (fopen("grass.in", "r")) {
+		freopen("grass.in", "r", stdin);
+		freopen("grass.out", "w", stdout);
+	}
+	cin >> n >> m;
+	vii edge;
+	FOR(i, 0, m) {
+		int u, v; cin >> u >> v; u--, v--;
+		adj[u].pb(v), radj[v].pb(u);
+		edge.pb(mp(u, v));
+	}
+	FOR(i, 0, n) if (!vis[i]) dfs1(i);
+	fill_n(vis, n, 0);
+	FORd(i, n, 0) {
+		int u = ver[i];
+		if (!vis[u]) {
+			dfs2(u, cnt++);
+		}
+	}
+	FOR(i, 0, cnt) adj[i].clear(), radj[i].clear();
+	FOR(i, 0, sz(edge)) {
+		int u = edge[i].fi;
+		int v = edge[i].se;
+		u = com[u], v = com[v];
+		if (u != v) {
+			adj[u].pb(v), radj[v].pb(u);
+		}
+	}
+	int z = com[0];
+	f[z] = tot[z];
+	FOR(i, 0, cnt) if (f[i]) {
+		FOR(j, 0, sz(adj[i])) {
+			int k = adj[i][j];
+			chkmax(f[k], f[i] + tot[k]);
+		}
+	}
+	g[z] = tot[z];
+	FORd(i, cnt, 0) if (g[i]) {
+		FOR(j, 0, sz(radj[i])) {
+			int k = radj[i][j];
+			chkmax(g[k], g[i] + tot[k]);
+		}
+	}
+	int ans = f[z];
+	FOR(i, 0, cnt) if (g[i]) {
+		FOR(j, 0, sz(adj[i])) {
+			int k = adj[i][j];
+			if (f[k]) {
+				chkmax(ans, g[i] + f[k] - f[z]);
 			}
 		}
 	}
-	int ans = INF;
-	FOR(msk, 1, 1 << n) {
-		if (f[msk] >= l) {
-			chkmin(ans, bitcount(msk));
-		}
-	}
-	if (ans == INF) ans = -1;
 	cout << ans << "\n";
 }
 

@@ -77,6 +77,10 @@ pi work(int l, int r) {
 }
 
 void solve() {
+	if (fopen("cowrect.in", "r")) {
+		freopen("cowrect.in", "r", stdin);
+		freopen("cowrect.out", "w", stdout);
+	}
 	cin >> n;
 	vi vx;
 	FOR(i, 0, n) {
