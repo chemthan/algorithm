@@ -5,6 +5,21 @@ typedef long double T;
 const int MAXN = 1 << 20;
 const T PI = 2 * acos((T) 0);
 typedef complex<T> cplex;
+/*
+struct cplex {
+	T r, i;
+	cplex() : r(0), i(0) {}
+	cplex(T n) : r(n), i(0) {}
+	cplex(T r, T i) : r(r), i(i) {}
+	T real() {return r;}
+	cplex operator + (cplex b) {return cplex (r + b.r, i + b.i);}
+	void operator += (cplex b) {r += b.r, i += b.i;}
+	cplex operator - (cplex b) {return cplex(r - b.r, i - b.i);}
+	cplex operator * (cplex b) {return cplex(r * b.r - i * b.i, r * b.i + i * b.r);}
+	cplex operator *= (cplex b) {T r2 = r * b.r - i * b.i, i2 = r * b.i + i * b.r; r = r2, i = i2;}
+	void operator /= (T n) {r /= n, i /= n;}
+};
+*/
 cplex fa[MAXN << 1], fb[MAXN << 1];
 void fft(cplex a[], int n, int invert) {
 	for (int i = 1, j = 0; i < n; i++) {
@@ -17,7 +32,7 @@ void fft(cplex a[], int n, int invert) {
 		for (int i = 0; i < n; i += m << 1) {
 			cplex unit = 1;
 			for (int j = 0; j < m; j++) {
-				cplex &x = a[i + j + m], &y = a[i + j], t = unit * x;
+				cplex& x = a[i + j + m], &y = a[i + j], t = unit * x;
 				x = y - t;
 				y = y + t;
 				unit *= w;
