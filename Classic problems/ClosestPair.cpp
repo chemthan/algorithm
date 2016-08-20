@@ -1,14 +1,15 @@
 #include <bits/stdc++.h>
 using namespace std;
 
-const int MAXN = 100010;
+const int MAXN = 100000 + 10;
 typedef long long T;
 const T oo = (T) 1e18;
 struct Point {
 	int x, y;
-	int operator < (const Point& rhs) const {
-		return make_pair(x, y) < make_pair(rhs.x, rhs.y);
-	}
+	Point() : x(0), y(0) {}
+	Point(int x, int y) : x(x), y(y) {}
+	Point(const Point& rhs) : x(rhs.x), y(rhs.y) {}
+	int operator < (const Point& rhs) const {return make_pair(x, y) < make_pair(rhs.x, rhs.y);}
 } mem[MAXN];
 T squaredist(Point a, Point b) {
 	return (T) (a.x - b.x) * (a.x - b.x) + (T) (a.y - b.y) * (a.y - b.y);
@@ -44,12 +45,13 @@ T closestpair(Point p[], int l, int r) {
 	return res;
 }
 
+int n;
 Point p[MAXN];
 
 int main() {
 	srand(time(NULL));
 	for (int test = 1; test < 1000; test++) {
-		int n = rand() % 1000 + 1;
+		n = rand() % 1000 + 1;
 		for (int i = 0; i < n; i++) {
 			p[i].x = rand();
 			p[i].y = rand();
