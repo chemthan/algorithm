@@ -8,6 +8,7 @@ struct PT {
 	PT(const PT& rhs) : x(rhs.x), y(rhs.y) {}
 	int operator < (const PT& rhs) const {return make_pair(y, x) < make_pair(rhs.y, rhs.x);}
 	int operator == (const PT& rhs) const {return make_pair(y, x) == make_pair(rhs.y, rhs.x);}
+	PT operator - (const PT& rhs) const {return PT(x - rhs.x, y - rhs.y);}
 };
 long long cross(PT a, PT b) {
 	return (long long) a.x * b.y - (long long) a.y * b.x;
@@ -48,11 +49,12 @@ int main() {
 		if (u == w) v--;
 		else if (!v) u++;
 		else {
-			if ((long long) (up[u + 1].y - up[u].y) * (dn[v].x - dn[v - 1].x)
-				> (long long) (dn[v].y - dn[v - 1].y) * (up[u + 1].x - up[u].x))
+			if (cross(up[u + 1] - up[u], dn[v] - dn[v - 1]) < 0) {
 				u++;
-			else
+			}
+			else {
 				v--;
+			}
 		}
 	}
 	for (int i = 0; i < vp.size(); i++) {
