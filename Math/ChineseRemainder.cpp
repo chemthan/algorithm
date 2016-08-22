@@ -2,7 +2,7 @@
 using namespace std;
 
 #define T long long
-const int MAXN = 100010;
+const int MAXN = 100000 + 10;
 long long p[MAXN], r[MAXN], b[MAXN], x[MAXN];
 T mulmod64(T a, T b, T p) {
 	a %= p; b %= p;
@@ -14,6 +14,11 @@ T mulmod64(T a, T b, T p) {
 		a = a * base % p;
 	}
 	return r;
+    /*T q = T((long double) a * b / p);
+    T r = a * b - q * p;
+    while (r < 0) r += p;
+    while (r >= p) r -= p;
+    return r;*/
 }
 T powmod64(T n, T k, T p) {
 	if (!n) return 0;
@@ -45,6 +50,6 @@ T chineseRemainder(int n, int p[], int r[]) {
 int main() {
 	int p[] = {2, 3, 5};
 	int r[] = {1, 2, 3};
-	cout<<chineseRemainder(3, p, r); //Expect 23
+	cout << chineseRemainder(3, p, r) << "\n"; //Expected 23
 	return 0;
 }

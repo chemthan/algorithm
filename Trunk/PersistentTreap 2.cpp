@@ -1,7 +1,7 @@
 #include <bits/stdc++.h>
 using namespace std;
 
-const int MAXN = 5000010;
+const int MAXN = 5000000 + 10;
 int cur = 0;
 struct Node {
 	int key, prio, size;
@@ -40,7 +40,7 @@ int findpos(Node* root, int key) {
 void trace(Node* root) {
 	if (root == nil) return;
 	trace(root->l);
-	cout<<root->key<<" ";
+	cout << root->key << " ";
 	trace(root->r);
 }
 
@@ -89,7 +89,7 @@ struct PersistentTreap {
 	}
 };
 
-const int maxn = 100010;
+const int maxn = 100000 + 10;
 PersistentTreap ptreap;
 Node* node[maxn];
 
@@ -102,7 +102,7 @@ int main() {
 	}
 	for (int i = 0; i < n; i++) {
 		trace(node[i]);
-		cout<<"\n";
+		cout << "\n";
 	}
 	return 0;
 }

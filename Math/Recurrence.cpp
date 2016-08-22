@@ -2,7 +2,7 @@
 using namespace std;
 
 const int MOD = (int) 1e9 + 7;
-const int MAXN = 1010;
+const int MAXN = 1000 + 10;
 int n;
 int a[MAXN][MAXN];
 int c[MAXN];
@@ -79,10 +79,10 @@ int main() {
 	}
 	for (int i = 0; i < k; i++) {
 		if (c[i] - d[i]) {
-			cout<<"Wrong!\n";
+			cout << "Wrong!\n";
 			return 0;
 		}
 	}
-	cout<<"Correct!\n";
+	cout << "Correct!\n";
 	return 0;
 }

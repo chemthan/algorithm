@@ -1,7 +1,7 @@
 #include <bits/stdc++.h>
 using namespace std;
 
-const int MAXN = 100010;
+const int MAXN = 100000 + 10;
 const int MAXC = 26;
 int key[MAXN], next[MAXN], ptrlist, nil;
 struct List {
@@ -80,7 +80,7 @@ void search(char s[], int len) {
 		v = go[v][c];
 		int x = out[v].head;
 		while (x != nil) {
-			cout<<key[x]<<" ";
+			cout << key[x] << " ";
 			x = next[x];
 		}
 	}
@@ -94,6 +94,6 @@ int main() {
 	add("ababb", 5, 3);
 	add("bab", 3, 4);
 	build();
-	search("aabab", 5);
+	search("aabab", 5); cout << "\n";
 	return 0;
 }

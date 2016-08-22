@@ -3,10 +3,10 @@ using namespace std;
 
 //Complexity: O(V^2*E) / O(min(V^2/3,E^1/2)E)
 typedef int T;
-#define MAXV 100010
-#define MAXE 1000010
 const T oo = (T) 1e9;
 struct Dinic {
+	static const int MAXV = 100000 + 10;
+	static const int MAXE = 1000000 + 10;
 	int n, s, t, E, adj[MAXE], next[MAXE], last[MAXV], run[MAXV], level[MAXV], que[MAXV];
 	T flow[MAXE], cap[MAXE];
 	void init(int _n, int _s, int _t) {
@@ -59,6 +59,6 @@ int main() {
 	dinic.init(3, 0, 2);
 	dinic.add(0, 1, 3, 0);
 	dinic.add(1, 2, 4, 0);
-	cout<<dinic.maxflow()<<"\n"; //Expected 3
+	cout << dinic.maxflow() << "\n"; //Expected 3
 	return 0;
 }

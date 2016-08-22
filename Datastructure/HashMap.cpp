@@ -32,7 +32,7 @@ struct HashMap {
 int main() {
 	hm.insert(3234234, 4);
 	hm.insert(4123123, 5);
-	cout<<hm.find(3234234)<<"\n";
-	cout<<hm.find(4123123)<<"\n";
+	cout << hm.find(3234234) << "\n";
+	cout << hm.find(4123123) << "\n";
 	return 0;
 }

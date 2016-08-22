@@ -114,7 +114,7 @@ int connected(Node* x, Node* y) {
     return x->p != nil;
 }
 
-const int MAXN = 100010;
+const int MAXN = 100000 + 10;
 Node node[MAXN];
 
 int main() {
@@ -128,9 +128,9 @@ int main() {
 	link(node + 3, node + 2);
 	link(node + 4, node + 2);
 	link(node + 6, node + 5);
-	cout<<lca(node + 3, node + 4)->key<<"\n";
-	cout<<findroot(node + 2)->key<<"\n";
+	cout << lca(node + 3, node + 4)->key << "\n";
+	cout << findroot(node + 2)->key << "\n";
 	cut(node + 3);
-	cout<<findroot(node + 3)->key<<"\n";
+	cout << findroot(node + 3)->key << "\n";
 	return 0;
 }

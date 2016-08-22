@@ -4,10 +4,10 @@ using namespace std;
 const int P1 = 998244353, P2 = 995622913;
 const long long M1 = 397550359381069386LL, M2 = 596324591238590904LL;
 const long long MM = 993874950619660289LL;
-const int maxn = 1 << 18;
+const int MAXN = 1 << 18;
 int E1, E2, F1, F2, I1, I2;
-int A[maxn << 1], B[maxn << 1], C[maxn << 1];
-int X[maxn], Y[maxn];
+int A[MAXN << 1], B[MAXN << 1], C[MAXN << 1];
+int X[MAXN], Y[MAXN];
 long long mul(long long a, long long b, long long p) {
 	a %= p; b %= p;
 	long long r = 0;
@@ -78,10 +78,10 @@ void mul(int* a, int* b, int* c, int n, int p) {
 	for (int i = n; i < N; i++) c[i] = 0;
 }
 
-int a[maxn];
-int b[maxn];
-int c[maxn << 1];
-int d[maxn << 1];
+int a[MAXN];
+int b[MAXN];
+int c[MAXN << 1];
+int d[MAXN << 1];
 
 int main() {
 	srand(time(NULL));
@@ -96,10 +96,10 @@ int main() {
 	}
 	for (int i = 0; i < (n << 1) - 1; i++) {
 		if (c[i] != d[i]) {
-			printf("Wrong!");
+			cout << "Wrong!\n";
 			return 0;
 		}
 	}
-	printf("Correct!");
+	cout << "Correct!\n";
 	return 0;
 }

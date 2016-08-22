@@ -1,10 +1,10 @@
 #include <bits/stdc++.h>
 using namespace std;
 
-#define MAXV 200010
 #define pos(v) ((v) << 1)
 #define neg(v) (pos(v) ^ 1)
 namespace Twosat {
+	static const int MAXV = 200000 + 10;
 	int n;
 	vector<int> forward[MAXV], backward[MAXV];
 	bool used[MAXV];

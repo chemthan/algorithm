@@ -98,9 +98,9 @@ int main() {
 	LPSolver solver(A, b, c);
 	VT x;
 	T value = solver.Solve(x);
-	cout<<"Value: "<<value<<"\n";
-	cout<<"Solution:";
-	for (size_t i = 0; i < x.size(); i++) cout<<" "<<x[i];
-	cout<<"\n";
+	cout << "Value: " << value << "\n";
+	cout << "Solution:";
+	for (size_t i = 0; i < x.size(); i++) cout << " " << x[i];
+	cout << "\n";
 	return 0;
 }

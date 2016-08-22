@@ -76,7 +76,7 @@ void splay(Node* x) {
 	pushup(x);
 }
 
-const int MAXN = 100010; //Be careful
+const int MAXN = 10000000 + 10;
 struct SplayTree {
 	Node mem[MAXN], *root;
 	int cur;
@@ -184,12 +184,12 @@ struct SplayTree {
 		if (x == nil) return;
 		pushdown(x);
 		trace(x->l);
-		cout<<x->key<<" ";
+		cout << x->key << " ";
 		trace(x->r);
 	}
 	void trace() {
 		trace(root);
-		cout<<"\n";
+		cout << "\n";
 	}
 } slt;
 

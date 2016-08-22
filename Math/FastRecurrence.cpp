@@ -4,7 +4,7 @@ using namespace std;
 //O(k^2log(n))
 //Solve recursive formula: x[n + 1] = a[0] * x[n] + a[1] * x[n - 1] + ... + a[k - 1] * x[n - k + 1]
 const int MOD = (int) 1e9 + 7;
-const int MAXN = 1010;
+const int MAXN = 1000 + 10;
 int k;
 int x[MAXN];
 int a[MAXN];
@@ -105,10 +105,10 @@ int main() {
 		}
 	}
 	if (nthelement(n) == y[n]) {
-		cout<<"Correct!\n";
+		cout << "Correct!\n";
 	}
 	else {
-		cout<<"Wrong!\n";
+		cout << "Wrong!\n";
 	}
 	return 0;
 }

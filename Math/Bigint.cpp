@@ -290,6 +290,6 @@ struct Bigint {
 int main() {
 	Bigint n = Bigint("123456789");
 	Bigint m = Bigint("987654321");
-	cout<<n * m;
+	cout << n * m << "\n";
 	return 0;
 }

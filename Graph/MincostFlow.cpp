@@ -4,10 +4,10 @@ using namespace std;
 //MincostFlow
 //O(min(E^2*V*logV, E*logV*Flow))
 #define T long long
-#define MAXV 1010
-#define MAXE 1000010
 #define oo ((T) 1e18)
 struct MincostFlow {
+	static const int MAXV = 1000 + 10;
+	static const int MAXE = 1000000 + 10;
 	int n, s, t, E, adj[MAXE], next[MAXE], last[MAXV], which[MAXV];
 	T totalCost, totalFlow, cap[MAXE], flow[MAXE], cost[MAXE], pot[MAXE], dist[MAXV];
 	void init(int _n, int _s, int _t) {
@@ -80,6 +80,6 @@ int main() {
 	mcf.add(1, 2, 1, 10);
 	mcf.add(0, 2, 1, 100);
 	mcf.maxflow();
-	cout<<mcf.totalCost;
+	cout << mcf.totalCost << "\n";
 	return 0;
 }

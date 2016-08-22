@@ -148,14 +148,15 @@ int main() {
 	sort(Fa, Fa + nfact);
 	T t = 1;
 	for (int i = 0; i < nfact; i++) {
-		cout<<Fa[i]<<" ";
+		cout << Fa[i] << " ";
 		t *= Fa[i];
 	}
+	cout << "\n";
 	if (n != t) {
-		printf("\nWrong!");
+		cout << "Wrong!\n";
 	}
 	else {
-		printf("\nCorrect!");
+		cout << "Correct!\n";
 	}
 	return 0;
 }

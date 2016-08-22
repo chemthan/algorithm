@@ -1,7 +1,7 @@
 #include <bits/stdc++.h>
 using namespace std;
 
-const int MAXN = 100010;
+const int MAXN = 100000 + 10;
 const int LOGN = 20;
 int st[MAXN << 1];
 int sz[MAXN << 1];

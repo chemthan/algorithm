@@ -56,7 +56,7 @@ struct ConvexhullTrick {
 
 //O(nlogn, qlogn)
 //Adding lines in arbitrary order
-struct ArbitraryConvexhullTrick {
+struct DynamicConvexhullTrick {
 	struct Line {
 		T a, b;
 		Line(T a = 0, T b = 0) : a(a), b(b) {}
@@ -147,23 +147,24 @@ struct ArbitraryConvexhullTrick {
 };
 
 //O(logn) for updating, O(logn^2) for query
-const int MAXN = 100010;
-ConvexhullTrick st[4 * MAXN];
+const int MAXN = 100000 + 10;
+ConvexhullTrick st[MAXN << 2];
 void update(int node, int i, int L, int R, T a, T b) {
 	if (i < L || i > R) return;
 	st[node].add(a, b);
 	if (L == R) return;
-	update(node << 1, i, L, (L + R) >> 1, a, b);
-	update((node << 1) + 1, i, ((L + R) >> 1) + 1, R, a, b);
+	update(node << 1, i, L, L + R >> 1, a, b);
+	update(node << 1 | 1, i, (L + R >> 1) + 1, R, a, b);
 }
 T query(int node, int l, int r, int L, int R, T x) {
 	if (l > R || r < L) return oo;
 	if (l <= L && r >= R) return st[node].query(x);
-	return min(query(node << 1, l, r, L, (L + R) >> 1, x), query((node << 1) + 1, l, r, ((L + R) >> 1) + 1, R, x));
+	return min(query(node << 1, l, r, L, L + R >> 1, x), query(node << 1 | 1, l, r, (L + R >> 1) + 1, R, x));
 }
 
 //O(logn) for updating, query
 struct LineSegmentTree {
+	static const int MAXN = 100000 + 10;
 	struct Line {
 		T a, b;
 		Line() {a = 0; b = oo;}
@@ -172,9 +173,9 @@ struct LineSegmentTree {
 			return a * x + b;
 		}
 	};
-	Line st[4 * MAXN];
+	Line st[MAXN << 2];
 	void update(int node, int l, int r, int L, int R, Line ln) {
-		int M = (L + R) >> 1;
+		int M = L + R >> 1;
 		if (l > R || r < L) return;
 		if (l <= L && r >= R) {
 			if (ln.query(L) >= st[node].query(L) && ln.query(R) >= st[node].query(R)) {
@@ -185,11 +186,11 @@ struct LineSegmentTree {
 				return;
 			}
 			if (ln.query(L) >= st[node].query(L) && ln.query(M) >= st[node].query(M)) {
-				update((node << 1) + 1, l, r, M + 1, R, ln);
+				update(node << 1 | 1, l, r, M + 1, R, ln);
 				return;
 			}
 			if (ln.query(L) <= st[node].query(L) && ln.query(M) <= st[node].query(M)) {
-				update((node << 1) + 1, l, r, M + 1, R, st[node]);
+				update(node << 1 | 1, l, r, M + 1, R, st[node]);
 				st[node] = ln;
 				return;
 			}
@@ -204,8 +205,8 @@ struct LineSegmentTree {
 			}
 		}
 		else if (L < R) {
-			update(node << 1, l, r, L, (L + R) >> 1, ln);
-			update((node << 1) + 1, l, r, ((L + R) >> 1) + 1, R, ln);
+			update(node << 1, l, r, L, L + R >> 1, ln);
+			update(node << 1 | 1, l, r, (L + R >> 1) + 1, R, ln);
 		}
 	}
 	void update(int node, int l, int r, int L, int R, T a, T b) {
@@ -216,8 +217,8 @@ struct LineSegmentTree {
 		T res = oo;
 		res = min(res, st[node].query(i));
 		if (L < R) {
-			res = min(res, query(node << 1, i, L, (L + R) >> 1));
-			res = min(res, query((node << 1) + 1, i, ((L + R) >> 1) + 1, R));
+			res = min(res, query(node << 1, i, L, L + R >> 1));
+			res = min(res, query((node << 1) + 1, i, (L + R >> 1) + 1, R));
 		}
 		return res;
 	}
@@ -227,11 +228,11 @@ int main() {
 	srand(time(NULL));
 	for (int test = 0; test < 1000; test++) {
 		ConvexhullTrick cht;
-		ArbitraryConvexhullTrick acht;
+		DynamicConvexhullTrick dcht;
 		vector<pair<long double, long double> > v1, v2;
 		for (int i = 0; i < 1000; i++) {
 			v1.push_back(make_pair(rand() * rand(), rand() * rand()));
-			acht.add(v1.back().first, v1.back().second);
+			dcht.add(v1.back().first, v1.back().second);
 		}
 		sort(v1.begin(), v1.end());
 		//reverse(v1.begin(), v1.end());
@@ -243,11 +244,11 @@ int main() {
 			cht.add(v1[i].first, v1[i].second);
 		}
 		T x = rand();
-		if (cht.query(x) != acht.query(x)) {
-			cout<<"Wrong!\n";
+		if (cht.query(x) != dcht.query(x)) {
+			cout << "Wrong!\n";
 			return 0;
 		}
 	}
-	cout<<"Correct!\n";
+	cout << "Correct!\n";
 	return 0;
 }

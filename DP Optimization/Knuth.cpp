@@ -10,7 +10,7 @@ using namespace std;
 */
 
 const int oo = (int) 1e9;
-const int MAXN = 1010;
+const int MAXN = 1000 + 10;
 int n;
 int f[MAXN][MAXN];
 int c[MAXN][MAXN];

@@ -27,7 +27,7 @@ void XORFFT(int a[], int n, int p, int invert) {
 	}
 }
 
-const int maxn = 100010;
+const int maxn = 100000 + 10;
 int n, p;
 int a[maxn];
 int b[maxn];
@@ -50,10 +50,10 @@ int main() {
 	XORFFT(a, n, p, 1);
 	for (int i = 0; i < n; i++) {
 		if (a[i] != c[i]) {
-			printf("Wrong!");
+			cout << "Wrong!\n";
 			return 0;
 		}
 	}
-	printf("Correct!");
+	cout << "Correct!\n";
 	return 0;
 }

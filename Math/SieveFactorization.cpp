@@ -1,7 +1,7 @@
 #include <bits/stdc++.h>
 using namespace std;
 
-const int MAXN = 100010;
+const int MAXN = 100000 + 10;
 int fl[MAXN];
 int sp[MAXN];
 void Sieve() {
@@ -27,7 +27,7 @@ int Euler(int n) {
 
 int main() {
 	Sieve();
-	cout<<sp[101 * 103]<<"\n";
-	cout<<Euler(12345)<<"\n";
+	cout<< sp[101 * 103] << "\n";
+	cout<< Euler(12345) << "\n";
 	return 0;
 }

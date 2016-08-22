@@ -72,11 +72,12 @@ void multiply(int n, T a[], T b[], T r[], T p = (T) 1e9 + 7) {
 	pos -= s + s + n;
 }
 
+const int maxn = 100000 + 10;
 const T MOD = (T) 1e9 + 7;
-T x[100010];
-T y[100010];
-T z[100010];
-T d[100010];
+T x[maxn];
+T y[maxn];
+T z[maxn];
+T d[maxn];
 
 int main() {
 	srand(time(NULL));
@@ -99,16 +100,16 @@ int main() {
 	}
 	for (int i = 0; i < c.size(); i++) {
 		if (c[i] != d[i]) {
-			printf("Wrong!");
+			cout << "Wrong!\n";
 			return 0;
 		}
 	}
 	for (int i = 0; i < c.size(); i++) {
 		if (z[i] != d[i] % MOD) {
-			printf("Wrong!");
+			cout << "Wrong!\n";
 			return 0;
 		}
 	}
-	printf("Correct!");
+	cout << "Correct!\n";
 	return 0;
 }

@@ -1,7 +1,7 @@
 #include <bits/stdc++.h>
 using namespace std;
 
-const int MAXN = 100010;
+const int MAXN = 100000 + 10;
 int t[MAXN];
 int nprime;
 int prime[MAXN / 10];
@@ -20,7 +20,7 @@ void build() {
 int main() {
 	build();
 	for (int i = 1; i <= 100; i++) {
-		cout<<prime[i]<<"\n";
+		cout << prime[i] << "\n";
 	}
 	return 0;
 }

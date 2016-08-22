@@ -2,7 +2,7 @@
 using namespace std;
 
 //Find x such that x * x = a [mod]
-const int MAXN = 100010;
+const int MAXN = 100000 + 10;
 int qn[MAXN];
 int fpow(int n, int k, int p) {
 	int r = 1;
@@ -53,7 +53,7 @@ int calc(int a, int mod) {
 int main() {
 	int a = 2311, mod = 100000007;
 	int k = calc(a, mod);
-	if (k == -1) cout<<-1<<"\n";
-	else cout<<(long long) k * k % mod;
+	if (k == -1) cout << -1 << "\n";
+	else cout << (long long) k * k % mod;
 	return 0;
 }

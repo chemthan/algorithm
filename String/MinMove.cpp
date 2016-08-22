@@ -24,6 +24,6 @@ int minmove(char s[], int n) {
 
 int main() {
 	char s[] = "stringrandom";
-	printf("%d", minmove(s, strlen(s)));
+	cout << minmove(s, strlen(s)) << "\n";
 	return 0;
 }

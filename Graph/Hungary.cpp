@@ -3,9 +3,9 @@ using namespace std;
 
 //O(n^3)
 //Index from 1
-#define MAXN 1010
-#define INF 1000000000
 struct Hungary {
+	static const int MAXN = 1000 + 10;
+	static const int INF = (int) 1e9;
 	int nx, ny, cost[MAXN][MAXN], fx[MAXN], fy[MAXN], maty[MAXN], which[MAXN], dist[MAXN];
 	bool used[MAXN];
 	void init(int _nx, int _ny) {
@@ -60,6 +60,6 @@ int main() {
 	hungary.init(3, 3);
 	hungary.add(1, 2, 3);
 	hungary.add(1, 2, 1);
-	printf("%d", hungary.mincost());
+	cout << hungary.mincost() << "\n";
 	return 0;
 }

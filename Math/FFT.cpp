@@ -102,10 +102,10 @@ int main() {
 	}
 	for (int i = 0; i < na + nb - 1; i++) {
 		if (c[i] != d[i]) {
-			printf("Wrong!");
+			cout << "Wrong!\n";
 			return 0;
 		}
 	}
-	printf("Correct!");
+	cout << "Correct!\n";
 	return 0;
 }

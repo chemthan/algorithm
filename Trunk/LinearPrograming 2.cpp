@@ -2,8 +2,8 @@
 using namespace std;
 
 #define EPS 1e-9
-const int MAXN = 1010;
-const int MAXM = 1010;
+const int MAXN = 1000 + 10;
+const int MAXM = 1000 + 10;
 double a[MAXN][MAXM], b[MAXN], c[MAXM], d[MAXN][MAXM];
 int idx[MAXN + MAXM];
 //Array all indexed from 0
@@ -66,6 +66,6 @@ int main() {
 	}
 	for (int i = 0; i < n; i++) b[i] = i + 1;
 	for (int i = 0; i < m; i++) c[i] = i * i + 1;
-	cout<<fixed<<setprecision(9)<<simplex(a, b, c, n, m); //Should be 0.833333333
+	cout << fixed << setprecision(9) << simplex(a, b, c, n, m) << "\n"; //Should be 0.833333333
 	return 0;
 }

@@ -5,7 +5,7 @@ using namespace std;
 1. http://codeforces.com/problemset/problem/434/C
 2. https://www.codechef.com/problems/MSDBIN
 */
-const int MAXN = 100010;
+const int MAXN = 100000 + 10;
 const int MAXC = 26;
 struct Node {
 	Node* parent;
@@ -66,7 +66,7 @@ void search(char* s) {
 		Node* tmp = cur;
 		if (tmp->key == -1) tmp = tmp->gfail;
 		while (tmp) {
-			cout<<tmp->key<<" ";
+			cout << tmp->key << " ";
 			tmp = tmp->gfail;
 		}
 		s++;
@@ -80,6 +80,6 @@ int main() {
 	insert(root, "ababb", 3);
 	insert(root, "bab", 4);
 	pushlink(root);
-	search("aabab");
+	search("aabab"); cout << "\n";
 	return 0;
 }

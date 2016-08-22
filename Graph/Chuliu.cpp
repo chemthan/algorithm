@@ -2,9 +2,9 @@
 using namespace std;
 
 //Index from 0
-const int MAXV = 100010;
-const int MAXE = 100010;
 namespace Chuliu {
+	static const int MAXV = 100000 + 10;
+	static const int MAXE = 100000 + 10;
 	int n, m, root, pre[MAXV], node[MAXV], vis[MAXV], best[MAXV];
 	struct Cost;
 	vector<Cost> costlist;
@@ -104,6 +104,6 @@ int main() {
 	Chuliu::add(1, 1, 2, 8);
 	Chuliu::add(1, 0, 2, 5);
 	Chuliu::add(1, 2, 3, 1);
-	printf("%d", Chuliu::mst(0));
+	cout << Chuliu::mst(0) << "\n";
 	return 0;
 }

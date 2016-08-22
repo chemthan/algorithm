@@ -46,9 +46,9 @@ int main() {
 	a = gauss(a);
 	for (int i = 0; i < n; i++) {
 		for (int j = 0; j < m; j++) {
-			cout<<fixed<<setprecision(9)<<a[i][j]<<" ";
+			cout << fixed << setprecision(9) << a[i][j] << " ";
 		}
-		cout<<"\n";
+		cout << "\n";
 	}
 	return 0;
 }

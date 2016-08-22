@@ -2,7 +2,7 @@
 using namespace std;
 
 //z[i] the length of the longest substr begins at i
-const int MAXN = 100010;
+const int MAXN = 100000 + 10;
 char S[MAXN];
 int n;
 int z[MAXN];
@@ -35,7 +35,8 @@ int main() {
 	n = strlen(S);
 	zfunction();
 	for (int i = 0; i < n; i++) {
-		cout<<z[i]<<" ";
+		cout << z[i] << " ";
 	}
+	cout << "\n";
 	return 0;
 }

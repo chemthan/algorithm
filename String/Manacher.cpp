@@ -1,7 +1,7 @@
 #include <bits/stdc++.h>
 using namespace std;
 
-const int MAXN = 100010;
+const int MAXN = 100000 + 10;
 int d[MAXN]; //Radius odd palindrome
 int e[MAXN]; //Radius even palindrome
 int manacher(char s[], int n) {
@@ -32,14 +32,14 @@ int manacher(char s[], int n) {
 }
 
 int main() {
-	cout<<manacher("aaadefede", 9)<<"\n";
+	cout << manacher("aaadefede", 9) << "\n";
 	for (int i = 0; i < 9; i++) {
 		cout<<d[i]<<" ";
 	}
-	cout<<"\n";
+	cout << "\n";
 	for (int i = 0; i < 9; i++) {
-		cout<<e[i]<<" ";
+		cout << e[i] << " ";
 	}
-	cout<<"\n";
+	cout << "\n";
 	return 0;
 }

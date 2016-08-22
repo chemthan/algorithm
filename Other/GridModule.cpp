@@ -141,10 +141,10 @@ int main() {
 	a[1][0] = 4; a[1][1] = 5; a[1][2] = 6;
 	a[2][0] = 7; a[2][1] = 8; a[2][2] = 9;
 	GridModule gm; gm.init(a);
-	cout<<gm.getsum(1, 0, 2, 1)<<"\n"; //Expect 24
-	cout<<gm.rowsum(1, 1, 2)<<"\n"; //Expect 11
-	cout<<gm.colsum(1, 0, 2)<<"\n"; //Expect 15
-	cout<<gm.diagonal(0, 1, 1, 2)<<"\n"; //Expect 8
-	cout<<gm.diagonal(0, 2, 2, 0)<<"\n"; //Expect 15
+	cout << gm.getsum(1, 0, 2, 1) << "\n"; //Expected 24
+	cout << gm.rowsum(1, 1, 2) << "\n"; //Expected 11
+	cout << gm.colsum(1, 0, 2) << "\n"; //Expected 15
+	cout << gm.diagonal(0, 1, 1, 2) << "\n"; //Expected 8
+	cout << gm.diagonal(0, 2, 2, 0) << "\n"; //Expected 15
 	return 0;
 }

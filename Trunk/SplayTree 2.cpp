@@ -227,12 +227,12 @@ void trace(Node* x) {
 	if (!x) return;
 	pushdown(x);
 	trace(x->l);
-	cout<<x->key<<" ";
+	cout << x->key << " ";
 	trace(x->r);
 }
 void trace() {
 	trace(root);
-	cout<<"\n";
+	cout << "\n";
 }
 
 int main() {

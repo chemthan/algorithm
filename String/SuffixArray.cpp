@@ -2,7 +2,7 @@
 using namespace std;
 
 //O(nlogn)
-const int MAXN = 100010;
+const int MAXN = 100000 + 10;
 struct SuffixArray {
 	char T[MAXN];
 	int nsz;
@@ -63,8 +63,8 @@ SuffixArray sa;
 
 int main() {
 	sa.init("stringsrandom$");
-	for (int i = 0; i < sa.nsz; i++) cout<<sa.SA[i]<<" "; cout<<"\n";
-	for (int i = 0; i < sa.nsz; i++) cout<<sa.RA[i]<<" "; cout<<"\n";
-	for (int i = 0; i < sa.nsz; i++) cout<<sa.LCP[i]<<" "; cout<<"\n";
+	for (int i = 0; i < sa.nsz; i++) cout << sa.SA[i] << " "; cout << "\n";
+	for (int i = 0; i < sa.nsz; i++) cout << sa.RA[i] << " "; cout << "\n";
+	for (int i = 0; i < sa.nsz; i++) cout << sa.LCP[i] << " "; cout << "\n";
 	return 0;
 }

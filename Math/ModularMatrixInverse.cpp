@@ -77,16 +77,16 @@ int main() {
 	}
 	for (int i = 0; i < n; i++) {
 		if (b[i][i] != 1) {
-			cout<<"Wrong!\n";
+			cout << "Wrong!\n";
 			return 0;
 		}
 		for (int j = 0; j < n; j++) {
 			if (i != j && b[i][j]) {
-				cout<<"Wrong!\n";
+				cout << "Wrong!\n";
 				return 0;
 			}
 		}
 	}
-	cout<<"Correct!\n";
+	cout << "Correct!\n";
 	return 0;
 }

@@ -2,10 +2,10 @@
 using namespace std;
 
 struct Lehmer {
-	static const int MAXX = 110;
-	static const int MAXY = 100010;
-	static const int MAXN = 10000010;
-	static const int MAXP = 1000010;
+	static const int MAXX = 100 + 10;
+	static const int MAXY = 100000 + 10;
+	static const int MAXN = 10000000 + 10;
+	static const int MAXP = 1000000 + 10;
 	int np;
 	int fl[MAXN], sp[MAXN];
 	int pr[MAXP], cn[MAXN];
@@ -51,6 +51,6 @@ struct Lehmer {
 } lehmer;
 
 int main() {
-	cout<<lehmer.calc(1e12)<<"\n"; //Expected 37607912018
+	cout << lehmer.calc(1e12) << "\n"; //Expected 37607912018
 	return 0;
 }

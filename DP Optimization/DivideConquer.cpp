@@ -12,8 +12,8 @@ using namespace std;
 */
 
 const int oo = (int) 1e9;
-const int MAXN = 1010;
-const int MAXM = 1010;
+const int MAXN = 1000 + 10;
+const int MAXM = 1000 + 10;
 int n;
 int f[MAXN][MAXM];
 int c[MAXN][MAXM];

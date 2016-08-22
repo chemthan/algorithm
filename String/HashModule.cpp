@@ -57,8 +57,8 @@ DoubleHash dhash;
 int main() {
 	dhash.init("123456123456", 2311, (int) 1e9 + 7, 1992, (int) 1e8 + 7);
 	pair<int, int> r = dhash.query(0, 3);
-	cout<<r.first<<" "<<r.second<<"\n";
+	cout << r.first << " " << r.second << "\n";
 	r = dhash.query(6, 9);
-	cout<<r.first<<" "<<r.second<<"\n";
+	cout << r.first << " " << r.second << "\n";
 	return 0;
 }

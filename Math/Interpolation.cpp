@@ -3,7 +3,7 @@ using namespace std;
 
 //O(nlog(mod), n)
 const int MOD = (int) 1e9 + 7;
-const int MAXN = 100010;
+const int MAXN = 100000 + 10;
 int a[MAXN];
 int fac[MAXN];
 int rfac[MAXN];
@@ -51,10 +51,10 @@ int main() {
 		a[i] = ((long long) 3111 * i * i * i - (long long) 54 * i * i + 13 * i) % MOD;
 	}
 	if (interpolation(1234, 4) == a[1234]) {
-		cout<<"Correct!\n";
+		cout << "Correct!\n";
 	}
 	else {
-		cout<<"Wrong!\n";
+		cout << "Wrong!\n";
 	}
 	return 0;
 }

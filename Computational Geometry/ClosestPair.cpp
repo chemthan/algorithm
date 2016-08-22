@@ -65,6 +65,6 @@ int main() {
 		sort(p, p + n);
 		assert(ans == closestpair(p, 0, n - 1));
 	}
-	cout<<"Correct!\n";
+	cout << "Correct!\n";
 	return 0;
 }

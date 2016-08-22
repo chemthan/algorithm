@@ -30,6 +30,6 @@ int primitiveroot(int p) {
 }
 
 int main() {
-	printf("%d", primitiveroot(1000000007));
+	cout << primitiveroot(1000000007) << "\n";
 	return 0;
 }

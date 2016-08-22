@@ -2,10 +2,10 @@
 using namespace std;
 
 //Index from 1
-const int MAXN = 1010;
-const int MAXM = 1010;
-const int LOGN = 10;
-const int LOGM = 10;
+const int MAXN = 1000 + 10;
+const int MAXM = 1000 + 10;
+const int LOGN = 10 + 1;
+const int LOGM = 10 + 1;
 int n, m;
 int a[MAXN][MAXM];
 int f[MAXN][MAXM][LOGM];
@@ -69,6 +69,6 @@ int main() {
 		}
 		assert(r1 == r2);
 	}
-	cout<<"Correct!\n";
+	cout << "Correct!\n";
 	return 0;
 }

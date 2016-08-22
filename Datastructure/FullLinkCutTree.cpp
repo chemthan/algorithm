@@ -3,7 +3,7 @@ using namespace std;
 
 //Index from 1
 struct FullLinkCutTree {
-	static const int maxn = 100010;
+	static const int maxn = 100000 + 10;
 	static const int oo = (int) 1e9;
 	
 	struct Edge {

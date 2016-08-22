@@ -26,6 +26,11 @@ T mulmod64(T a, T b, T p) {
 		a = a * base % p;
 	}
 	return r;
+    /*T q = T((long double) a * b / p);
+    T r = a * b - q * p;
+    while (r < 0) r += p;
+    while (r >= p) r -= p;
+    return r;*/
 }
 T powmod64(T n, T k, T p) {
 	if (!n) return 0;
@@ -56,14 +61,14 @@ int rabin(T n) {
 }
 
 int main() {
-	cout<<rabin(1000000007)<<"\n";
-	cout<<rabin(100000007)<<"\n";
-	cout<<rabin(10000007)<<"\n";
-	cout<<rabin(1000007)<<"\n";
-	cout<<rabin(100007)<<"\n";
-	cout<<rabin(10007)<<"\n";
-	cout<<rabin(1007)<<"\n";
-	cout<<rabin(107)<<"\n";
-	cout<<rabin(17)<<"\n";
+	cout << rabin(1000000007) << "\n";
+	cout << rabin(100000007) << "\n";
+	cout << rabin(10000007) << "\n";
+	cout << rabin(1000007) << "\n";
+	cout << rabin(100007) << "\n";
+	cout << rabin(10007) << "\n";
+	cout << rabin(1007) << "\n";
+	cout << rabin(107) << "\n";
+	cout << rabin(17) << "\n";
 	return 0;
 }

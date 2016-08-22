@@ -9,7 +9,7 @@ using namespace std;
 */
 
 typedef double T;
-const int MAXN = 100010;
+const int MAXN = 100000 + 10;
 int n;
 int f[MAXN];
 int dq[MAXN];

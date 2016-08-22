@@ -1,7 +1,7 @@
 #include <bits/stdc++.h>
 using namespace std;
 
-const int MAXN = 2000010;
+const int MAXN = 2000000 + 10;
 struct Node {
 	Node *l, *r;
 	int L, R, cnt;
@@ -51,6 +51,6 @@ int main() {
 	root[0] = build(0, n - 1);
 	root[1] = update(root[0], 2, 4);
 	root[2] = update(root[1], 3, 1);
-	cout<<query(root[2], 0, 3)<<"\n";
+	cout << query(root[2], 0, 3) << "\n";
 	return 0;
 }

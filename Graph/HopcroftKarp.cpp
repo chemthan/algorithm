@@ -3,9 +3,9 @@ using namespace std;
 
 //O(|E| * |V| ^ 1/2)
 //Index from 1
-#define MAXV 1010
-#define MAXE 1000010
 struct HopcroftKarp {
+	static const int MAXV = 1000 + 10;
+	static const int MAXE = 1000000 + 10;
 	int nx, ny, E, adj[MAXE], next[MAXE], last[MAXV], run[MAXV], level[MAXV], que[MAXV], matx[MAXV], maty[MAXV];
 	void init(int _nx, int _ny) {
 		nx = _nx; ny = _ny;
@@ -61,6 +61,6 @@ int main() {
 	hopkarp.add(1, 2);
 	hopkarp.add(1, 3);
 	hopkarp.add(2, 3);
-	printf("%d", hopkarp.maxmat());
+	cout << hopkarp.maxmat() << "\n";
 	return 0;
 }

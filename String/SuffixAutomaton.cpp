@@ -4,7 +4,7 @@ using namespace std;
 //O(n)
 //Problem:
 //http://codeforces.com/problemset/problem/128/B
-const int MAXN = 100010;
+const int MAXN = 100000 + 10;
 const int MAXC = 26;
 struct state {
 	int len, link, fpos;
@@ -54,7 +54,7 @@ struct SuffixAutomaton {
 			if (~st[u].nxt[i]) {
 				cur[len] = 'a' + i;
 				cur[len + 1] = 0;
-				cout<<cur<<"\n";
+				cout << cur << "\n";
 				trace(st[u].nxt[i], len + 1);
 				cur[len] = 0;
 			}
@@ -162,18 +162,18 @@ int main() {
 	for (int i = 0; i < s.size(); i++) {
 		sa.extend(s[i] - 'a');
 	}
-	sa.trace(0); cout<<"\n";
-	cout<<sa.ndsubstr(0)<<"\n"; //Total distinct substring, include empty one
-	cout<<sa.kth(0, 3)<<"\n"; //kth smallest substring
+	sa.trace(0); cout << "\n";
+	cout << sa.ndsubstr(0) << "\n"; //Total distinct substring, include empty one
+	cout << sa.kth(0, 3) << "\n"; //kth smallest substring
 	sa.updatesize();
-	cout<<sa.repstr("e")<<"\n"; //The number of occurrences
+	cout << sa.repstr("e") << "\n"; //The number of occurrences
 	s += s;
 	sa.init();
 	for (int i = 0; i < s.size(); i++) {
 		sa.extend(s[i] - 'a');
 	}
-	cout<<sa.minshift(0, s.size() >> 1) - (s.size() >> 1) + 1<<"\n";
-	cout<<sa.firstpostn("ab")<<"\n";
-	cout<<lcs("abcdef", "gcdeft")<<"\n";
+	cout << sa.minshift(0, s.size() >> 1) - (s.size() >> 1) + 1 << "\n";
+	cout << sa.firstpostn("ab") << "\n";
+	cout << lcs("abcdef", "gcdeft") << "\n";
 	return 0;
 }

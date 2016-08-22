@@ -43,9 +43,8 @@ int main() {
 	for (int i = 0; i < 100000; i++) vp.push_back(PT(rand(), rand()));
 	ConvexHull(vp, up, dn);
 	int u = 0, v = dn.size() - 1, w = up.size() - 1;
-	long long mx = 0;
+	long long mx = dist(up[u], dn[v]);
 	while (u < w || v > 0) {
-		mx = max(mx, dist(up[u], dn[v]));
 		if (u == w) v--;
 		else if (!v) u++;
 		else {
@@ -56,6 +55,7 @@ int main() {
 				v--;
 			}
 		}
+		mx = max(mx, dist(up[u], dn[v]));
 	}
 	for (int i = 0; i < vp.size(); i++) {
 		for (int j = i + 1; j < vp.size(); j++) {

@@ -141,19 +141,19 @@ void trace(node* t) {
 	if (!t) return;
 	pushdown(t);
 	trace(t->l);
-	cout<<t->key<<" ";
+	cout << t->key << " ";
 	trace(t->r);
 }
 void trace() {
 	trace(root);
-	cout<<"\n";
+	cout << "\n";
 }
 
 int main() {
 	for (int i = 1; i < 10; i++) {
 		insert(root, i, randprio(), i);
 	}
-	cout<<size(root->l)<<" "<<size(root->r)<<"\n";
+	cout << size(root->l) << " " << size(root->r) << "\n";
 	trace();
 	reverse(1, 4);
 	trace();

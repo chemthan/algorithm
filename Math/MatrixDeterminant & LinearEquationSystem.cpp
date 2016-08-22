@@ -55,15 +55,15 @@ int main() {
 			t += a[i][j] * r[j];
 		}
 		if (!eq(t, a[i][n])) {
-			cout<<"Wrong!\n";
+			cout << "Wrong!\n";
 			return 0;
 		}
 	}
-	cout<<fixed<<setprecision(9)<<"Determinant: "<<det<<"\n";;
-	cout<<"Solution: ";
+	cout << fixed << setprecision(9) << "Determinant: " << det << "\n";;
+	cout << "Solution: ";
 	for (int i = 0; i < n; i++) {
-		cout<<r[i]<<" ";
+		cout << r[i] << " ";
 	}
-	cout<<"\n";
+	cout << "\n";
 	return 0;
 }

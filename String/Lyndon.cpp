@@ -12,7 +12,7 @@ void lyndon(string s) {
 			j++;
 		}
 		while (i <= k) {
-			cout<<s.substr(i, j - k)<<" ";
+			cout << s.substr(i, j - k) << " ";
 			i += j - k;
 		}
 	}
@@ -20,6 +20,6 @@ void lyndon(string s) {
 
 int main() {
 	string s = "basdafswaer";
-	lyndon(s);
+	lyndon(s); cout << "\n";
 	return 0;
 }

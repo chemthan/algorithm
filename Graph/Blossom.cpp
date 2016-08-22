@@ -2,9 +2,9 @@
 using namespace std;
 
 //O(V^1/2*E)
-const int MAXV = 1010;
-const int MAXE = 1000010;
 struct Blossom {
+	static const int MAXV = 1000 + 10;
+	static const int MAXE = 1000000 + 10;
 	int n, E, lst[MAXV], next[MAXE], adj[MAXE];
 	int nxt[MAXV], mat[MAXV], dad[MAXV], col[MAXV];
 	int que[MAXV], qh, qt;

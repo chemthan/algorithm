@@ -1,7 +1,7 @@
 #include <bits/stdc++.h>
 using namespace std;
 
-int const MAXN = 100010;
+int const MAXN = 100000 + 10;
 struct KMP {
 	char s[MAXN];
 	int nsz, link[MAXN];
@@ -35,6 +35,6 @@ KMP kmp;
 int main() {
 	kmp.init("123123");
 	vector<int> res = kmp.search("412312312312312312341231231231234");
-	for (int i = 0; i < res.size(); i++) cout<<res[i]<<" "; //Expect 1 4 7 10 13 20 23 26
+	for (int i = 0; i < res.size(); i++) cout<<res[i] << " "; cout << "\n"; //Expected 1 4 7 10 13 20 23 26
 	return 0;
 }

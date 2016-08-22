@@ -3,9 +3,9 @@ using namespace std;
 
 //O(|E| * |V| ^ 1/2)
 //index from 1
-#define MAXV 1010
-#define MAXE 1000010
 struct EdmondsLawler {
+	static const int MAXV = 1000 + 10;
+	static const int MAXE = 1000000 + 10;
 	int n, E, start, finish, newRoot, qsize, adj[MAXE], next[MAXE], last[MAXV], mat[MAXV], que[MAXV], dad[MAXV], root[MAXV];
 	bool inque[MAXV], inpath[MAXV], inblossom[MAXV];
 	void init(int _n) {
@@ -108,6 +108,6 @@ int main() {
 	edmonds.add(2, 1);
 	edmonds.add(1, 3);
 	edmonds.add(3, 1);
-	printf("%d", edmonds.maxmat());
+	cout << edmonds.maxmat() << "\n";
 	return 0;
 }

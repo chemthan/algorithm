@@ -1,19 +1,19 @@
 #include <bits/stdc++.h>
 using namespace std;
 
-const int maxn = 100010;
-const int maxe = 20;
+const int MAXN = 100000 + 10;
+const int LOGN = 20;
 int n;
-vector<int> adj[maxn];
+vector<int> adj[MAXN];
 int nchain, nbase;
-int hchain[maxn];
-int ichain[maxn];
-int size[maxn];
-int pib[maxn];
-int lev[maxn];
-int p[maxn][maxe];
-int tin[maxn];
-int tou[maxn];
+int hchain[MAXN];
+int ichain[MAXN];
+int size[MAXN];
+int pib[MAXN];
+int lev[MAXN];
+int p[MAXN][LOGN];
+int tin[MAXN];
+int tou[MAXN];
 int tms;
 
 void init() {
@@ -24,7 +24,7 @@ void init() {
 void dfs(int u, int dad = -1) {
 	tin[u] = ++tms;
 	size[u] = 1;
-	for (int i = 1; i < maxe; i++) p[u][i] = p[p[u][i - 1]][i - 1];
+	for (int i = 1; i < LOGN; i++) p[u][i] = p[p[u][i - 1]][i - 1];
 	for (int i = 0; i < adj[u].size(); i++) {
 		int v = adj[u][i];
 		if (v != dad) {
@@ -37,8 +37,8 @@ void dfs(int u, int dad = -1) {
 int lca(int u, int v) {
 	if (lev[u] < lev[v]) swap(u, v);
 	if (tin[v] <= tin[u] && tou[v] >= tou[u]) return v;
-	for (int i = maxe - 1; i >= 0; i--) if (lev[p[u][i]] >= lev[v]) u = p[u][i];
-	for (int i = maxe - 1; i >= 0; i--) if (p[u][i] != p[v][i]) {u = p[u][i]; v = p[v][i];}
+	for (int i = LOGN - 1; i >= 0; i--) if (lev[p[u][i]] >= lev[v]) u = p[u][i];
+	for (int i = LOGN - 1; i >= 0; i--) if (p[u][i] != p[v][i]) {u = p[u][i]; v = p[v][i];}
 	return p[u][0];
 }
 void hld(int u) {

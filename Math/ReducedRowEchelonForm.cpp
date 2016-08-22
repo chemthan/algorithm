@@ -40,16 +40,16 @@ int main() {
 	for (int i = 0; i < n; i++) a[i] = VT(A[i], A[i] + m);
 	int rank = rref(a);
 	//expected: 3
-	cout<<"Rank: "<<rank<<"\n";
+	cout << "Rank: " << rank << "\n";
 	//expected: 1 0 0 1
 	//          0 1 0 3
 	//          0 0 1 -3
 	//          0 0 0 3.10862e-15
 	//          0 0 0 2.22045e-15
-	cout<<"rref:\n";
+	cout << "rref:\n";
 	for (int i = 0; i < n; i++) {
 		for (int j = 0; j < m; j++)
-			cout<<a[i][j]<<" ";
-		cout<<"\n";;
+			cout << a[i][j] << " ";
+		cout << "\n";;
 	}
 }

@@ -1,7 +1,7 @@
 #include <bits/stdc++.h>
 using namespace std;
 
-const int MAXN = 100010;
+const int MAXN = 100000 + 10;
 int st[MAXN << 2];
 int lz[MAXN << 2];
 void pushdown(int node, int L, int R) {
@@ -33,7 +33,7 @@ int query(int node, int l, int r, int L, int R) {
 	return query(node << 1, l, r, L, L + R >> 1) + query(node << 1 | 1, l, r, (L + R >> 1) + 1, R);
 }
 
-const int maxn = 100010;
+const int maxn = 100000 + 10;
 int n;
 int a[maxn];
 

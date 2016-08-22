@@ -2,7 +2,7 @@
 using namespace std;
 
 struct RMQ {
-	static const int MAXN = 100010;
+	static const int MAXN = 100000 + 10;
 	static const int LOGN = 20;
 	int n;
 	int a[MAXN];

@@ -24,7 +24,7 @@ const int ar[9][18] = {
 
 typedef int T;
 const T oo = (T) 1e9;
-const int MAXN = 100010;
+const int MAXN = 100000 + 10;
 int n, r, c;
 T f[MAXN];
 T g[MAXN];

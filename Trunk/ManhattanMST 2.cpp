@@ -19,7 +19,7 @@ bool comparesub(Point a, Point b) {
 	return make_pair(a.x - a.y, a.y) < make_pair(b.x - b.y, b.y);
 }
 
-const int MAXN = 100010;
+const int MAXN = 100000 + 10;
 int n;
 Point p[MAXN];
 int x[MAXN];
@@ -96,9 +96,9 @@ void sweep2(int l, int r) {
 }
 
 int main() {
-	scanf("%d", &n);
+	cin >> n;
 	for (int i = 0; i < n; i++) {
-		scanf("%d%d", &p[i].x, &p[i].y);
+		cin >> p[i].x >> p[i].y;
 		x[i] = p[i].x;
 		y[i] = p[i].y;
 		p[i].idx = i;
@@ -137,6 +137,6 @@ int main() {
 		}
 		pq.pop();
 	}
-	cout<<ans<<"\n";
+	cout << ans << "\n";
 	return 0;
 }

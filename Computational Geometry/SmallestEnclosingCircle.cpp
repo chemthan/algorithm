@@ -8,8 +8,8 @@ struct PT {
 	PT() : x(0), y(0) {}
 	PT(RL x, RL y) : x(x), y(y) {}
 	PT(const PT& p) : x(p.x), y(p.y) {}
-	bool operator < (const PT& rhs) const {return make_pair(y, x) < make_pair(rhs.y, rhs.x);}
-	bool operator == (const PT& rhs) const {return make_pair(y, x) == make_pair(rhs.y, rhs.x);}
+	int operator < (const PT& rhs) const {return make_pair(y, x) < make_pair(rhs.y, rhs.x);}
+	int operator == (const PT& rhs) const {return make_pair(y, x) == make_pair(rhs.y, rhs.x);}
 	PT operator + (const PT& p) const {return PT(x + p.x, y + p.y);}
 	PT operator - (const PT& p) const {return PT(x - p.x, y - p.y);}
 	PT operator * (RL c) const {return PT(x * c, y * c);}

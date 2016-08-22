@@ -9,7 +9,7 @@ Problem:
  3. https://www.codechef.com/problems/CUBTOWER
 */
 struct RangeQuery {
-	static const int maxn = 100010;
+	static const int maxn = 100000 + 10;
 	static const int magic = 320;
 	int a[maxn];
 	int b[maxn];
@@ -49,7 +49,7 @@ struct RangeQuery {
 	}
 } rq;
 
-const int maxn = 100010;
+const int maxn = 100000 + 10;
 int a[maxn];
 
 int main() {
@@ -70,6 +70,6 @@ int main() {
 		}
 		assert(res == rq.query(l, r));
 	}
-	cout<<"Correct!\n";
+	cout << "Correct!\n";
 	return 0;
 }

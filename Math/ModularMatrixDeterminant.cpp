@@ -60,11 +60,11 @@ int main() {
 		}
 		assert(t == a[i][n]);
 	}
-	cout<<"Determinant: "<<det<<"\n";
-	cout<<"Solution: ";
+	cout << "Determinant: " << det << "\n";
+	cout << "Solution: ";
 	for (int i = 0; i < n; i++) {
-		cout<<r[i]<<" ";
+		cout << r[i] << " ";
 	}
-	cout<<"\n";
+	cout << "\n";
 	return 0;
 }

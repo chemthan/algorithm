@@ -1,7 +1,7 @@
 #include <bits/stdc++.h>
 using namespace std;
 
-const int MAXN = 1010;
+const int MAXN = 1000 + 10;
 int n, rate[MAXN][MAXN], husband[MAXN];
 queue<int> womanlist[MAXN];
 queue<int> freemans;

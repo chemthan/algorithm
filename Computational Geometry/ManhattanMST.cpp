@@ -1,7 +1,7 @@
 #include <bits/stdc++.h>
 using namespace std;
 
-const int maxn = 100010;
+const int maxn = 100000 + 10;
 const int oo = (int) 1e9;
 
 struct Point {
