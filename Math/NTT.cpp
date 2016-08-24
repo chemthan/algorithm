@@ -43,9 +43,7 @@ void multiply(int a[], int b[], int c[], int na, int nb, int mod = (int) 1e9 + 7
 		for (int i = 0; i < (1 << k); i++) fc[r][i] = mul(fa[i], fb[i], p);
 		fft(fc[r], p, inv(w, p), 1 << k);
 		int rem = inv(1 << k, p);
-		for (int i = 0; i < (1 << k); i++) {
-			fc[r][i] = mul(fc[r][i], rem, p);
-		}
+		for (int i = 0; i < (1 << k); i++) fc[r][i] = mul(fc[r][i], rem, p);
 	}
 	for (int i = 0; i < len; i++) {
 		long long cur1 = (long long) mul(sub(fc[1][i], fc[0][i], pr[1]), inv(pr[0], pr[1]), pr[1]) * pr[0] + fc[0][i];
