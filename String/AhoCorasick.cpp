@@ -62,7 +62,10 @@ void search(char* s) {
 	while (*s) {
 		while (cur != root && !cur->child[*s - 'a']) cur = cur->bfail;
 		cur = cur->child[*s - 'a'];
-		if (!cur) break;
+		if (!cur) {
+			cur = root;
+			continue;
+		}
 		Node* tmp = cur;
 		if (tmp->key == -1) tmp = tmp->gfail;
 		while (tmp) {

@@ -1,9 +1,9 @@
 #include <bits/stdc++.h>
 using namespace std;
 
-const int MAXN = 100000 + 10;
-const int MAXC = 26;
 struct PalindromeTree {
+	static const int MAXN = 100000 + 10;
+	static const int MAXC = 26;
 	int next[MAXN][MAXC], fail[MAXN], cnt[MAXN];
 	int num[MAXN], len[MAXN], s[MAXN];
 	int last, n, p;
@@ -39,7 +39,7 @@ struct PalindromeTree {
 	void count() {
 		for (int i = p - 1; i >= 0; i--) cnt[fail[i]] += cnt[i];
 	}
-};
+} pdt;
 
 int main() {
 	return 0;

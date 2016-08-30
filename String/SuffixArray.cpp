@@ -2,8 +2,8 @@
 using namespace std;
 
 //O(nlogn)
-const int MAXN = 100000 + 10;
 struct SuffixArray {
+	static const int MAXN = 100000 + 10;
 	char T[MAXN];
 	int nsz;
 	int RA[MAXN], tmpRA[MAXN];
@@ -57,9 +57,7 @@ struct SuffixArray {
 		}
 		for (int i = 0; i < nsz; i++) LCP[i] = PLCP[SA[i]];
 	}
-};
-
-SuffixArray sa;
+} sa;
 
 int main() {
 	sa.init("stringsrandom$");

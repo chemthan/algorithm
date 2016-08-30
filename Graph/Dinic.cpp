@@ -3,8 +3,8 @@ using namespace std;
 
 //Complexity: O(V^2*E) / O(min(V^2/3,E^1/2)E)
 typedef int T;
-const T oo = (T) 1e9;
 struct Dinic {
+	static const T oo = (T) 1e9;
 	static const int MAXV = 100000 + 10;
 	static const int MAXE = 1000000 + 10;
 	int n, s, t, E, adj[MAXE], next[MAXE], last[MAXV], run[MAXV], level[MAXV], que[MAXV];
