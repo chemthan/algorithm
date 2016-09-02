@@ -106,7 +106,7 @@ void solve() {
 		}
 		best = mp(INF, "");
 		trace(0, 0, "", 0);
-		FOR(i, 0, l) cout << best.se[i] << " \n"[i == l - 1];
+		FOR(i, 0, l) cout << best.se[i] - '0' << " \n"[i == l - 1];
 	}
 }
 
