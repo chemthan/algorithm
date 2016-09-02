@@ -40,7 +40,7 @@ PT ComputeLineIntersection(PT a, PT b, PT c, PT d) {
 	return a + b * cross(c, d) / cross(b, d);
 }
 
-//Contains all point p such that: cross(b - a, p - a) >= 0
+//Contains all points p such that: cross(b - a, p - a) >= 0
 struct Plane {
 	PT a, b;
 	Plane() {}
