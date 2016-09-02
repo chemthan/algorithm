@@ -71,48 +71,75 @@ Circle CircumCircle(PT a, PT b, PT c) {
 	PT cen = ComputeLineIntersection(ln1.l, ln1.r, ln2.l, ln2.r);
 	return Circle(cen, dist(cen, a));
 }
-
-Circle Enclose(vector<PT>& p) {
-	random_shuffle(p.begin(), p.end());
-	int n = p.size();
-	Circle c(p[0], 0);
-	for (int i = 1; i < n; i++) {
-		if (rlcmp(dist(c.cen, p[i]), c.rad) > 0) {
-			c = Circle(p[i], 0);
-			for (int j = 0; j < i; j++) {
-				if (rlcmp(dist(c.cen, p[j]), c.rad) > 0) {
-					c = Circle((p[i] + p[j]) / 2, dist(p[i], p[j]) / 2);
-					for (int k = 0; k < j; k++) {
-						if (rlcmp(dist(c.cen, p[k]), c.rad) > 0) {
-							c = CircumCircle(p[i], p[j], p[k]);
-						}
-					}
-				}
-			}
-		}
-	}
-	return c;
-}
-
-int Inside(vector<PT>& p, Circle c) {
-	for (int i = 0; i < p.size(); i++) {
-		if (rlcmp(dist(c.cen, p[i]), c.rad) > 0) return 0;
+int Inside(vector<PT>& vp, Circle c) {
+	for (int i = 0; i < vp.size(); i++) {
+		if (rlcmp(dist(c.cen, vp[i]), c.rad) > 0) return 0;
 	}
 	return 1;
 }
-
-Circle bruteforce(vector<PT> p) {
+Circle Enclose(vector<PT>& vp, PT p, PT q) {
+	Circle res = Circle(PT(), +1e100);
+	pair<RL, Circle> best = make_pair(-1e100, Circle());
+	for (int i = 0; i < vp.size(); i++) if (rlcmp(cross(p - vp[i], q - vp[i])) >= 0) {
+		Circle c = CircumCircle(p, q, vp[i]);
+		RL d = DistancePointLine(p, q, c.cen);
+		if (rlcmp(cross(p - c.cen, q - c.cen)) < 0) d *= -1;
+		best = max(best, make_pair(d, c));
+	}
+	if (best.first > -1e100 && Inside(vp, best.second)) {
+		res = min(res, best.second);
+	}
+	best = make_pair(-1e100, Circle());
+	for (int i = 0; i < vp.size(); i++) if (rlcmp(cross(p - vp[i], q - vp[i])) < 0) {
+		Circle c = CircumCircle(p, q, vp[i]);
+		RL d = DistancePointLine(p, q, c.cen);
+		if (rlcmp(cross(p - c.cen, q - c.cen)) > 0) d *= -1;
+		best = max(best, make_pair(d, c));
+	}
+	if (best.first > -1e100 && Inside(vp, best.second)) {
+		res = min(res, best.second);
+	}
+	Circle c = Circle((p + q) / 2, dist(p, q) / 2);
+	if (Inside(vp, c)) {
+		res = min(res, c);
+	}
+	return res;
+}
+Circle Enclose(vector<PT>& vp, PT p) {
+	Circle c = Circle((p + vp[0]) / 2, dist(p, vp[0]) / 2);
+	vector<PT> cur; cur.push_back(vp[0]);
+	for (int i = 1; i < vp.size(); i++) {
+		if (rlcmp(dist(c.cen, vp[i]), c.rad) > 0) {
+			c = Enclose(cur, p, vp[i]);
+		}
+		cur.push_back(vp[i]);
+	}
+	return c;
+}
+Circle Enclose(vector<PT>& vp) {
+	random_shuffle(vp.begin(), vp.end());
+	Circle c = Circle((vp[0] + vp[1]) / 2, dist(vp[0], vp[1]) / 2);
+	vector<PT> cur; cur.push_back(vp[0]), cur.push_back(vp[1]);
+	for (int i = 2; i < vp.size(); i++) {
+		if (rlcmp(dist(c.cen, vp[i]), c.rad) > 0) {
+			c = Enclose(cur, vp[i]);
+		}
+		cur.push_back(vp[i]);
+	}
+	return c;
+}
+Circle bruteforce(vector<PT> vp) {
 	Circle best = Circle(PT(), +1e100);
-	for (int i = 0; i < p.size(); i++) {
-		for (int j = i + 1; j < p.size(); j++) {
-			for (int k = j + 1; k < p.size(); k++) {
-				Circle c = CircumCircle(p[i], p[j], p[k]);
-				if (Inside(p, c)) {
+	for (int i = 0; i < vp.size(); i++) {
+		for (int j = i + 1; j < vp.size(); j++) {
+			for (int k = j + 1; k < vp.size(); k++) {
+				Circle c = CircumCircle(vp[i], vp[j], vp[k]);
+				if (Inside(vp, c)) {
 					best = min(best, c);
 				}
 			}
-			Circle c = Circle((p[i] + p[j]) / 2, dist(p[i], p[j]) / 2);
-			if (Inside(p, c)) {
+			Circle c = Circle((vp[i] + vp[j]) / 2, dist(vp[i], vp[j]) / 2);
+			if (Inside(vp, c)) {
 				best = min(best, c);
 			}
 		}
@@ -124,32 +151,32 @@ int main() {
 	srand(time(NULL));
 	for (int it = 0; it < 100; it++) {
 		map<pair<int, int>, int> hs;
-		vector<PT> p;
+		vector<PT> vp;
 		for (int i = 0; i < 50; i++) {
 			int x = rand();
 			int y = rand();
 			if (!hs.count(make_pair(x, y))) {
 				hs[make_pair(x, y)];
-				p.push_back(PT(x, y));
+				vp.push_back(PT(x, y));
 			}
 		}
-		Circle c = Enclose(p);
-		Circle ans = bruteforce(p);
+		Circle c = Enclose(vp);
+		Circle ans = bruteforce(vp);
 		assert(rlcmp(dist(c.cen, ans.cen)) == 0);
 		assert(rlcmp(c.rad, ans.rad) == 0);
 		cout << fixed << setprecision(3) << c.cen << " " << c.rad << "\n";
 	}
 	map<pair<int, int>, int> hs;
-	vector<PT> p;
+	vector<PT> vp;
 	for (int i = 0; i < 100000; i++) {
 		int x = rand();
 		int y = rand();
 		if (!hs.count(make_pair(x, y))) {
 			hs[make_pair(x, y)];
-			p.push_back(PT(x, y));
+			vp.push_back(PT(x, y));
 		}
 	}
-	Circle c = Enclose(p);
+	Circle c = Enclose(vp);
 	cout << fixed << setprecision(3) << c.cen << " " << c.rad << "\n";
 	cout << "Correct!\n";
 	return 0;
