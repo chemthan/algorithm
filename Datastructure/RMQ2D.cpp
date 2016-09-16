@@ -8,28 +8,28 @@ const int LOGN = 10 + 1;
 const int LOGM = 10 + 1;
 int n, m;
 int a[MAXN][MAXM];
-int f[MAXN][MAXM][LOGM];
-int g[MAXM][LOGM][MAXN][LOGN];
+int f[LOGM][MAXN][MAXM];
+int g[LOGM][LOGN][MAXM][MAXN];
 
 void build() {
 	for (int k = 1; k <= n; k++) {
 		for (int i = 1; i <= m; i++) {
-			f[k][i][0] = a[k][i];
+			f[0][k][i] = a[k][i];
 		}
 		for (int j = 1; 1 << j <= m; j++) {
 			for (int i = 0; i + (1 << j) - 1 <= m; i++) {
-				f[k][i][j] = max(f[k][i][j - 1], f[k][i + (1 << (j - 1))][j - 1]);
+				f[j][k][i] = max(f[j - 1][k][i], f[j - 1][k][i + (1 << (j - 1))]);
 			}
 		}
 	}
 	for (int k = 1; k <= m; k++) {
 		for (int l = 0; k + (1 << l) - 1 <= m; l++) {
 			for (int i = 1; i <= n; i++) {
-				g[k][l][i][0] = f[i][k][l];
+				g[l][0][k][i] = f[l][i][k];
 			}
 			for (int j = 1; 1 << j <= n; j++) {
 				for (int i = 0; i + (1 << j) - 1 <= n; i++) {
-					g[k][l][i][j] = max(g[k][l][i][j - 1], g[k][l][i + (1 << (j - 1))][j - 1]);
+					g[l][j][k][i] = max(g[l][j - 1][k][i], g[l][j - 1][k][i + (1 << (j - 1))]);
 				}
 			}
 		}
@@ -38,10 +38,10 @@ void build() {
 int query(int i, int j, int a, int b) {
 	int lga = __lg(a);
 	int lgb = __lg(b);
-	int res = g[j][lgb][i][lga];
-	res = max(res, g[j + b - (1 << (lgb))][lgb][i + a - (1 << (lga))][lga]);
-	res = max(res, g[j][lgb][i + a - (1 << (lga))][lga]);
-	res = max(res, g[j + b - (1 << (lgb))][lgb][i][lga]);
+	int res = g[lgb][lga][j][i];
+	res = max(res, g[lgb][lga][j + b - (1 << (lgb))][i + a - (1 << (lga))]);
+	res = max(res, g[lgb][lga][j][i + a - (1 << (lga))]);
+	res = max(res, g[lgb][lga][j + b - (1 << (lgb))][i]);
 	return res;
 }
 
