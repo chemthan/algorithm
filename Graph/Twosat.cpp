@@ -1,9 +1,9 @@
 #include <bits/stdc++.h>
 using namespace std;
 
-#define pos(v) ((v) << 1)
-#define neg(v) (pos(v) ^ 1)
-namespace Twosat {
+struct Twosat {
+	#define pos(v) ((v) << 1)
+	#define neg(v) (pos(v) ^ 1)
 	static const int MAXV = 200000 + 10;
 	int n;
 	vector<int> forward[MAXV], backward[MAXV];
@@ -35,7 +35,7 @@ namespace Twosat {
 			if (comp[v] == -1) dfs2(v, c);
 		}
 	}
-	bool solve(vector<int> &res) {
+	int solve(vector<int>& res) {
 		cnt = 0;
 		memset(used, 0, sizeof(used));
 		for (int u = 0; u < n; u++) if (!used[u]) dfs1(u);
@@ -46,15 +46,15 @@ namespace Twosat {
 			if (comp[u] == -1) dfs2(u, c++);
 		}
 		for (int u = 0; u < n; u += 2)
-			if (comp[u] == comp[u ^ 1]) return false;
+			if (comp[u] == comp[u ^ 1]) return 0;
 		res.clear();
 		for (int u = 0; u < n; u += 2) {
 			int choose = (comp[u] > comp[u ^ 1]) ? u : u ^ 1;
 			if (!(choose & 1)) res.push_back(choose >> 1);
 		}
-		return true;
+		return 1;
 	}
-}
+} twosat;
 
 int main() {
 	return 0;
