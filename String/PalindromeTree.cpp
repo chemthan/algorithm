@@ -1,6 +1,12 @@
 #include <bits/stdc++.h>
 using namespace std;
 
+/*
+* Complexity: O(N)
+* Problems:
+* 1. http://codeforces.com/gym/100548/status/G
+*/
+
 struct PalindromeTree {
 	static const int MAXN = 100000 + 10;
 	static const int MAXC = 26;
