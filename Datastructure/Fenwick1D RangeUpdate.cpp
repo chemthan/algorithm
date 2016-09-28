@@ -3,6 +3,8 @@ using namespace std;
 
 /*
 * Complexity: O(log(N))
+* Problems:
+* 1. https://icpcarchive.ecs.baylor.edu/index.php?option=com_onlinejudge&Itemid=8&category=596&page=show_problem&problem=4454
 */
 const int MAXN = 100000 + 10;
 int fen[2][MAXN];

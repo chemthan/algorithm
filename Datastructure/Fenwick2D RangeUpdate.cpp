@@ -1,6 +1,11 @@
 #include <bits/stdc++.h>
 using namespace std;
 
+/*
+* Complexity: O(log(N)^2)
+* Problems:
+* 1. http://codeforces.com/contest/341/problem/D
+*/
 const int MAXN = 1000 + 10;
 int fen[4][MAXN][MAXN];
 void upd(int x, int y, int val) {

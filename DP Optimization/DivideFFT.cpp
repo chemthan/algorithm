@@ -1,11 +1,17 @@
 #include <bits/stdc++.h>
 using namespace std;
 
+/*
+* Complexity: Nlog(N)^2
+* Solve dp formula: a[i] = a[i - 1] * b[0] + a[i - 2] * b[1] + ... + a[0] * b[i - 1]
+* Problems:
+* 1. http://codeforces.com/contest/553/problem/E
+* 2. http://codeforces.com/gym/100959/status/H
+* 3. https://www.bnuoj.com/v3/problem_show.php?pid=52248
+*/
 typedef long double T;
 const int MAXN = 1 << 20;
 const T PI = 2 * acos((T) 0);
-typedef complex<T> cplex;
-/*
 struct cplex {
 	T r, i;
 	cplex() : r(0), i(0) {}
@@ -19,7 +25,6 @@ struct cplex {
 	cplex operator *= (cplex b) {T r2 = r * b.r - i * b.i, i2 = r * b.i + i * b.r; r = r2, i = i2;}
 	void operator /= (T n) {r /= n, i /= n;}
 };
-*/
 cplex fa[MAXN << 1], fb[MAXN << 1];
 void fft(cplex a[], int n, int invert) {
 	for (int i = 1, j = 0; i < n; i++) {
@@ -40,16 +45,6 @@ void fft(cplex a[], int n, int invert) {
 		}
 	}
 	if (invert) for (int i = 0; i < n; i++) a[i] /= n;
-}
-void multiply(int a[], int b[], long long c[], int na, int nb) {
-	int n = 1; while (n < na + nb) n <<= 1;
-	for (int i = 0; i < n; i++) fa[i] = fb[i] = cplex(0);
-	for (int i = 0; i < na; i++) fa[i] = cplex(a[i]);
-	for (int i = 0; i < nb; i++) fb[i] = cplex(b[i]);
-	fft(fa, n, 0); fft(fb, n, 0);
-	for (int i = 0; i < n; i++) fa[i] *= fb[i];
-	fft(fa, n, 1);
-	for (int i = 0; i < n; i++) c[i] = (long long) (fa[i].real() + 0.5);
 }
 const int K = 2;
 cplex ap[K][MAXN << 1], bp[K][MAXN << 1], cc[MAXN << 1];
@@ -82,29 +77,35 @@ void modularmultiply(int a[], int b[], int c[], int na, int nb, int mod = (int) 
 	}
 }
 
-const int MOD = (int) 1e9 + 7;
-int a[MAXN];
-int b[MAXN];
-int c[MAXN << 1];
-long long d[MAXN << 1];
+const int maxn = 1 << 20;
+const int mod = (int) 1e9 + 7;
+int n;
+int a[maxn];
+int b[maxn];
+int c[maxn << 1];
+int d[maxn];
 
 int main() {
 	srand(time(NULL));
-	int na = 10000, nb = 10000;
-	for (int i = 0; i < na; i++) a[i] = rand() * rand() % 1000000000;
-	for (int i = 0; i < nb; i++) b[i] = rand() * rand() % 1000000000;
-	modularmultiply(a, b, c, na, nb);
-	for (int i = 0; i < na; i++) {
-		for (int j = 0; j < nb; j++) {
-			d[i + j] += (long long) a[i] * b[j];
-			d[i + j] %= MOD;
-		}
+	n = 1000;
+	a[0] = d[0] = rand();
+	for (int i = 0; i < n; i++) {
+		b[i] = rand();
 	}
-	for (int i = 0; i < na + nb - 1; i++) {
-		if (c[i] != d[i]) {
-			cout << "Wrong!\n";
-			return 0;
+	for (int i = 0; i < n; i++) {
+		a[i + 1] = (a[i + 1] + (long long) a[i] * b[0]) % mod;
+		a[i + 2] = (a[i + 2] + (long long) a[i] * b[1]) % mod;
+		for (int k = 2; i && i % k == 0; k <<= 1) {
+			modularmultiply(a + i - k, b + k, c, k, k, mod);
+			for (int j = i + 1; j < i + 2 * k; j++) {
+				a[j] = (a[j] + c[j - i - 1]) % mod;
+			}
 		}
+		for (int j = 0; j < i; j++) {
+			d[i] = (d[i] + (long long) d[j] * b[i - j - 1]) % mod;
+		}
+		assert(a[i] == d[i]);
+		cout << a[i] << " " << d[i] << "\n";
 	}
 	cout << "Correct!\n";
 	return 0;
