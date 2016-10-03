@@ -141,6 +141,7 @@ struct SplayTree {
 		return findpos(root, pos);
 	}
 	Node* join(Node* x, Node* y) {
+		x->p = y->p = nil;
 		if (x == nil) return root = y;
 		if (y == nil) return root = x;
 		pushdown(y);

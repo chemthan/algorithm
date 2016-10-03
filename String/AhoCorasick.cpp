@@ -54,12 +54,17 @@ void pushlink(Node* root) {
 			if (x->bfail->child[x->val]) x->bfail = x->bfail->child[x->val];
 			if (x->bfail->key != -1) x->gfail = x->bfail;
 			else x->gfail = x->bfail->gfail;
+			//x->info += x->bfail->info;
 		}
 	}
 }
 void search(char* s) {
 	Node* cur = root;
 	while (*s) {
+		if (cur == root && !cur->child[*s - 'a']) {
+			s++;
+			continue;
+		}
 		while (cur != root && !cur->child[*s - 'a']) cur = cur->bfail;
 		cur = cur->child[*s - 'a'];
 		if (!cur) {

@@ -1,7 +1,9 @@
 #include <bits/stdc++.h>
 using namespace std;
 
-//Complexity: O(V^2*E) / O(min(V^2/3,E^1/2)E)
+/*
+* Complexity: O(V^2E), O(min(V^2/3, E^1/2)E) for unit flow
+*/
 typedef int T;
 struct Dinic {
 	static const T oo = (T) 1e9;
