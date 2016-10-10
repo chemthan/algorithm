@@ -4,8 +4,8 @@ using namespace std;
 /*
 * Complexity: O(V^2E), O(min(V^2/3, E^1/2)E) for unit flow
 */
-typedef int T;
 struct Dinic {
+	typedef int T;
 	static const T oo = (T) 1e9;
 	static const int MAXV = 100000 + 10;
 	static const int MAXE = 1000000 + 10;
@@ -15,7 +15,7 @@ struct Dinic {
 		n = _n; s = _s; t = _t; E = 0;
 		fill_n(last, n + 1, -1);
 	}
-	void add(int u, int v, int c1, int c2) {
+	void add(int u, int v, T c1, T c2) {
 		adj[E] = v; flow[E] = 0; cap[E] = c1; next[E] = last[u]; last[u] = E++;
 		adj[E] = u; flow[E] = 0; cap[E] = c2; next[E] = last[v]; last[v] = E++;
 	}

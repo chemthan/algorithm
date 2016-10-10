@@ -7,7 +7,7 @@ using namespace std;
 * 1. http://codeforces.com/gym/100548/status/G
 */
 
-struct PalindromeTree {
+struct PalindromicTree {
 	static const int MAXN = 100000 + 10;
 	static const int MAXC = 26;
 	int next[MAXN][MAXC], link[MAXN], qlink[MAXN], dlinl[MAXN][MAXC], cnt[MAXN];
