@@ -24,8 +24,8 @@ RL dist2(PT p, PT q) {return dot(p - q, p - q);}
 PT RotateCCW90(PT p) {return PT(-p.y, p.x);}
 PT RotateCW90(PT p) {return PT(p.y, -p.x);}
 PT RotateCCW(PT p, RL t) {return PT(p.x * cos(t) - p.y * sin(t), p.x * sin(t) + p.y * cos(t));}
-int rlcmp(RL x) {return x < -EPS ? -1 : x > EPS;}
-int rlcmp(RL x, RL y) {return rlcmp(x - y);}
+int sign(RL x) {return x < -EPS ? -1 : x > EPS;}
+int sign(RL x, RL y) {return sign(x - y);}
 ostream& operator << (ostream& os, const PT& p) {
   os << "(" << p.x << "," << p.y << ")"; 
 }
@@ -60,7 +60,7 @@ struct Circle {
 	}
 };
 Circle CircumCircle(PT a, PT b, PT c) {
-	if (rlcmp(cross(a - c, b - c)) == 0) {
+	if (sign(cross(a - c, b - c)) == 0) {
 		Circle res = Circle((a + b) / 2, dist(a, b) / 2);
 		res = max(res, Circle((b + c) / 2, dist(b, c) / 2));
 		res = max(res, Circle((c + a) / 2, dist(c, a) / 2));
@@ -77,13 +77,13 @@ Circle Enclose(vector<PT>& p) {
 	int n = p.size();
 	Circle c(p[0], 0);
 	for (int i = 1; i < n; i++) {
-		if (rlcmp(dist(c.cen, p[i]), c.rad) > 0) {
+		if (sign(dist(c.cen, p[i]), c.rad) > 0) {
 			c = Circle(p[i], 0);
 			for (int j = 0; j < i; j++) {
-				if (rlcmp(dist(c.cen, p[j]), c.rad) > 0) {
+				if (sign(dist(c.cen, p[j]), c.rad) > 0) {
 					c = Circle((p[i] + p[j]) / 2, dist(p[i], p[j]) / 2);
 					for (int k = 0; k < j; k++) {
-						if (rlcmp(dist(c.cen, p[k]), c.rad) > 0) {
+						if (sign(dist(c.cen, p[k]), c.rad) > 0) {
 							c = CircumCircle(p[i], p[j], p[k]);
 						}
 					}
@@ -96,7 +96,7 @@ Circle Enclose(vector<PT>& p) {
 
 int Inside(vector<PT>& p, Circle c) {
 	for (int i = 0; i < p.size(); i++) {
-		if (rlcmp(dist(c.cen, p[i]), c.rad) > 0) return 0;
+		if (sign(dist(c.cen, p[i]), c.rad) > 0) return 0;
 	}
 	return 1;
 }
@@ -135,8 +135,8 @@ int main() {
 		}
 		Circle c = Enclose(p);
 		Circle ans = bruteforce(p);
-		assert(rlcmp(dist(c.cen, ans.cen)) == 0);
-		assert(rlcmp(c.rad, ans.rad) == 0);
+		assert(sign(dist(c.cen, ans.cen)) == 0);
+		assert(sign(c.rad, ans.rad) == 0);
 		cout << fixed << setprecision(3) << c.cen << " " << c.rad << "\n";
 	}
 	map<pair<int, int>, int> hs;

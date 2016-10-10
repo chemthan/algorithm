@@ -24,8 +24,8 @@ RL dist2(PT p, PT q) {return dot(p - q, p - q);}
 PT RotateCCW90(PT p) {return PT(-p.y, p.x);}
 PT RotateCW90(PT p) {return PT(p.y, -p.x);}
 PT RotateCCW(PT p, RL t) {return PT(p.x * cos(t) - p.y * sin(t), p.x * sin(t) + p.y * cos(t));}
-int rlcmp(RL x) {return x < -EPS ? -1 : x > EPS;}
-int rlcmp(RL x, RL y) {return rlcmp(x - y);}
+int sign(RL x) {return x < -EPS ? -1 : x > EPS;}
+int sign(RL x, RL y) {return sign(x - y);}
 ostream& operator << (ostream& os, const PT& p) {
   os << "(" << p.x << "," << p.y << ")"; 
 }
