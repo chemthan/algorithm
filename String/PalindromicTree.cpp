@@ -10,7 +10,7 @@ using namespace std;
 struct PalindromicTree {
 	static const int MAXN = 100000 + 10;
 	static const int MAXC = 26;
-	int next[MAXN][MAXC], link[MAXN], qlink[MAXN], dlinl[MAXN][MAXC], cnt[MAXN];
+	int next[MAXN][MAXC], link[MAXN], qlink[MAXN], dlink[MAXN][MAXC], cnt[MAXN];
 	int num[MAXN], len[MAXN], s[MAXN];
 	int last, n, p;
 	int newnode(int l) {
@@ -31,6 +31,7 @@ struct PalindromicTree {
 		while (s[n - len[x] - 1] != s[n]) {
 			if (s[n - len[link[x]] - 1] == s[n]) x = link[x];
 			else x = qlink[x]; //dlink[x][s[n]]
+		}
 		return x;
 	}
 	void add(char c) {
