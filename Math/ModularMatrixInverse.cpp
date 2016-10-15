@@ -27,8 +27,10 @@ vector<vector<int> > MatrixInverse(vector<vector<int> > matrix, int mod) {
 			for (j = i + 1; j < n; j++) {
 				if (matrix[j][i] != 0) {
 					for (k = 0; k < n; k++) {
-						matrix[i][k] = (matrix[i][k] + matrix[j][k]) % mod;
-						res[i][k] = (res[i][k] + res[j][k]) % mod;
+						matrix[i][k] += matrix[j][k];
+						if (matrix[i][k] >= mod) matrix[i][k] -= mod;
+						res[i][k] += res[j][k];
+						if (res[i][k] >= mod) res[i][k] -= mod;
 					}
 					break;
 				}
@@ -48,9 +50,9 @@ vector<vector<int> > MatrixInverse(vector<vector<int> > matrix, int mod) {
 			tmp = matrix[j][i];
 			for (k = 0; k < n; k++) {
 				matrix[j][k] -= (long long) matrix[i][k] * tmp % mod;
-				matrix[j][k] = (matrix[j][k] % mod + mod) % mod;
+				if (matrix[j][k] < 0) matrix[j][k] += mod;
 				res[j][k] -= (long long )res[i][k] * tmp % mod;
-				res[j][k] = (res[j][k] % mod + mod) % mod;
+				if (res[j][k] < 0) res[j][k] += mod;
 			}
 		}
 	}

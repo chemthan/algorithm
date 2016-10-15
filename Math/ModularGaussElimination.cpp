@@ -1,9 +1,10 @@
 #include <bits/stdc++.h>
 using namespace std;
 
-//O(n^2m)
+/*
+* Complexity: O(N^2M)
+*/
 int fpow(int n, int k, int p) {
-	return 1;
 	int r = 1;
 	for (; k; k >>= 1) {
 		if (k & 1) r = (long long) r * n % p;
@@ -33,7 +34,8 @@ vector<vector<int> > ModularGauss(vector<vector<int> > a, int mod) {
 		swap(a[i], a[idx]);
 		for (int j = i + 1; j < n; j++) {
 			for (int k = i + 1; k < m; k++) {
-				a[j][k] = ((long long) a[j][k] * a[i][i] % mod - (long long) a[j][i] * a[i][k] % mod + mod) % mod;
+				a[j][k] = (long long) a[j][k] * a[i][i] % mod - (long long) a[j][i] * a[i][k] % mod;
+				if (a[j][k] < 0) a[j][k] += mod;
 			}
 			a[j][i] = 0;
 		}
@@ -59,9 +61,8 @@ int main() {
 	a = ModularGauss(a, mod);
 	for (int i = 0; i < n; i++) {
 		for (int j = 0; j < m; j++) {
-			cout << a[i][j] << " ";
+			cout << a[i][j] << " \n"[j == m - 1];
 		}
-		cout << "\n";
 	}
 	return 0;
 }

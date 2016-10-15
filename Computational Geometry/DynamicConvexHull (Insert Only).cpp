@@ -84,7 +84,7 @@ int main() {
 	sii uhull, dhull;
 	PT p[] = {PT(0, 0), PT(3, 0), PT(3, 3), PT(0, 3), PT(0, 1), PT(0, 2), PT(3, 1), PT(3, 2)};
 	for (int i = 0; i < 5; i++) {
-		add(uhull, PT(+p[i].x, +p[i].y), dcross);
+		add(uhull, PT(+p[i].x, +p[i].y), ucross);
 		add(dhull, PT(-p[i].x, -p[i].y), dcross);
 	}
 	for (sit it = uhull.begin(); it != uhull.end(); it++) {
