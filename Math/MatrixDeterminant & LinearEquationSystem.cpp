@@ -1,21 +1,21 @@
 #include <bits/stdc++.h>
 using namespace std;
 
-//O(n^3)
+/*
+* Complexity: O(N^3)
+*/
+#define EPS 1e-9
 typedef double T;
 typedef vector<T> VT;
 typedef vector<vector<T> > VVT;
-inline int eq(T a, T b) {
-	static const T EPS = 1e-9;
-	return fabs(a - b) < EPS;
-}
+inline int sign(T x) {return x < -EPS ? -1 : x > +EPS;}
 T MatrixDeterminant(VVT a, VT& r) {
 	int i, j, k, n = a.size(), m = a[0].size();
 	T res = 1;
 	for (i = 0; i < n; i++) {
-		if (eq(a[i][i], 0)) {
+		if (!sign(a[i][i])) {
 			for (j = i + 1; j < n; j++) {
-				if (!eq(a[j][i], 0)) {
+				if (sign(a[j][i])) {
 					for (k = 0; k < m; k++) a[i][k] += a[j][k];
 					break;
 				}
@@ -54,7 +54,7 @@ int main() {
 		for (int j = 0; j < n; j++) {
 			t += a[i][j] * r[j];
 		}
-		if (!eq(t, a[i][n])) {
+		if (sign(t - a[i][n])) {
 			cout << "Wrong!\n";
 			return 0;
 		}

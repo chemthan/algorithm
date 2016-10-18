@@ -1,15 +1,14 @@
 #include <bits/stdc++.h>
 using namespace std;
 
-
+/*
+* Complexity: O(N^3)
+*/
+#define EPS 1e-9
 typedef double T;
 typedef vector<T> VT;
 typedef vector<VT> VVT;
-
-inline int eq(T a, T b) {
-	static const T EPS = 1e-9;
-	return fabs(a - b) < EPS;
-}
+inline int sign(T x) {return x < -EPS ? -1 : x > +EPS;}
 VVT MatrixInverse(VVT a) {
 	int i, j, k, n = a.size();
 	VVT res;
@@ -20,9 +19,9 @@ VVT MatrixInverse(VVT a) {
 		res[i][i] = 1;
 	}
 	for (i = 0; i < n; i++) {
-		if (eq(a[i][i], 0)) {
+		if (!sign(a[i][i])) {
 			for (j = i + 1; j < n; j++) {
-				if (!eq(a[j][i], 0)) {
+				if (sign(a[j][i])) {
 					for (k = 0; k < n; k++) {
 						a[i][k] += a[j][k];
 						res[i][k] += res[j][k];
@@ -71,12 +70,12 @@ int main() {
 		}
 	}
 	for (int i = 0; i < n; i++) {
-		if (!eq(b[i][i], 1)) {
+		if (sign(b[i][i] - 1)) {
 			cout << "Wrong!\n";
 			return 0;
 		}
 		for (int j = 0; j < n; j++) {
-			if (i != j && !eq(b[i][j], 0)) {
+			if (i != j && sign(b[i][j])) {
 				cout << "Wrong!\n";
 				return 0;
 			}
