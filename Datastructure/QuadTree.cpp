@@ -2,9 +2,8 @@
 using namespace std;
 
 /*
-* SegmentTree 2D
+* QuadTree 2D
 * Space: O(N^2)
-* Complexity: O(logN^2) per query
 */
 #define lnode(p) (p << 1)
 #define rnode(p) (p << 1 | 1)

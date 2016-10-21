@@ -1,0 +1,168 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.1//EN" "http://www.w3.org/TR/xhtml11/DTD/xhtml11.dtd">
+<!-- saved from url=(0059)https://www.bnuoj.com/v3/contest_problem_merge.php?cid=8501 -->
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en"><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+  
+  <style>
+html
+{ height: 100%;}
+
+*
+{ margin: 0;
+  padding: 0;
+}
+
+body
+{ font-family:  arial, sans-serif;
+  font-size: .80em;}
+
+p
+{ padding: 0 0 20px 0;
+  line-height: 1.7em;}
+
+img
+{ border: 0;}
+
+a
+{ text-decoration: underline;}
+
+a:hover
+{ text-decoration: none;}
+
+table {
+border-collapse:collapse;
+border-spacing:0px;
+}
+
+table td, table th {
+border:solid 1px black;
+padding: 5px;
+}
+
+  </style>
+</head>
+<body>
+
+<center><h1>A. I Count Two Three</h1></center>I will show you the most popular board game in the Shanghai Ingress Resistance Team.<br>It all started several months ago.<br>We found out the home address of the enlightened agent Icount2three and decided to draw him out.<br>Millions of missiles were detonated, but some of them failed.<br><br>After the event, we analysed the laws of failed attacks.<br>It's interesting that the $i$-th attacks failed if and only if $i$ can be rewritten as the form of $2^a3^b5^c7^d$ which $a,b,c,d$ are non-negative integers.<br><br>At recent dinner parties, we call the integers with the form $2^a3^b5^c7^d$ "I Count Two Three Numbers".<br>A related board game with a given positive integer $n$ from one agent, asks all participants the smallest "I Count Two Three Number" no smaller than $n$.<h2 style="margin-top:10px">Input</h2>The first line of input contains an integer $t~(1\le t \le 500000)$, the number of test cases. $t$ test cases follow.  Each test case provides one integer $n~(1\le n \le 10^9)$.<h2 style="margin-top:10px">Output</h2>For each test case, output one line with only one integer corresponding to the shortest "I Count Two Three Number" no smaller than $n$.<h2 style="margin-top:10px">Sample Input</h2><pre>10
+1
+11
+13
+123
+1234
+12345
+123456
+1234567
+12345678
+123456789</pre><h2 style="margin-top:10px">Sample Output</h2><pre>1
+12
+14
+125
+1250
+12348
+123480
+1234800
+12348000
+123480000</pre><div style="PAGE-BREAK-AFTER: always"></div><center><h1>B. Cure</h1></center>Given an integer $n$, we only want to know the sum of $1/k^2$ where $k$ from $1$ to $n$.<h2 style="margin-top:10px">Input</h2>There are multiple cases.<br>For each test case, there is a single line, containing a single positive integer $n$. <br>The input file is at most 1M.<br><h2 style="margin-top:10px">Output</h2>The required sum, rounded to the fifth digits after the decimal point.<h2 style="margin-top:10px">Sample Input</h2><pre>1
+2
+4
+8
+15</pre><h2 style="margin-top:10px">Sample Output</h2><pre>1.00000
+1.25000
+1.42361
+1.52742
+1.58044</pre><div style="PAGE-BREAK-AFTER: always"></div><center><h1>C. Family View</h1></center>Steam is a digital distribution platform developed by Valve Corporation offering digital rights management (DRM), multiplayer gaming and social networking services. A family view can help you to prevent your children access to some content which are not suitable for them. <br><br>Take an MMORPG game as an example, given a sentence T, and a list of forbidden words {P}, your job is to use '*' to subsititute all the characters, which is a part of the substring matched with at least one forbidden word in the list (case-insensitive).<br><br>For example, T is: "I love Beijing's Tiananmen, the sun rises over Tiananmen. Our great leader Chairman Mao, he leades us marching on."<br><br>And {P} is: {"tiananmen", "eat"}<br><br>The result should be: "I love Beijing's *********, the sun rises over *********. Our gr*** leader Chairman Mao, he leades us marching on."<h2 style="margin-top:10px">Input</h2><b>The first line contains the number of test cases. For each test case:</b><br>The first line contains an integer $n$, represneting the size of the forbidden words list $P$. Each line of the next $n$ lines contains a forbidden words $P_i~(1\le |P_i|\le 1000000, \sum |P_i| \le 1000000)$ where $P_i$ only contains lowercase letters.<br><br>The last line contains a string $T~(|T| \le 1000000)$.<h2 style="margin-top:10px">Output</h2>For each case output the sentence in a line.<h2 style="margin-top:10px">Sample Input</h2><pre>1
+3
+trump
+ri
+o
+Donald John Trump (born June 14, 1946) is an American businessman, television personality, author, politician, and the Republican Party nominee for President of the United States in the 2016 election. He is chairman of The Trump Organization, which is the principal holding company for his real estate ventures and other business interests.</pre><h2 style="margin-top:10px">Sample Output</h2><pre>D*nald J*hn ***** (b*rn June 14, 1946) is an Ame**can businessman, televisi*n pers*nality, auth*r, p*litician, and the Republican Party n*minee f*r President *f the United States in the 2016 electi*n. He is chairman *f The ***** *rganizati*n, which is the p**ncipal h*lding c*mpany f*r his real estate ventures and *ther business interests.</pre><div style="PAGE-BREAK-AFTER: always"></div><center><h1>D. Tea</h1></center>Tea is good.<br><br>Tea is life.<br><br>Tea is everything.<br><br>The balance of tea is a journey of pursuing balance of the universe.<br><br>Alice knows that. <br><br>Alice wants to teach you the art of pouring tea.<br><br>Alice has a pot of tea.<br><br>The exact volume of tea is not important.<br><br>The exact volume of tea is at least $L$.<br><br>The exact volume of tea is at most $R$.<br><br>Alice put two empty cups between you and her.<br><br>Alice wants the two cups filled by almost equal volume of tea.<br><br>Yours cannot be $1$ unit more than hers.<br><br>Hers cannot be $1$ unit more than yours.<br><br>Alice wants you to pour the tea.<br><br>Alice wants you to pour until the pot is almost empty.<br><br>Alice wants no more than $1$ unit volume of tea remaining in the pot.<br><br>You cannot read the residue volume of tea remaining in the pot.<br><br>You can only know the tea status in the pot, empty or not.<br><br>Alice does not want you to pour the tea too many times.<br><br>You better pour as few times as possible.<h2 style="margin-top:10px">Input</h2>There are multiple cases.<br>For each case, there is one line of two integers $L$ and $R$, separated by single space.<br><br>Here are some analyses about sample cases.<br>For the first case, pouring $1$ unit into one cup will satisfy Alice.<br>For the second case, it is clearly that you cannot only pour once to reach the desired balance, but she can achieve it by pouring twice.<br>First you pour $1.5$ units into one cup, then you attempt to pour another $1.5$ units into the other cup.<br>Since the lower bound is $2$, at least $0.5$ unit remains in the pot after the first pouring.<br>If the initial volume is in range $[2, 3]$, the second cup will have volume in range $[0.5, 1.5]$ which is balanced with $1.5$ unit in the first cup, and at most $1$ unit remain after these two attempts.<br><br>About $1000$ test cases, and $0 \le L \le R \le 10^{16}$.<h2 style="margin-top:10px">Output</h2>For each case, there should be a single integer in a single line, the least number of pouring attempts.<h2 style="margin-top:10px">Sample Input</h2><pre>2 2
+2 4</pre><h2 style="margin-top:10px">Sample Output</h2><pre>1
+2</pre><div style="PAGE-BREAK-AFTER: always"></div><center><h1>E. Balanced Game</h1></center>Rock-paper-scissors is a zero-sum hand game usually played between two people, in which each player simultaneously forms one of three shapes with an outstretched hand. These shapes are "rock", "paper", and "scissors". The game has only three possible outcomes other than a tie: a player who decides to play rock will beat another player who has chosen scissors ("rock crushes scissors") but will lose to one who has played paper ("paper covers rock"); a play of paper will lose to a play of scissors ("scissors cut paper"). If both players choose the same shape, the game is tied and is usually immediately replayed to break the tie.<br><br>Recently, there is a upgraded edition of this game: rock-paper-scissors-Spock-lizard, in which there are totally five shapes. The rule is simple: scissors cuts paper; paper covers rock; rock crushes lizard; lizard poisons Spock; Spock smashes scissors; scissors decapitates lizard; lizard eats paper; paper disproves Spock; Spock vaporizes rock; and as it always has, rock crushes scissors.<br><br>Both rock-paper-scissors and rock-paper-scissors-Spock-lizard are balanced games. Because there does not exist a strategy which is better than another. In other words, if one chooses shapes randomly, the possibility he or she wins is exactly $50\%$ no matter how the other one plays (if there is a tie, repeat this game until someone wins). Given an integer $N$, representing the count of shapes in a game. You need to find out if there exist a rule to make this game balanced.<h2 style="margin-top:10px">Input</h2>The first line of input contains an integer t, the number of test cases. t test cases follow.<br>For each test case, there is only one line with an integer $N~(2\leq N \leq 1000)$, as described above.<br><br>Here is the sample explanation.<br><br>In the first case, donate two shapes as A and B. There are only two kind of rules: A defeats B, or B defeats A. Obviously, in both situation, one shapes is better than another. Consequently, this game is not balanced.<br><br>In the second case, donate two shapes as A, B and C. If A defeats B, B defeats C, and C defeats A, this game is balanced. This is also the same as rock-paper-scissors.<br><br>In the third case, it is easy to set a rule according to that of rock-paper-scissors-Spock-lizard.<h2 style="margin-top:10px">Output</h2>For each test cases, output "Balanced" if there exist a rule to make the game balanced, otherwise output "Bad".<h2 style="margin-top:10px">Sample Input</h2><pre>3
+2
+3
+5</pre><h2 style="margin-top:10px">Sample Output</h2><pre>Bad
+Balanced
+Balanced</pre><div style="PAGE-BREAK-AFTER: always"></div><center><h1>F. The Best Path</h1></center>Alice is planning her travel route in a beautiful valley. In this valley, there are $N$ lakes, and $M$ rivers linking these lakes. Alice wants to start her trip from one lake, and enjoys the landscape by boat. That means she need to set up a path which go through every river exactly once. In addition, Alice has a specific number ($a_1, a_2, ... , a_n$) for each lake. If the path she finds is $P_0 \rightarrow P_1 \rightarrow ... \rightarrow P_t$, the lucky number of this trip would be $a_{P_0} \quad XOR \quad a_{P_1} \quad XOR \quad... \quad XOR \quad a_{P_t}$. She want to make this number as large as possible. Can you help her?<h2 style="margin-top:10px">Input</h2>The first line of input contains an integer $t$, the number of test cases. $t$ test cases follow.<br><br>For each test case, in the first line there are two positive integers $N~(N \leq 100000)$ and $M~(M \leq 500000)$, as described above. The $i$-th line of the next $N$ lines contains an integer $a_i(\forall i, 0 \leq a_i \leq 10000)$ representing the number of the $i$-th lake.<br><br>The $i$-th line of the next $M$ lines contains two integers $u_i$ and $v_i$ representing the $i$-th river between the $u_i$-th lake and $v_i$-th lake. It is possible that $u_i=v_i$.<h2 style="margin-top:10px">Output</h2>For each test cases, output the largest lucky number. If it dose not have any path, output "Impossible".<h2 style="margin-top:10px">Sample Input</h2><pre>2
+3 2
+3
+4
+5
+1 2
+2 3
+4 3
+1
+2
+3
+4
+1 2
+2 3
+2 4</pre><h2 style="margin-top:10px">Sample Output</h2><pre>2
+Impossible</pre><div style="PAGE-BREAK-AFTER: always"></div><center><h1>G. Sort</h1></center>Recently, Bob has just learnt a naive sorting algorithm: merge sort. Now, Bob receives a task from Alice.<br>Alice will give Bob $N$ sorted sequences, and the $i$-th sequence includes $a_i$ elements. Bob need to merge all of these sequences. He can write a program, which can merge no more than $k$ sequences in one time. The cost of a merging operation is the sum of the length of these sequences. Unfortunately, Alice allows this program to use no more than $T$ cost. So Bob wants to know the smallest $k$ to make the program complete in time.<h2 style="margin-top:10px">Input</h2>The first line of input contains an integer $t_0$, the number of test cases. $t_0$ test cases follow.<br>For each test case, the first line consists two integers $N~(2 \leq N \leq 100000)$ and $T~(\sum_{i=1}^{N}a_i &lt; T &lt; 2^{31}<br>)$.<br>In the next line there are $N$ integers $a_1, a_2, a_3, ... , a_N(\forall i, 0 \leq a_i \leq 1000)$.<h2 style="margin-top:10px">Output</h2>For each test cases, output the smallest $k$.<h2 style="margin-top:10px">Sample Input</h2><pre>1
+5 25
+1 2 3 4 5</pre><h2 style="margin-top:10px">Sample Output</h2><pre>3</pre><div style="PAGE-BREAK-AFTER: always"></div><center><h1>H. XM Reserves</h1></center>As an eligible Ingress Resistance Agent you should know your power source, the Exotic Matter.<br>We call it XM, which is the driving force behind all of our actions in Ingress.<br>XM allows us to construct items through hacking portals, to attack enemy portals, make links and create fields.<br><br>We try to collect XM from the ground. XM concentration come from location based services, meaning that areas with a lot of foot traffic have higher amounts versus places that don't.<br>You can collect XM by moving through those areas.<br>The XM will be automatically harvested by your Scanner when it is within your interaction circle/range.<br><br>Alice decides to select a location such that she can collect XM as much as possible.<br>To simplify the problem, we consider the city as a grid map with size `n*m' numbered from $(0,0)$ to $(n-1,m-1)$.<br>The XM concentration inside the block $(i,j)$ is $p(i,j)$.<br>The radius of your interaction circle is $r$.<br>We can assume that XM of the block $(i,j)$ are located in the centre of this block.<br>The distance between two blocks is the Euclidean distance between their centres.<br><br>Alice stands in the centre of one block and collects the XM.<br>For each block with the distance d smaller than r to Alice, and whose XM concertation is $p(i,j)$, Alice's scanner can collects $p(i,j)/(1+d)$ XM from it.<br><br>Help Alice to determine the maximum XM which she can collect once he stands in the centre of one block.<h2 style="margin-top:10px">Input</h2>There are multiple cases.<br>For each case, the first line consists two integers $n, m~(1\le n,m \le 500)$ and one float-point number $r~(0\le r \le 300)$.<br>Each of the following $n$ line consists $m$ non-negative float-point numbers corresponding to the XM concentrations inside each blocks.<h2 style="margin-top:10px">Output</h2>For each case, output the maximum XM which Alice can collect in one line.<br>Your answers should be rounded to three decimal places.<h2 style="margin-top:10px">Sample Input</h2><pre>3 3 1
+1 3 6
+7 9 4
+2 8 1
+3 3 2
+1 3 6
+7 9 4
+2 8 1
+5 5 1.5
+4 3 2 9 1 
+3 4 3 2 8
+9 4 3 2 1
+2 3 0 1 2
+6 3 4 3 1</pre><h2 style="margin-top:10px">Sample Output</h2><pre>9.000
+24.142
+17.956</pre><div style="PAGE-BREAK-AFTER: always"></div><center><h1>I. Tower Defence</h1></center>There was a civil war between two factions in Skyrim, a province of the Empire on the continent of Tamriel. The Stormcloaks, led by Ulfric Stormcloak, are made up of Skyrim's native Nord race. Their goal is an independent Skyrim free from Imperial interference. The Imperial Legion, led by General Tullius, is the military of the Empire that opposes the Stormcloaks and seeks to reunite and pacify the province.<br><br>The current target of General Tullius is to defend Whiterun City. Near by this city there are $N$ towers under the Empire's control. There are $N - 1$ roads link these tower, so solders can move from any tower to another one through these roads.<br><br>In military affairs, tactical depth means the longest path between two towers of all. Larger the tactical depth is, more stable these towers are.<br><br>According to the message sent by spies, General Tullius believe that Stormcloaks is planning to attack one of these roads, and his towers would be divided into two parts. However, Tullius does not know which one, so he supposes the possibility that Stormcloaks attack these roads are the same. Now, General Tullius ask for your help, to calculate the expectation of tactical depth after this attack.<br><br>To avoid the issue of precision, you need to calculate $expectation \quad of \quad tactical \quad depth \times (N - 1)$.<h2 style="margin-top:10px">Input</h2>The first line of input contains an integer $t$, the number of test cases. $t$ test cases follow.<br>For each test case, in the first line there is an integer $N(N \leq 100000)$.<br>The $i$-th line of the next $N-1$ lines describes the $i$-th edge. Three integers $u,v,w~(0 \leq w \leq 1000)$ describe an edge between $u$ and $v$ of length $w$.<h2 style="margin-top:10px">Output</h2>For each test cases, output $expectation \quad of \quad tactical \quad depth \times (N - 1)$.<h2 style="margin-top:10px">Sample Input</h2><pre>2
+3
+2 1 2
+3 2 5
+5
+2 1 7
+3 1 7
+4 2 5
+5 2 6</pre><h2 style="margin-top:10px">Sample Output</h2><pre>7
+63</pre><div style="PAGE-BREAK-AFTER: always"></div><center><h1>J. Herbs Gathering</h1></center>Collecting one's own plants for use as herbal medicines is perhaps one of the most self-empowering things a person can do, as it implies that they have taken the time and effort to learn about the uses and virtues of the plant and how it might benefit them, how to identify it in its native habitat or how to cultivate it in a garden, and how to prepare it as medicine. It also implies that a person has chosen to take responsibility for their own health and well being, rather than entirely surrender that faculty to another. Consider several different herbs. Each of them has a certain time which needs to be gathered, to be prepared and to be processed. Meanwhile a detailed analysis presents scores as evaluations of each herbs. Our time is running out. The only goal is to maximize the sum of scores for herbs which we can get within a limited time.<h2 style="margin-top:10px">Input</h2>There are at most ten test cases.<br>For each case, the first line consists two integers, the total number of different herbs and the time limit.<br>The $i$-th line of the following $n$ line consists two non-negative integers. The first one is the time we need to gather and prepare the $i$-th herb, and the second one is its score.<br><br>The total number of different herbs should be no more than $100$. All of the other numbers read in are uniform random and should not be more than $10^9$.<h2 style="margin-top:10px">Output</h2>For each test case, output an integer as the maximum sum of scores.<h2 style="margin-top:10px">Sample Input</h2><pre>3 70
+71 100
+69 1
+1 2</pre><h2 style="margin-top:10px">Sample Output</h2><pre>3</pre><div style="PAGE-BREAK-AFTER: always"></div><center><h1>K. Barricade</h1></center>The empire is under attack again. The general of empire is planning to defend his castle. The land can be seen as $N$ towns and $M$ roads, and each road has the same length and connects two towns. The town numbered $1$ is where general's castle is located, and the town numbered $N$ is where the enemies are staying. The general supposes that the enemies would choose a shortest path. He knows his army is not ready to fight and he needs more time. Consequently he decides to put some barricades on some roads to slow down his enemies. Now, he asks you to find a way to set these barricades to make sure the enemies would meet at least one of them. Moreover, the barricade on the $i$-th road requires $w_i$ units of wood. Because of lacking resources, you need to use as less wood as possible.<h2 style="margin-top:10px">Input</h2>The first line of input contains an integer $t$, then $t$ test cases follow.<br>For each test case, in the first line there are two integers $N(N \leq 1000)$ and $M(M \leq 10000)$.<br>The $i$-the line of the next $M$ lines describes the $i$-th edge with three integers $u,v$ and $w$ where $0 \leq w \leq 1000$ denoting an edge between $u$ and $v$ of barricade cost $w$.<h2 style="margin-top:10px">Output</h2>For each test cases, output the minimum wood cost.<h2 style="margin-top:10px">Sample Input</h2><pre>1
+4 4
+1 2 1
+2 4 2
+3 1 3
+4 3 4</pre><h2 style="margin-top:10px">Sample Output</h2><pre>4</pre><div style="PAGE-BREAK-AFTER: always"></div><center><h1>L. Eighty seven</h1></center>Mr. Fib is a mathematics teacher of a primary school. In the next lesson, he is planning to teach children how to add numbers up. Before the class, he will prepare $N$ cards with numbers. The number on the $i$-th card is $a_i$. In class, each turn he will remove no more than $3$ cards and let students choose any ten cards, the sum of the numbers on which is $87$. After each turn the removed cards will be put back to their position.  Now, he wants to know if there is at least one solution of each turn. Can you help him?<h2 style="margin-top:10px">Input</h2>The first line of input contains an integer $t~(t \le 5)$, the number of test cases. $t$ test cases follow.<br>For each test case, the first line consists an integer $N(N \leq 50)$.<br>The second line contains $N$ non-negative integers $a_1, a_2, ... , a_N$. The $i$-th number represents the number on the $i$-th card. The third line consists an integer $Q(Q \leq 100000)$. Each line of the next $Q$ lines contains three integers $i,j,k$, representing Mr.Fib will remove the $i$-th, $j$-th, and $k$-th cards in this turn. A question may degenerate while $i=j$, $i=k$ or $j=k$.<h2 style="margin-top:10px">Output</h2>For each turn of each case, output 'Yes' if there exists at least one solution, otherwise output 'No'.<h2 style="margin-top:10px">Sample Input</h2><pre>1
+12
+1 2 3 4 5 6 7 8 9 42 21 22
+10
+1 2 3
+3 4 5
+2 3 2
+10 10 10
+10 11 11
+10 1 1
+1 2 10
+1 11 12
+1 10 10
+11 11 12</pre><h2 style="margin-top:10px">Sample Output</h2><pre>No
+No
+No
+Yes
+No
+Yes
+No
+No
+Yes
+Yes</pre><div style="PAGE-BREAK-AFTER: always"></div><center><h1>M. String</h1></center>Alice just tries to maintain a string, with a kind of operation and a kind of query.<br>The kind of operation allows to insert a character at the end of the string.<br>The kind of query considers the substring, denoted by $T$, of the string from the $l$-th character to the $r$-th one, and asks the maximum length of substring of $T$ which appears at least twice in $T$.<br>If no substring appears at least twice in $T$, the outcome should be $0$.<h2 style="margin-top:10px">Input</h2>The first line consists a string in lowercase and a positive integer m. We use $len$ to denote the length of this string.<br>Each of the following m lines consists a operation or a query.<br><br>We define a temporary variable $tmp$ and it is initially set to $0$.<br>We use the format "1 c" to describe the operation where $(c-'a'+tmp)~mod~26+'a'$ is the new character.<br>We use the format "2 l r" to describe the query where $(l-1+tmp)~mod~len+1$ and $(r-1+tmp)~mod~len+1$ are the indexes of substring $T$.<br>We guarantee that $1\le (l-1+tmp)~mod~len+1\le (r-1+tmp)~mod~len+1\le len$ and after this query $tmp$ should be modified to the outcome.<br><br>The initial length of the string and $m$ are no more than $50000$.<h2 style="margin-top:10px">Output</h2>For each query, out the outcome in one line.<h2 style="margin-top:10px">Sample Input</h2><pre>aabda 6
+2 1 4
+1 a
+2 1 5
+1 b
+2 6 5
+2 7 4</pre><h2 style="margin-top:10px">Sample Output</h2><pre>1
+2
+3
+2</pre><div style="PAGE-BREAK-AFTER: always"></div>
+
+
+
+</body></html>

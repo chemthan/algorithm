@@ -60,7 +60,7 @@ void GetAllAntiPodalPairs() {
 			}
 		}
 		if (area(u, next(u), next(v)) == area(u, next(u), v)) {
-			if (u != v0 || v != u0) {
+			if (u != v0 || next(v) != u0) {
 				mx = max(mx, dist(u, next(v)));
 			}
 			else {
