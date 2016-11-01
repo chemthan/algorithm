@@ -5,7 +5,7 @@ using namespace std;
 #define EPS 1e-9
 const RL PI = acos((RL) -1.0);
 
-RL sqr(const RL x) {return x*x;}
+RL sqr(const RL x) {return x * x;}
 RL dist(RL x1, RL y1, RL x2, RL y2) {return sqrt(sqr(x1 - x2) + sqr(y1 - y2));}
 RL angle(RL A, RL B, RL C) {return acos((sqr(A) + sqr(B) - sqr(C)) / (2 * A * B));}
 int sign(RL x) {return x < -EPS ? -1 : x > EPS;}
