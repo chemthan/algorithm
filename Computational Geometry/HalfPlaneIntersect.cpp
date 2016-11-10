@@ -33,7 +33,8 @@ PT RotateCCW(PT p, RL t) {return PT(p.x * cos(t) - p.y * sin(t), p.x * sin(t) + 
 int sign(RL x) {return x < -EPS ? -1 : x > EPS;}
 int sign(RL x, RL y) {return sign(x - y);}
 ostream& operator << (ostream& os, const PT& p) {
-  os << "(" << p.x << "," << p.y << ")"; 
+	os << "(" << p.x << "," << p.y << ")";
+	return os;
 }
 PT ComputeLineIntersection(PT a, PT b, PT c, PT d) {
 	b = b - a; d = c - d; c = c - a;

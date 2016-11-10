@@ -27,7 +27,8 @@ PT RotateCCW(PT p, RL t) {return PT(p.x * cos(t) - p.y * sin(t), p.x * sin(t) + 
 int sign(RL x) {return x < -EPS ? -1 : x > EPS;}
 int sign(RL x, RL y) {return sign(x - y);}
 ostream& operator << (ostream& os, const PT& p) {
-  os << "(" << p.x << "," << p.y << ")"; 
+	os << "(" << p.x << "," << p.y << ")";
+	return os;
 }
 PT ProjectPointLine(PT a, PT b, PT c) {
 	return a + (b - a) * dot(c - a, b - a) / dot(b - a, b - a);
