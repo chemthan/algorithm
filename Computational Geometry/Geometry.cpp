@@ -239,11 +239,11 @@ int main() {
 	v.push_back(PT(0,5));
 
 	// expected: 1 1 1 0 0
-	cout << PointInPolygon(v, PT(2,2)) << " "
-	     << PointInPolygon(v, PT(2,0)) << " "
-	     << PointInPolygon(v, PT(0,2)) << " "
-	     << PointInPolygon(v, PT(5,2)) << " "
-	     << PointInPolygon(v, PT(2,5)) << endl;
+	cout << PointInPolygonSlow(v, PT(2,2)) << " "
+	     << PointInPolygonSlow(v, PT(2,0)) << " "
+	     << PointInPolygonSlow(v, PT(0,2)) << " "
+	     << PointInPolygonSlow(v, PT(5,2)) << " "
+	     << PointInPolygonSlow(v, PT(2,5)) << endl;
 
 	// expected: 0 1 1 1 1
 	cout << PointOnPolygon(v, PT(2,2)) << " "

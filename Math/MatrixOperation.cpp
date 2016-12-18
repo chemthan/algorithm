@@ -43,7 +43,7 @@ struct matrix {
 		}
 		return res;
 	}
-	friend matrix sumpower(matrix A, long long k) {
+	friend matrix geometricseries(matrix A, long long k) {
 		if (k == 1) return A;
 		vector<int> bit;
 		while (k) {
