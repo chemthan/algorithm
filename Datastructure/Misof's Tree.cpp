@@ -4,7 +4,7 @@ using namespace std;
 const int MAXN = 100000 + 10;
 const int LOGN = 20;
 int tr[LOGN + 1][MAXN];
-int sm[LOGN + 1][MAXN];
+long long sm[LOGN + 1][MAXN];
 void insert(int x, int t) {
 	for (int i = 0; i < LOGN; i++) {
 		tr[i][x]++;
@@ -29,8 +29,8 @@ int kthelm(int k) {
 	}
 	return res;
 }
-int kthsum(int k) {
-	int res = 0;
+long long kthsum(int k) {
+	long long res = 0;
 	int a = 0, b = LOGN;
 	while (b--) {
 		a <<= 1;
