@@ -4,8 +4,7 @@ using namespace std;
 typedef long double T;
 const int MAXN = 1 << 20;
 const T PI = 2 * acos((T) 0);
-typedef complex<T> cplex;
-/*
+//typedef complex<T> cplex;
 struct cplex {
 	T r, i;
 	cplex() : r(0), i(0) {}
@@ -13,13 +12,12 @@ struct cplex {
 	cplex(T r, T i) : r(r), i(i) {}
 	T real() {return r;}
 	cplex operator + (cplex b) {return cplex (r + b.r, i + b.i);}
-	void operator += (cplex b) {r += b.r, i += b.i;}
+	cplex operator += (cplex b) {r += b.r, i += b.i; return *this;}
 	cplex operator - (cplex b) {return cplex(r - b.r, i - b.i);}
 	cplex operator * (cplex b) {return cplex(r * b.r - i * b.i, r * b.i + i * b.r);}
-	cplex operator *= (cplex b) {T r2 = r * b.r - i * b.i, i2 = r * b.i + i * b.r; r = r2, i = i2;}
-	void operator /= (T n) {r /= n, i /= n;}
+	cplex operator *= (cplex b) {T r2 = r * b.r - i * b.i, i2 = r * b.i + i * b.r; r = r2, i = i2; return *this;}
+	cplex operator /= (T n) {r /= n, i /= n; return *this;}
 };
-*/
 cplex fa[MAXN << 1], fb[MAXN << 1];
 void fft(cplex a[], int n, int invert) {
 	for (int i = 1, j = 0; i < n; i++) {
