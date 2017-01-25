@@ -10,33 +10,51 @@ Problems:
 4. https://www.codechef.com/problems/FURGRAPH
 */
 
+const int MAXN = 1000000 + 5;
+int ptr;
 struct Node {
-	Node();
 	Node *l, *r, *p;
 	int size, key;
 	int rev, lz;
-};
-Node* nil = new Node();
+	Node();
+	void clear();
+} mem[MAXN], *nil = (mem + ptr++);
+
 Node::Node() {
-	l = r = p = nil;
-	size = 1; key = rev = lz = 0;
+	clear();
 }
-void init() {
+void Node::clear() {
+	l = r = p = nil;
+	size = 1, key = rev = lz = 0;
+}
+
+inline Node* newNode(int key) {
+	mem[ptr].clear();
+	mem[ptr].key = key;
+	return mem + (ptr++);
+}
+inline void init() {
+	ptr = 1;
 	nil->l = nil->r = nil->p = nil;
 	nil->size = 0;
 }
-int isrt(Node* x) {
+inline void normalize(Node*& x) {if (!x) x = nil;}
+inline int isrt(Node* x) {
+	normalize(x);
 	return x->p == nil || (x->p->l != x && x->p->r != x);
 }
-void setchild(Node* p, Node* c, int l) {
+inline void setchild(Node* p, Node* c, int l) {
+	normalize(p), normalize(c);
 	c->p = p; l ? p->l = c : p->r = c;
 }
-void updatelz(Node* x, int val) {
+inline void updatelz(Node* x, int val) {
+	normalize(x);
 	if (x == nil) return;
 	x->lz += val;
 	x->key += val;
 }
-void pushdown(Node* x) {
+inline void pushdown(Node* x) {
+	normalize(x);
 	if (x == nil) return;
 	Node *u = x->l, *v = x->r;
 	if (x->rev) {
@@ -50,10 +68,12 @@ void pushdown(Node* x) {
 		x->lz = 0;
 	}
 }
-void pushup(Node* x) {
+inline void pushup(Node* x) {
+	normalize(x);
 	x->size = x->l->size + x->r->size + 1;
 }
-void rotate(Node* x) {
+inline void rotate(Node* x) {
+	normalize(x);
 	Node* y = x->p;
 	int l = x->p->l == x;
 	if (!isrt(y)) {
@@ -66,7 +86,8 @@ void rotate(Node* x) {
 	setchild(x, y, !l);
 	pushup(y);
 }
-void splay(Node* x) {
+inline void splay(Node* x) {
+	normalize(x);
 	pushdown(x);
 	while (!isrt(x)) {
 		pushdown(x->p->p); pushdown(x->p); pushdown(x);
@@ -75,132 +96,125 @@ void splay(Node* x) {
 	}
 	pushup(x);
 }
-
-const int MAXN = 10000000 + 10;
-struct SplayTree {
-	Node mem[MAXN], *root;
-	int cur;
-	SplayTree() {
-		root = nil; cur = 0;
-		init();
-	}
-	Node* alloc(int key) {
-		mem[cur].key = key;
-		return mem + (cur++);
-	}
-	Node* insert(Node* x, int key) {
-		Node* p = nil;
-		while (x != nil) {
-			pushdown(x);
-			p = x;
-			if (x->key < key) x = x->r;
-			else x = x->l;
-		}
-		x = alloc(key);
-		x->p = p;
-		if (p == nil) {
-			root = x;
-		}
-		else if (p->key < x->key) p->r = x;
-		else p->l = x;
-		splay(x);
-		return root = x;
-	}
-	Node* insert(int key) {
-		return insert(root, key);
-	}
-	Node* findkey(Node* x, int key) {
-		while (x != nil) {
-			pushdown(x);
-			if (x->key < key) x = x->r;
-			else if (key < x->key) x = x->l;
-			else {
-				splay(x);
-				return root = x;
-			}
-		}
-		return nil;
-	}
-	Node* findkey(int key) {
-		return findkey(root, key);
-	}
-	Node* findpos(Node* x, int pos) {
-		while (1) {
-			pushdown(x);
-			int k = x->l ? x->l->size + 1 : 1;
-			if (pos == k) {
-				splay(x);
-				return root = x;
-			}
-			else if (pos < k) x = x->l;
-			else {x = x->r; pos -= k;}
-		}
-		return nil;
-	}
-	Node* findpos(int pos) {
-		return findpos(root, pos);
-	}
-	Node* join(Node* x, Node* y) {
-		x->p = y->p = nil;
-		if (x == nil) return root = y;
-		if (y == nil) return root = x;
-		pushdown(y);
-		while (1) {
-			pushdown(x);
-			if (x->r == nil) break;
-			x = x->r;
-		}
-		splay(x);
-		setchild(x, y, 0);
-		pushup(x);
-		return root = x;
-	}
-	void split(Node* x, int pos, Node*& l, Node*& r) {
-		if (!pos) {l = nil; r = x; return;}
-		Node* y = findpos(x, pos);
-		if ((r = y->r) != nil) r->p = nil;
-		if ((l = y) != nil) {l->r = nil; pushup(l);}
-	}
-	void split(Node* t, int pos1, int pos2, Node*& t1, Node*& t2, Node*& t3) {
-		split(t, pos1 - 1, t1, t2);
-		split(t2, pos2 - pos1 + 1, t2, t3);
-	}
-	void reverse(int l, int r) {
-		Node *x, *y, *z, *t;
-		split(root, r, t, z);
-		split(t, l - 1, x, y);
-		if (y) {
-			swap(y->l, y->r);
-			y->rev ^= 1;
-		}
-		join(join(x, y), z);
-	}
-	void update(int l, int r, int val) {
-		Node *x, *y, *z;
-		split(root, l, r, x, y, z);
-		updatelz(y, val);
-		join(join(x, y), z);
-	}
-	void trace(Node* x) {
-		if (x == nil) return;
+inline void insert(Node*& x, int key) {
+	normalize(x);
+	Node* p = nil;
+	while (x != nil) {
 		pushdown(x);
-		trace(x->l);
-		cout << x->key << " ";
-		trace(x->r);
+		p = x;
+		if (x->key < key) x = x->r;
+		else x = x->l;
 	}
-	void trace() {
-		trace(root);
-		cout << "\n";
+	x = newNode(key);
+	x->p = p;
+	if (p != nil) {
+		if (p->key < x->key) p->r = x;
+		else p->l = x;
 	}
-} slt;
+	splay(x);
+}
+inline Node* findkey(Node*& x, int key) {
+	normalize(x);
+	while (x != nil) {
+		pushdown(x);
+		if (x->key < key) x = x->r;
+		else if (key < x->key) x = x->l;
+		else {
+			splay(x);
+			return x;
+		}
+	}
+	return nil;
+}
+inline Node* findpos(Node*& x, int pos) {
+	normalize(x);
+	while (1) {
+		pushdown(x);
+		int k = x->l ? x->l->size + 1 : 1;
+		if (pos == k) {
+			splay(x);
+			return x;
+		}
+		else if (pos < k) x = x->l;
+		else {x = x->r; pos -= k;}
+	}
+	return nil;
+}
+inline Node* join(Node* x, Node* y) {
+	normalize(x), normalize(y);
+	x->p = y->p = nil;
+	if (x == nil) return y;
+	if (y == nil) return x;
+	pushdown(y);
+	while (1) {
+		pushdown(x);
+		if (x->r == nil) break;
+		x = x->r;
+	}
+	splay(x);
+	setchild(x, y, 0);
+	pushup(x);
+	return x;
+}
+inline void erase(Node*& x, int key) {
+	normalize(x);
+	Node* y = findkey(x, key);
+	y->l->p = y->r->p = nil;
+	x = join(y->p, y->r);
+}
+inline void split(Node* x, int pos, Node*& l, Node*& r) {
+	normalize(x);
+	if (!pos) {l = nil; r = x; return;}
+	Node* y = findpos(x, pos);
+	if ((r = y->r) != nil) r->p = nil;
+	if ((l = y) != nil) {l->r = nil; pushup(l);}
+}
+inline void split(Node* x, int l, int r, Node*& y, Node*& z, Node*& t) {
+	normalize(x);
+	split(x, l - 1, y, z);
+	split(z, r - l + 1, z, t);
+}
+inline void reverse(Node*& rt, int l, int r) {
+	normalize(rt);
+	Node *x, *y, *z, *t;
+	split(rt, r, t, z);
+	split(t, l - 1, x, y);
+	if (y) {
+		swap(y->l, y->r);
+		y->rev ^= 1;
+	}
+	rt = join(join(x, y), z);
+}
+inline void upd(Node*& rt, int l, int r, int val) {
+	normalize(rt);
+	Node *x, *y, *z;
+	split(rt, l, r, x, y, z);
+	updatelz(y, val);
+	rt = join(join(x, y), z);
+}
+void trace(Node* x) {
+	normalize(x);
+	if (x == nil) return;
+	pushdown(x);
+	trace(x->l);
+	cout << x->key << " ";
+	trace(x->r);
+}
+
+Node* rt;
 
 int main() {
-	slt.insert(3); slt.insert(4); slt.insert(5);
-	slt.reverse(1, 2);
-	slt.trace();
-	slt.update(1, 3, 1);
-	slt.trace();
-	slt.update(2, 3, 2);
-	slt.trace();
+	init();
+	insert(rt, 3);
+	insert(rt, 4);
+	insert(rt, 5);
+	reverse(rt, 1, 2);
+	trace(rt); cout << "\n";
+	upd(rt, 1, 3, 1);
+	trace(rt); cout << "\n";
+	upd(rt, 2, 3, 2);
+	trace(rt); cout << "\n";
+	erase(rt, 5);
+	trace(rt); cout << "\n";
 	return 0;
 }

@@ -20,7 +20,7 @@ struct CentroidTree {
 	int n;
 	vector<int> adj[maxn];
 	int size[maxn];
-	int rem[maxn];
+	int del[maxn];
 	vector<int> tree[maxn];
 	int lev[maxn];
 	int p[logn][maxn];
@@ -31,7 +31,7 @@ struct CentroidTree {
 		for (int i = 0; i < n; i++) {
 			adj[i].clear();
 			tree[i].clear();
-			rem[i] = 0;
+			del[i] = 0;
 		}
 	}
 	void add(int u, int v) {
@@ -42,7 +42,7 @@ struct CentroidTree {
 		size[u] = 1;
 		for (int i = 0; i < (int) adj[u].size(); i++) {
 			int v = adj[u][i];
-			if (v != p && !rem[v]) {
+			if (v != p && !del[v]) {
 				dfs(v, u);
 				size[u] += size[v];
 			}
@@ -55,7 +55,7 @@ struct CentroidTree {
 			pair<int, int> best;
 			for (int i = 0; i < (int) adj[u].size(); i++) {
 				int v = adj[u][i];
-				if (v != p && !rem[v]) {
+				if (v != p && !del[v]) {
 					best = max(best, make_pair(size[v], v));
 				}
 			}
@@ -68,7 +68,7 @@ struct CentroidTree {
 	void upd(int u, int dep, int p) {
 		for (int i = 0; i < (int) adj[u].size(); i++) {
 			int v = adj[u][i];
-			if (v != p && !rem[v]) {
+			if (v != p && !del[v]) {
 				info[dep][v] = info[dep][u] + 1;
 				upd(v, dep, u);
 			}
@@ -79,10 +79,10 @@ struct CentroidTree {
 		p[0][u] = u;
 		info[dep][u] = Info(0);
 		upd(u, dep, -1);
-		rem[u] = 1;
+		del[u] = 1;
 		for (int i = 0; i < (int) adj[u].size(); i++) {
 			int v = adj[u][i];
-			if (!rem[v]) {
+			if (!del[v]) {
 				int w = divide(v, dep + 1);
 				tree[u].push_back(w);
 				p[0][w] = u;

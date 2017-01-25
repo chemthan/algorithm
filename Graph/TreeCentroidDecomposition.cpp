@@ -17,7 +17,7 @@ void dfs(int u, int p) {
 		}
 	}
 }
-int findcenter(int u) {
+int findcentroid(int u) {
 	int p = -1; dfs(u, -1);
 	int cap = size[u] >> 1;
 	while (1) {
@@ -35,13 +35,13 @@ int findcenter(int u) {
 }
 void work(int u) {
 }
-void tcd(int u) {
-	u = findcenter(u);
+void divide(int u) {
+	u = findcentroid(u);
 	del[u] = 1; work(u);
 	for (int i = 0; i < adj[u].size(); i++) {
 		int v = adj[u][i];
 		if (!del[v]) {
-			tcd(v);
+			divide(v);
 		}
 	}
 }

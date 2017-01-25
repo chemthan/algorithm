@@ -39,7 +39,7 @@ template<class TK, class TV> struct HashTable {
 		prv[ptr] = lst[hs], lst[hs] = ptr;
 		return x[ptr++];
 	}
-	void erase(const TK& key) {
+	void erase(TK key) {
 		int hs = (key % MAGIC + MAGIC) % MAGIC;
 		int nxt = -1;
 		for (int e = lst[hs]; ~e; e = prv[e]) {
