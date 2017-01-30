@@ -39,6 +39,15 @@ template<class TK, class TV> struct HashTable {
 		prv[ptr] = lst[hs], lst[hs] = ptr;
 		return x[ptr++];
 	}
+	int count(TK key) {
+		int hs = (key % MAGIC + MAGIC) % MAGIC;
+		for (int e = lst[hs]; ~e; e = prv[e]) {
+			if (l[e] == key) {
+				return 1;
+			}
+		}
+		return 0;
+	}
 	void erase(TK key) {
 		int hs = (key % MAGIC + MAGIC) % MAGIC;
 		int nxt = -1;
@@ -64,5 +73,7 @@ int main() {
 	hs[4123123] = 5;
 	cout << hs[3234234] << "\n"; //Expected 4
 	cout << hs[4123123] << "\n"; //Expected 5
+	cout << hs.count(3234234) << "\n"; //Expected 1
+	cout << hs.count(3234235) << "\n"; //Expected 0
 	return 0;
 }
