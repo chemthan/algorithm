@@ -159,7 +159,7 @@ template<class T> class dvd {
 		return make_pair(r.second, r.first - a / b * r.second);
 	}
 };
-typedef FiniteField<int, 30, mul<int>, dvd<int> > FF;
+typedef FiniteField<int, (int) 1e9 + 7, mul<int>, dvd<int> > FF;
 
 int main() {
 	FF a = 7;
