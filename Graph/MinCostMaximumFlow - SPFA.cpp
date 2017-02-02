@@ -7,7 +7,7 @@ template<class TF, class TC, TF Foo, TC Coo> struct MinCostMaximumFlow {
 	int n, s, t, E;
 	int adj[MAXE], nxt[MAXE], lst[MAXV], frm[MAXV], vis[MAXV];
 	TF cap[MAXE], flw[MAXE], totalFlow;
-	TC cst[MAXE], pot[MAXE], dst[MAXV], totalCost;
+	TC cst[MAXE], dst[MAXV], totalCost;
 	void init(int n, int s, int t) {
 		this->n = n, this->s = s, this->t = t;
 		fill_n(lst, n, -1), E = 0;
@@ -47,8 +47,7 @@ template<class TF, class TC, TF Foo, TC Coo> struct MinCostMaximumFlow {
 				flw[e ^ 1] -= mn;
 			}
 			totalFlow += mn;
-			totalCost += mn * (dst[t] - pot[s] + pot[t]);
-			for (int u = 0; u < n; u++) pot[u] += dst[u];
+			totalCost += mn * dst[t];
 		}
 		return totalCost;
 	}
