@@ -2,13 +2,13 @@
 using namespace std;
 
 template<class T> T mulmod(T a, T b, T p) {
-	a %= p; b %= p;
+	a %= p, b %= p;
 	T q = (T) ((long double) a * b / p);
-    T r = a * b - q * p;
-    while (r < 0) r += p;
-    while (r >= p) r -= p;
-    return r;
-    /*
+	T r = a * b - q * p;
+	while (r < 0) r += p;
+	while (r >= p) r -= p;
+	return r;
+	/*
 	T r = 0;
 	int block = 1;
 	T base = 1LL << block;
