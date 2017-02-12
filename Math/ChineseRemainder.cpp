@@ -1,7 +1,7 @@
 #include <bits/stdc++.h>
 using namespace std;
 
-template<class T> mulmod(T a, T b, T p) {
+template<class T> T mulmod(T a, T b, T p) {
 	a %= p; b %= p;
 	T q = (T) ((long double) a * b / p);
     T r = a * b - q * p;
@@ -19,7 +19,7 @@ template<class T> mulmod(T a, T b, T p) {
 	return r;
 	*/
 }
-template<class T> powmod(T n, T k, T p) {
+template<class T> T powmod(T n, T k, T p) {
 	if (!n) return 0;
 	T r = 1;
 	for (; k; k >>= 1) {
