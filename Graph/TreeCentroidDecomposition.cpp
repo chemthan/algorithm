@@ -2,7 +2,7 @@
 using namespace std;
 
 //O(nlogn)
-const int MAXN = 100000 + 10;
+const int MAXN = 100000 + 5;
 int n;
 vector<int> adj[MAXN];
 int del[MAXN];

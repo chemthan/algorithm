@@ -1,7 +1,11 @@
 #include <bits/stdc++.h>
 using namespace std;
 
-//O(n^3)
+/*
+* Complexity: O(N^3)
+*/
+typedef vector<int> ROW;
+typedef vector<ROW> MATRIX;
 int fpow(int n, int k, int p) {
 	int r = 1;
 	for (; k; k >>= 1) {
@@ -13,8 +17,8 @@ int fpow(int n, int k, int p) {
 int inv(int n, int p) {
 	return fpow(n, p - 2, p);
 }
-vector<vector<int> > MatrixInverse(vector<vector<int> > matrix, int mod) {
-	vector<vector<int> > res;
+MATRIX MatrixInverse(MATRIX matrix, int mod) {
+	MATRIX res;
 	int i, j, k, n = matrix.size();
 	res.resize(n);
 	for (i = 0; i < n; i++) {
@@ -62,14 +66,14 @@ vector<vector<int> > MatrixInverse(vector<vector<int> > matrix, int mod) {
 int main() {
 	srand(time(NULL));
 	int n = 100, mod = (int) 1e9 + 7;
-	vector<vector<int> > a(n, vector<int>(n, 0));
+	MATRIX a(n, ROW(n, 0));
 	for (int i = 0; i < n; i++) {
 		for (int j = 0; j < n; j++) {
 			a[i][j] = rand() % mod;
 		}
 	}
-	vector<vector<int> > ia = MatrixInverse(a, mod);
-	vector<vector<int> > b(n, vector<int>(n, 0));
+	MATRIX ia = MatrixInverse(a, mod);
+	MATRIX b(n, ROW(n, 0));
 	for (int i = 0; i < n; i++) {
 		for (int k = 0; k < n; k++) {
 			for (int j = 0; j < n; j++) {

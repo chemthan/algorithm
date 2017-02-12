@@ -6,12 +6,13 @@ using namespace std;
 */
 #define EPS 1e-9
 typedef double T;
-typedef vector<T> VT;
-typedef vector<VT> VVT;
+typedef vector<T> ROW;
+typedef vector<ROW> MATRIX;
+
 inline int sign(T x) {return x < -EPS ? -1 : x > +EPS;}
-VVT MatrixInverse(VVT a) {
+MATRIX MatrixInverse(MATRIX a) {
 	int i, j, k, n = a.size();
-	VVT res;
+	MATRIX res;
 	res.resize(n);
 	for (i = 0; i < n; i++) {
 		res[i].resize(n);
@@ -54,14 +55,14 @@ VVT MatrixInverse(VVT a) {
 int main() {
 	srand(time(NULL));
 	int n = 100;
-	VVT a(n, VT(n, 0));
+	MATRIX a(n, ROW(n, 0));
 	for (int i = 0; i < n; i++) {
 		for (int j = 0; j < n; j++) {
 			a[i][j] = rand();
 		}
 	}
-	VVT ia = MatrixInverse(a);
-	VVT b(n, VT(n, 0));
+	MATRIX ia = MatrixInverse(a);
+	MATRIX b(n, ROW(n, 0));
 	for (int i = 0; i < n; i++) {
 		for (int k = 0; k < n; k++) {
 			for (int j = 0; j < n; j++) {

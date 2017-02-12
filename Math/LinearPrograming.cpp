@@ -8,16 +8,17 @@ using namespace std;
  * where <x, y> is the dot product of x and y.
  */
 typedef long double T;
-typedef vector<T> VT;
-typedef vector<VT> VVT;
-typedef vector<int> VI;
+typedef vector<T> ROW;
+typedef vector<ROW> MATRIX;
 #define EPS 1e-9
 
+inline int sign(T x) {return x < -EPS ? -1 : x > +EPS;}
+inline int sign(T x, T y) {return sign(x - y);}
 struct LPSolver {
 	int m, n;
-	VI B, N;
-	VVT D;
-	LPSolver(const VVT &A, const VT &b, const VT &c) : m(b.size()), n(c.size()), N(n + 1), B(m), D(m + 2, VT(n + 2)) {
+	vector<int> B, N;
+	MATRIX D;
+	LPSolver(const MATRIX &A, const ROW &b, const ROW &c) : m(b.size()), n(c.size()), N(n + 1), B(m), D(m + 2, ROW(n + 2)) {
 		for (int i = 0; i < m; i++) for (int j = 0; j < n; j++) D[i][j] = A[i][j];
 		for (int i = 0; i < m; i++) {
 			B[i] = n + i;
@@ -50,22 +51,22 @@ struct LPSolver {
 				if (phase == 2 && N[j] == -1) continue;
 				if (s == -1 || D[x][j] < D[x][s] || D[x][j] == D[x][s] && N[j] < N[s]) s = j;
 			}
-			if (D[x][s] > -EPS) return 1;
+			if (sign(D[x][s]) >= 0) return 1;
 			int r = -1;
 			for (int i = 0; i < m; i++) {
-				if (D[i][s] < EPS) continue;
+				if (sign(D[i][s]) <= 0) continue;
 				if (r == -1 || D[i][n + 1] / D[i][s] < D[r][n + 1] / D[r][s] || D[i][n + 1] / D[i][s] == D[r][n + 1] / D[r][s] && B[i] < B[r]) r = i;
 			}
 			if (r == -1) return 0;
 			Pivot(r, s);
 		}
 	}
-	T Solve(VT& x) {
+	T Solve(ROW& x) {
 		int r = 0;
 		for (int i = 1; i < m; i++) if (D[i][n + 1] < D[r][n + 1]) r = i;
-		if (D[r][n + 1] < -EPS) {
+		if (sign(D[r][n + 1]) < 0) {
 			Pivot(r, n);
-			if (!Simplex(1) || D[m + 1][n + 1] < -EPS) return -numeric_limits<T>::infinity();
+			if (!Simplex(1) || sign(D[m + 1][n + 1]) < 0) return -numeric_limits<T>::infinity();
 			for (int i = 0; i < m; i++) if (B[i] == -1) {
 					int s = -1;
 					for (int j = 0; j <= n; j++) {
@@ -75,7 +76,7 @@ struct LPSolver {
 				}
 		}
 		if (!Simplex(2)) return numeric_limits<T>::infinity();
-		x = VT(n);
+		x = ROW(n);
 		for (int i = 0; i < m; i++) if (B[i] < n) x[B[i]] = D[i][n + 1];
 		return D[m][n + 1];
 	}
@@ -91,12 +92,12 @@ int main() {
 	};
 	T _b[m] = {10, -4, 5, -3};
 	T _c[n] = {1, -1, 0};
-	VVT A(m);
-	VT b(_b, _b + m);
-	VT c(_c, _c + n);
-	for (int i = 0; i < m; i++) A[i] = VT(_A[i], _A[i] + n);
+	MATRIX A(m);
+	ROW b(_b, _b + m);
+	ROW c(_c, _c + n);
+	for (int i = 0; i < m; i++) A[i] = ROW(_A[i], _A[i] + n);
 	LPSolver solver(A, b, c);
-	VT x;
+	ROW x;
 	T value = solver.Solve(x);
 	cout << "Value: " << value << "\n";
 	cout << "Solution:";

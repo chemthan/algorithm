@@ -1,11 +1,11 @@
 #include <bits/stdc++.h>
 using namespace std;
 
-long long fpow(long long n, long long k, int p = (int) 1e9 + 7) {
-	long long r = 1;
+int fpow(int n, long long k, int p = (int) 1e9 + 7) {
+	int r = 1;
 	for (; k; k >>= 1) {
-		if (k & 1) r = r * n % p;
-		n = n * n % p;
+		if (k & 1) r = (long long) r * n % p;
+		n = (long long) n * n % p;
 	}
 	return r;
 }
@@ -81,7 +81,7 @@ void ANDFFT(int a[], int n, int p, int invert) {
 	}
 }
 
-const int maxn = 100000 + 10;
+const int maxn = 100000 + 5;
 int n, p;
 int a[maxn];
 int b[maxn];

@@ -2,8 +2,10 @@
 using namespace std;
 
 /*
-* Complexity: O(n^3)
+* Complexity: O(N^3)
 */
+typedef vector<int> ROW;
+typedef vector<ROW> MATRIX;
 int fpow(int n, int k, int p) {
 	int r = 1;
 	for (; k; k >>= 1) {
@@ -15,7 +17,7 @@ int fpow(int n, int k, int p) {
 int inv(int n, int p) {
 	return fpow(n, p - 2, p);
 }
-int MatrixDeterminant(vector<vector<int> > a, vector<int>& r, int mod) {
+int MatrixDeterminant(MATRIX a, ROW& r, int mod) {
 	int i, j, k, n = a.size(), m = a[0].size();
 	int res = 1;
 	for (i = 0; i < n; i++) {
@@ -53,13 +55,13 @@ int MatrixDeterminant(vector<vector<int> > a, vector<int>& r, int mod) {
 int main() {
 	srand(time(NULL));
 	int n = 5, mod = (int) 1e9 + 7;
-	vector<vector<int> > a(n, vector<int>(n + 1, 0));
+	MATRIX a(n, ROW(n + 1, 0));
 	for (int i = 0; i < n; i++) {
 		for (int j = 0; j < n + 1; j++) {
 			a[i][j] = rand() % mod;
 		}
 	}
-	vector<int> r;
+	ROW r;
 	int det = MatrixDeterminant(a, r, mod);
 	for (int i = 0; i < n; i++) {
 		int t = 0;

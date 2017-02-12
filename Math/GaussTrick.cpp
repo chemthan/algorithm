@@ -1,7 +1,7 @@
 #include <bits/stdc++.h>
 using namespace std;
 
-void add(int x, vector<int>& v) {
+inline void add(int x, vector<int>& v) {
 	for (int i = 0; i < v.size(); i++) {
 		if (v[i] & -v[i] & x) x ^= v[i];
 	}

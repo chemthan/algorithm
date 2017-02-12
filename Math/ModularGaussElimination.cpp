@@ -4,6 +4,8 @@ using namespace std;
 /*
 * Complexity: O(N^2M)
 */
+typedef vector<int> ROW;
+typedef vector<ROW> MATRIX;
 int fpow(int n, int k, int p) {
 	int r = 1;
 	for (; k; k >>= 1) {
@@ -15,7 +17,7 @@ int fpow(int n, int k, int p) {
 int inv(int n, int p) {
 	return fpow(n, p - 2, p);
 }
-vector<vector<int> > ModularGauss(vector<vector<int> > a, int mod) {
+MATRIX ModularGauss(MATRIX a, int mod) {
 	int n = a.size(), m = a[0].size();
 	for (int i = 0; i < n; i++) {
 		for (int j = 0; j < m; j++) {
@@ -23,14 +25,12 @@ vector<vector<int> > ModularGauss(vector<vector<int> > a, int mod) {
 		}
 	}
 	for (int i = 0; i < n - 1; i++) {
-		int dmax = 0, idx;
+		pair<int, int> best;
 		for (int j = i; j < n; j++) {
-			if (dmax < a[j][i]) {
-				dmax = a[j][i];
-				idx = j;
-			}
+			best = max(best, make_pair(a[j][i], j));
 		}
-		if (!dmax) return a;
+		if (!best.first) continue;
+		int idx = best.second;
 		swap(a[i], a[idx]);
 		for (int j = i + 1; j < n; j++) {
 			for (int k = i + 1; k < m; k++) {
@@ -52,7 +52,7 @@ vector<vector<int> > ModularGauss(vector<vector<int> > a, int mod) {
 int main() {
 	srand(time(NULL));
 	int n = 3, m = 4, mod = (int) 1e9 + 7;
-	vector<vector<int> > a(n, vector<int>(m, 0));
+	MATRIX a(n, ROW(m, 0));
 	for (int i = 0; i < n; i++) {
 		for (int j = 0; j < m; j++) {
 			a[i][j] = rand() % mod;

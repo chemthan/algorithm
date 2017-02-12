@@ -1,22 +1,25 @@
 #include <bits/stdc++.h>
 using namespace std;
 
-//O(n^2m)
+/*
+* Complexity: O(N^2M)
+*/
 typedef double T;
-typedef vector<T> VT;
-typedef vector<VT> VVT;
+typedef vector<T> ROW;
+typedef vector<ROW> MATRIX;
 #define EPS 1e-9
-VVT gauss(VVT a) {
+
+inline int sign(T x) {return x < -EPS ? -1 : x > +EPS;}
+inline int sign(T x, T y) {return sign(x - y);}
+MATRIX gauss(MATRIX a) {
 	int n = a.size(), m = a[0].size();
 	for (int i = 0; i < n - 1; i++) {
-		T dmax = 0; int idx;
+		pair<T, int> best;
 		for (int j = i; j < n; j++) {
-			if (dmax < fabs(a[j][i])) {
-				dmax = fabs(a[j][i]);
-				idx = j;
-			}
+			best = max(best, make_pair(fabs(a[j][i]), j));
 		}
-		if (dmax < EPS) return a;
+		if (!sign(best.first)) continue;
+		int idx = best.second;
 		swap(a[i], a[idx]);
 		for (int j = i + 1; j < n; j++) {
 			for (int k = i + 1; k < m; k++) {
@@ -25,7 +28,7 @@ VVT gauss(VVT a) {
 			a[j][i] = 0;
 		}
 	}
-	for (int i = 0; i < n; i++) if (a[i][i]) {
+	for (int i = 0; i < n; i++) if (sign(a[i][i])) {
 		for (int j = i + 1; j < m; j++) {
 			a[i][j] = a[i][j] / a[i][i];
 		}
@@ -36,19 +39,18 @@ VVT gauss(VVT a) {
 
 int main() {
 	srand(time(NULL));
-	int n = 3, m = 4;
-	vector<vector<T> > a(n, vector<T>(m, 0));
+	int n = 5, m = 5;
+	MATRIX a(n, ROW(m, 0));
 	for (int i = 0; i < n; i++) {
 		for (int j = 0; j < m; j++) {
-			a[i][j] = rand();
+			a[i][j] = rand() % 10;
 		}
 	}
 	a = gauss(a);
 	for (int i = 0; i < n; i++) {
 		for (int j = 0; j < m; j++) {
-			cout << fixed << setprecision(9) << a[i][j] << " ";
+			cout << fixed << setprecision(3) << a[i][j] << " \n"[j == m - 1];
 		}
-		cout << "\n";
 	}
 	return 0;
 }

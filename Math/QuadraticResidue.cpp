@@ -2,7 +2,7 @@
 using namespace std;
 
 //Find x such that x * x = a [mod]
-const int MAXN = 100000 + 10;
+const int MAXN = 100000 + 5;
 int qn[MAXN];
 int fpow(int n, int k, int p) {
 	int r = 1;

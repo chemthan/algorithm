@@ -15,10 +15,16 @@ using namespace std;
 //if n < 18,446,744,073,709,551,616 = 264, it is enough to test a = 2, 3, 5, 7, 11, 13, 17, 19, 23, 29, 31, and 37.
 //if n < 318,665,857,834,031,151,167,461, it is enough to test a = 2, 3, 5, 7, 11, 13, 17, 19, 23, 29, 31, and 37.
 //if n < 3,317,044,064,679,887,385,961,981, it is enough to test a = 2, 3, 5, 7, 11, 13, 17, 19, 23, 29, 31, 37, and 41.
-#define T long long
-T mulmod64(T a, T b, T p) {
+
+template<class T> T mulmod(T a, T b, T p) {
 	a %= p; b %= p;
-	T r = 0;
+	T q = (T) ((long double) a * b / p);
+    T r = a * b - q * p;
+    while (r < 0) r += p;
+    while (r >= p) r -= p;
+    return r;
+    /*
+    T r = 0;
 	int block = 1;
 	T base = 1LL << block;
 	for (; b; b >>= block) {
@@ -26,22 +32,18 @@ T mulmod64(T a, T b, T p) {
 		a = a * base % p;
 	}
 	return r;
-    /*T q = T((long double) a * b / p);
-    T r = a * b - q * p;
-    while (r < 0) r += p;
-    while (r >= p) r -= p;
-    return r;*/
+	*/
 }
-T powmod64(T n, T k, T p) {
+template<class T> T powmod(T n, T k, T p) {
 	if (!n) return 0;
 	T r = 1;
 	for (; k; k >>= 1) {
-		if (k & 1) r = mulmod64(r, n, p);
-		n = mulmod64(n, n, p);
+		if (k & 1) r = mulmod(r, n, p);
+		n = mulmod(n, n, p);
 	}
 	return r;
 }
-int rabin(T n) {
+template<class T> int rabin(T n) {
 	if (n == 2) return 1;
 	if (n < 2 || !(n & 1)) return 0;
 	const T p[3] = {3, 5, 7};
@@ -51,9 +53,9 @@ int rabin(T n) {
 	for (i = 0; i < mx; i++) {
 		if (n == p[i]) return 1;
 		if (!(n % p[i])) return 0;
-		a = powmod64(p[i], d, n);
+		a = powmod(p[i], d, n);
 		if (a != 1) {
-			for (r = 0; r < s && a != n - 1; r++) a = mulmod64(a, a, n);
+			for (r = 0; r < s && a != n - 1; r++) a = mulmod(a, a, n);
 			if (r == s) return 0;
 		}
 	}

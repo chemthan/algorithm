@@ -4,12 +4,14 @@ using namespace std;
 /*
 * Complexity: O(N^3)
 */
-#define EPS 1e-9
 typedef double T;
-typedef vector<T> VT;
-typedef vector<vector<T> > VVT;
+#define EPS 1e-9
+typedef vector<T> ROW;
+typedef vector<ROW> MATRIX;
+
 inline int sign(T x) {return x < -EPS ? -1 : x > +EPS;}
-T MatrixDeterminant(VVT a, VT& r) {
+inline int sign(T x, T y) {return sign(x - y);}
+T MatrixDeterminant(MATRIX a, ROW& r) {
 	int i, j, k, n = a.size(), m = a[0].size();
 	T res = 1;
 	for (i = 0; i < n; i++) {
@@ -41,13 +43,13 @@ T MatrixDeterminant(VVT a, VT& r) {
 int main() {
 	srand(time(NULL));
 	int n = 5;
-	VVT a(n, VT(n + 1, 0));
+	MATRIX a(n, ROW(n + 1, 0));
 	for (int i = 0; i < n; i++) {
 		for (int j = 0; j < n + 1; j++) {
 			a[i][j] = rand() % 10;
 		}
 	}
-	VT r;
+	ROW r;
 	T det = MatrixDeterminant(a, r);
 	for (int i = 0; i < n; i++) {
 		T t = 0;

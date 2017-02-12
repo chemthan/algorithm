@@ -5,7 +5,7 @@ using namespace std;
 * Complexity: O(V^2E), O(min(V^2/3, E^1/2)E) for unit flow
 */
 
-template<class T, T oo> struct MaximumFlow {
+template<class T, T oo> struct Dinic {
 	static const int MAXV = 100000 + 5;
 	static const int MAXE = 1000000 + 5;
 	int n, s, t, E;
@@ -55,12 +55,12 @@ template<class T, T oo> struct MaximumFlow {
 		return total;
 	}
 };
-MaximumFlow<int, (int) 1e9> mf;
+Dinic<int, (int) 1e9> dinic;
 
 int main() {
-	mf.init(3, 0, 2);
-	mf.add(0, 1, 3, 0);
-	mf.add(1, 2, 4, 0);
-	cout << mf.maxflow() << "\n"; //Expected 3
+	dinic.init(3, 0, 2);
+	dinic.add(0, 1, 3, 0);
+	dinic.add(1, 2, 4, 0);
+	cout << dinic.maxflow() << "\n"; //Expected 3
 	return 0;
 }

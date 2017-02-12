@@ -1,7 +1,7 @@
 #include <bits/stdc++.h>
 using namespace std;
 
-const int MAXN = 100000 + 10;
+const int MAXN = 100000 + 5;
 int n;
 vector<int> adj[MAXN];
 int size[MAXN];

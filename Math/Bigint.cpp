@@ -285,11 +285,48 @@ struct Bigint {
 		}
 		return res;
 	}
+	template<class T> friend Bigint operator + (const T& v, const Bigint& a) {
+		return a + v;
+	}
+	template<class T> friend Bigint operator - (const T& v, const Bigint& a) {
+		return -a + v;
+	}
+	template<class T> friend Bigint operator * (const T& v, const Bigint& a) {
+		return a * v;
+	}
+	template<class T> friend Bigint operator / (const T& v, const Bigint& a) {
+		return Bigint(v) / a;
+	}
+	Bigint operator ++() {
+		(*this) += 1;
+		return *this;
+	}
+	Bigint operator ++(int) {
+		(*this) += 1;
+		return *this - 1;
+	}
+	Bigint operator --() {
+		(*this) -= 1;
+		return *this;
+	}
+	Bigint operator --(int) {
+		(*this) -= 1;
+		return *this + 1;
+	}
 };
 
 int main() {
 	Bigint n = Bigint("123456789");
 	Bigint m = Bigint("987654321");
 	cout << n * m << "\n";
+	cout << 5 + m << "\n";
+	cout << 5 - m << "\n";
+	cout << 5 * m << "\n";
+	cout << 5 / m << "\n";
+	Bigint k = 1;
+	cout << ++k << "\n";
+	cout << k++ << "\n";
+	cout << --k << "\n";
+	cout << k-- << "\n";
 	return 0;
 }

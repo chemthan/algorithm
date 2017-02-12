@@ -1,10 +1,12 @@
 #include <bits/stdc++.h>
 using namespace std;
 
+/*
+* Complexity: O(N*sqrt(N))
+*/
 struct Query {
 	static const int MAGIC = 320;
 	int l, r, a, idx;
-	Query() {l = r = 0, a = -1;}
 	int operator < (const Query& rhs) {
 		if (l / MAGIC != rhs.l / MAGIC) return l / MAGIC < rhs.l / MAGIC;
 		return r < rhs.r;
@@ -61,19 +63,20 @@ void rem(int u) {} //Need to modify
 void deal(int u) {if (vis[u] ^= 1) add(u); else rem(u);}
 
 int main() {
-	scanf("%d%d", &n, &q);
+	cin >> n >> q;
 	for (int i = 0; i < n - 1; i++) {
-		int u, v; scanf("%d%d", &u, &v); u--, v--;
+		int u, v; cin >> u >> v; u--, v--;
 		adj[u].push_back(v), adj[v].push_back(u);
 	}
 	dfs(0);
 	for (int i = 0; i < q; i++) {
-		int u, v; scanf("%d%d", &u, &v); u--, v--;
+		int u, v; cin >> u >> v; u--, v--;
 		if (lev[u] > lev[v]) swap(u, v);
 		int a = lca(u, v);
 		if (u == a) {
 			query[i].l = tin[u];
 			query[i].r = tin[v];
+			query[i].a = -1;
 		}
 		else {
 			query[i].l = tou[u];

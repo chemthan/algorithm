@@ -1,25 +1,30 @@
 #include <bits/stdc++.h>
 using namespace std;
 
-//O(V^1/2*E)
+/*
+* Complexity: O(E*sqrt(V))
+* Indexing from 1
+*/
 struct Blossom {
-	static const int MAXV = 1000 + 10;
-	static const int MAXE = 1000000 + 10;
+	static const int MAXV = 1000 + 5;
+	static const int MAXE = 1000000 + 5;
 	int n, E, lst[MAXV], next[MAXE], adj[MAXE];
 	int nxt[MAXV], mat[MAXV], dad[MAXV], col[MAXV];
 	int que[MAXV], qh, qt;
 	int vis[MAXV], act[MAXV];
 	int tag, total;
 	
-	void init(int _n) {
-		n = _n;
-		for (int i = 0; i <= n; i++) lst[i] = nxt[i] = mat[i] = vis[i] = 0;
-		E = 1; tag = total = 0;
+	void init(int n) {
+		this->n = n;
+		for (int i = 0; i <= n; i++) {
+			lst[i] = nxt[i] = mat[i] = vis[i] = 0;
+		}
+		E = 1, tag = total = 0;
 	}
 	void add(int u,int v) {
-		if(!mat[u] && !mat[v]) {mat[u] = v; mat[v] = u; total++;}
-		E++; adj[E] = v; next[E] = lst[u]; lst[u] = E;
-		E++; adj[E] = u; next[E] = lst[v]; lst[v] = E;
+		if (!mat[u] && !mat[v]) mat[u] = v, mat[v] = u, total++;
+		E++, adj[E] = v, next[E] = lst[u], lst[u] = E;
+		E++, adj[E] = u, next[E] = lst[v], lst[v] = E;
 	}
 	int lca(int u, int v) {
 		tag++;
@@ -93,5 +98,16 @@ struct Blossom {
 } blossom;
 
 int main() {
+	blossom.init(3);
+	blossom.add(1, 2);
+	blossom.add(1, 3);
+	blossom.maxmat();
+	for (int i = 1; i <= blossom.n; i++) {
+		blossom.act[i] = 0;
+	}
+	blossom.maxmat();
+	for (int i = 1; i <= blossom.n; i++) {
+		cout << i << " " << blossom.act[i] << "\n";
+	}
 	return 0;
 }

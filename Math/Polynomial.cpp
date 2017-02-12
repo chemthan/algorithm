@@ -12,7 +12,7 @@ int fpow(int n, int k, int p) {
 
 struct Polynomial {
 	//nirjhor's code
-	static const int maxn = 1000 + 10;
+	static const int maxn = 1000 + 5;
 	static const int limit = 1000;
 	static const int mod = (int) 1e9 + 7;
 	int deg;

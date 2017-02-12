@@ -1,8 +1,7 @@
 #include <bits/stdc++.h>
 using namespace std;
 
-#define T long long
-vector<T> karatsuba(vector<T>& a, vector<T>& b) {
+template<class T> vector<T> karatsuba(vector<T>& a, vector<T>& b) {
 	while (a.size() & (a.size() - 1)) {
 		a.push_back(0);
 		b.push_back(0);
@@ -34,17 +33,17 @@ vector<T> karatsuba(vector<T>& a, vector<T>& b) {
 }
 
 int pos;
-T buf[1 << 20];
+int buf[1 << 20];
 //Require n is a power of 2
-void multiply(int n, T a[], T b[], T r[], T p = (T) 1e9 + 7) {
+void multiply(int n, int a[], int b[], int r[], int p = (int) 1e9 + 7) {
 	if (n <= 8) {
 		for (int i = 0; i < n + n; i++) {
 			r[i] = 0;
 		}
 		for (int i = 0; i < n; i++) {
 			for (int j = 0; j < n; j++) {
-				r[i + j] += a[i] * b[j];
-				r[i + j] %= p;
+				r[i + j] += (long long) a[i] * b[j] % p;
+				if (r[i + j] >= p) r[i + j] -= p;
 			}
 		}
 		return;
@@ -52,63 +51,62 @@ void multiply(int n, T a[], T b[], T r[], T p = (T) 1e9 + 7) {
 	int s = n / 2;
 	multiply(s, a, b, r);
 	multiply(s, a + s, b + s, r + n);
-	T* a2 = buf + pos; pos += s;
-	T* b2 = buf + pos; pos += s;
-	T* r2 = buf + pos; pos += n;
+	int* a2 = buf + pos; pos += s;
+	int* b2 = buf + pos; pos += s;
+	int* r2 = buf + pos; pos += n;
 	for (int i = 0; i < s; i++) {
-		a2[i] = (a[i] + a[i + s]) % p;
+		a2[i] = a[i] + a[i + s];
+		if (a2[i] >= p) a2[i] -= p;
 	}
 	for (int i = 0; i < s; i++) {
-		b2[i] = (b[i] + b[i + s]) % p;
+		b2[i] = b[i] + b[i + s];
+		if (b2[i] >= p) b2[i] -= p;
 	}
 	multiply(s, a2, b2, r2);
 	for (int i = 0; i < n; i++) {
-		r2[i] = (r2[i] - (r[i] + r[i + n]) % p + p) % p;
+		r2[i] = r2[i] - (r[i] + r[i + n]);
+		if (r2[i] < 0) r2[i] += p;
+		if (r2[i] < 0) r2[i] += p;
 	}
 	for (int i = 0; i < n; i++) {
 		r[i + s] += r2[i];
-		r[i + s] %= p;
+		if (r[i + s] >= p) r[i + s] -= p;
 	}
 	pos -= s + s + n;
 }
 
-const int maxn = 100000 + 10;
-const T MOD = (T) 1e9 + 7;
-T x[maxn];
-T y[maxn];
-T z[maxn];
-T d[maxn];
+const int maxn = 100000 + 5;
+const int MOD = (int) 1e9 + 7;
+int x[maxn];
+int y[maxn];
+int z[maxn];
+int d[maxn];
 
 int main() {
 	srand(time(NULL));
-	vector<T> a, b;
+	vector<long long> a, b;
 	int n = 1 << 10;
 	for (int i = 0; i < n; i++) {
-		a.push_back(rand() * rand() % 1000000);
+		a.push_back(rand());
 		x[i] = a.back();
 	}
 	for (int i = 0; i < n; i++) {
-		b.push_back(rand() * rand() % 1000000);
+		b.push_back(rand());
 		y[i] = b.back();
 	}
-	vector<T> c = karatsuba(a, b);
+	vector<long long> c = karatsuba(a, b);
 	multiply(n, x, y, z, MOD);
 	for (int i = 0; i < n; i++) {
 		for (int j = 0; j < n; j++) {
-			d[i + j] += a[i] * b[j];
+			d[i + j] += (long long) a[i] * b[j] % MOD;
+			if (d[i + j] >= MOD) d[i + j] -= MOD;
 		}
 	}
 	for (int i = 0; i < c.size(); i++) {
-		if (c[i] != d[i]) {
-			cout << "Wrong!\n";
-			return 0;
-		}
+		assert(c[i] % MOD == d[i]);
 	}
 	for (int i = 0; i < c.size(); i++) {
-		if (z[i] != d[i] % MOD) {
-			cout << "Wrong!\n";
-			return 0;
-		}
+		assert(z[i] == d[i]);
 	}
 	cout << "Correct!\n";
 	return 0;

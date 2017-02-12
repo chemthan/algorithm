@@ -1,10 +1,10 @@
 #include <bits/stdc++.h>
 using namespace std;
 
+#define pos(v) ((v) << 1)
+#define neg(v) (pos(v) ^ 1)
 struct Twosat {
-	#define pos(v) ((v) << 1)
-	#define neg(v) (pos(v) ^ 1)
-	static const int MAXV = 200000 + 10;
+	static const int MAXV = 200000 + 5;
 	int n;
 	vector<int> forward[MAXV], backward[MAXV];
 	bool used[MAXV];
