@@ -3,7 +3,6 @@ using namespace std;
 
 typedef long double T;
 const int MAXN = 1 << 20;
-const T PI = 2 * acos((T) 0);
 //typedef complex<T> cplex;
 struct cplex {
 	T r, i;
@@ -18,8 +17,8 @@ struct cplex {
 	cplex operator *= (cplex b) {T r2 = r * b.r - i * b.i, i2 = r * b.i + i * b.r; r = r2, i = i2; return *this;}
 	cplex operator /= (T n) {r /= n, i /= n; return *this;}
 };
-cplex fa[MAXN << 1], fb[MAXN << 1];
 void fft(cplex a[], int n, int invert) {
+	static T PI = 2 * acos((T) 0);
 	for (int i = 1, j = 0; i < n; i++) {
 		for (int s = n; j ^= s >>= 1, ~j & s;);
 		if (i < j) swap(a[i], a[j]);
@@ -40,7 +39,8 @@ void fft(cplex a[], int n, int invert) {
 	if (invert) for (int i = 0; i < n; i++) a[i] /= n;
 }
 void multiply(int a[], int b[], long long c[], int na, int nb) {
-	int n = 1; while (n < na + nb) n <<= 1;
+	static cplex fa[MAXN << 1], fb[MAXN << 1];
+	int n = 1; while (n < na + nb - 1) n <<= 1;
 	for (int i = 0; i < n; i++) fa[i] = fb[i] = cplex(0);
 	for (int i = 0; i < na; i++) fa[i] = cplex(a[i]);
 	for (int i = 0; i < nb; i++) fb[i] = cplex(b[i]);
@@ -49,10 +49,10 @@ void multiply(int a[], int b[], long long c[], int na, int nb) {
 	fft(fa, n, 1);
 	for (int i = 0; i < n; i++) c[i] = (long long) (fa[i].real() + 0.5);
 }
-const int K = 2;
-cplex ap[K][MAXN << 1], bp[K][MAXN << 1], cc[MAXN << 1];
-void modularmultiply(int a[], int b[], int c[], int na, int nb, int mod = (int) 1e9 + 7) {
-	int n = 1; while (n < na + nb) n <<= 1;
+void modularmultiply(int a[], int b[], int c[], int na, int nb, int mod) {
+	static const int K = 2;
+	static cplex ap[K][MAXN << 1], bp[K][MAXN << 1], cc[MAXN << 1];
+	int n = 1; while (n < na + nb - 1) n <<= 1;
 	int base = (int) pow(mod, 1.0 / K) + 1;
 	for (int i = 0; i < n; i++) {
 		int ta = i < na ? a[i] : 0, tb = i < nb ? b[i] : 0;
@@ -91,7 +91,7 @@ int main() {
 	int na = 10000, nb = 10000;
 	for (int i = 0; i < na; i++) a[i] = rand() * rand() % 1000000000;
 	for (int i = 0; i < nb; i++) b[i] = rand() * rand() % 1000000000;
-	modularmultiply(a, b, c, na, nb);
+	modularmultiply(a, b, c, na, nb, MOD);
 	for (int i = 0; i < na; i++) {
 		for (int j = 0; j < nb; j++) {
 			d[i + j] += (long long) a[i] * b[j];
