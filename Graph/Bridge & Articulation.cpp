@@ -15,7 +15,7 @@ void dfs(int u, int p = -1) {
 		int v = adj[u][i];
 		if (!num[v]) {
 			if (u == root) nchild++;
-			dfs(v);
+			dfs(v, u);
 			if (low[v] >= num[u]) {
 				//u is an articulation point
 			}
