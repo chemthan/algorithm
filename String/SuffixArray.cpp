@@ -1,9 +1,12 @@
 #include <bits/stdc++.h>
 using namespace std;
 
-//O(nlogn)
+/*
+* Complexity: O(NlogN)
+*/
 struct SuffixArray {
-	static const int MAXN = 100000 + 10;
+	static const int MAXN = 1e5 + 5;
+	static const char SEP = '$';
 	char T[MAXN];
 	int nsz;
 	int RA[MAXN], tmpRA[MAXN];
@@ -51,7 +54,7 @@ struct SuffixArray {
 		for (int i = 1; i < nsz; i++) Phi[SA[i]] = SA[i - 1];
 		for (int i = 0; i < nsz; i++) {
 			if (!~Phi[i]) {PLCP[i] = 0; continue;}
-			while (T[i + L] == T[Phi[i] + L]) L++;
+			while (T[i + L] == T[Phi[i] + L] && T[i + L] != SEP) L++;
 			PLCP[i] = L;
 			L = max(L - 1, 0);
 		}
