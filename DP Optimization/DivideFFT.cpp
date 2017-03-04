@@ -92,7 +92,7 @@ int main() {
 		b[i] = rand();
 	}
 	for (int i = 0; i < n; i++) {
-		//a[i] has computed
+		//a[i] has been computed
 		a[i + 1] = (a[i + 1] + (long long) a[i] * b[0]) % mod;
 		a[i + 2] = (a[i + 2] + (long long) a[i] * b[1]) % mod;
 		for (int k = 2; i && i % k == 0; k <<= 1) {
