@@ -1,12 +1,15 @@
 #include <bits/stdc++.h
 using namespace std;
 
+/*
+* SuffixArray DC3 Algorithm
+* Complexity: O(N)
+*/
 unsigned char mask[] = {0x80, 0x40, 0x20, 0x10, 0x08, 0x04, 0x02, 0x01};
 #define tget(i) ((t[(i) / 8] & mask[(i) % 8]) ? 1 : 0)
 #define tset(i, b) t[(i) / 8] = (b) ? (mask[(i) % 8] | t[(i) / 8]) : ((~mask[(i) % 8]) & t[(i) / 8])
 #define chr(i) (cs == sizeof(int) ? ((int*) s)[i] : ((unsigned char*) s)[i])
 #define isLMS(i) (i > 0 && tget(i) && !tget(i - 1))
-
 void getBuckets(unsigned char* s, int* bkt, int n, int K, int cs, int end) {
     for (int i = 0; i <= K; i++) {
         bkt[i] = 0;
@@ -119,7 +122,7 @@ void buildSA(unsigned char* s, int* SA, int n, int K, int cs) {
 struct SuffixArray {
     static const int MAXN = 1e6 + 5;
     static const int MAXC = 256;
-    static const unsigned char SEP = 32;
+    static const unsigned char SEP = '$';
     int SA[MAXN], RA[MAXN];
     int Phi[MAXN], PLCP[MAXN];
     int LCP[MAXN];
