@@ -1,8 +1,10 @@
 #include <bits/stdc++.h>
 using namespace std;
 
-//O(nlogn)
-const int MAXN = 100000 + 5;
+/*
+* Comlexity: O(nlogn)
+*/
+const int MAXN = 1e5 + 5;
 int n;
 vector<int> adj[MAXN];
 int del[MAXN];
