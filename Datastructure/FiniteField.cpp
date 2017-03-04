@@ -130,6 +130,16 @@ template<class T, class mul, class dvd, class mod> struct FiniteField {
 		res.x = dvd()(x, rhs.x, p);
 		return res;
 	}
+	template<class G> friend FiniteField operator + (const G& y, const FiniteField& rhs)
+            FiniteField res;
+            res.x = res.normalize(y);
+            return res + rhs;
+        }
+        template<class G> friend FiniteField operator - (const G& y, const FiniteField& rhs) {
+            FiniteField res;
+            res.x = res.normalize(y);
+            return res - rhs;
+        }
 	template<class G> friend FiniteField operator * (const G& y, const FiniteField& rhs) {
 		FiniteField res;
 		res.x = res.normalize(y);
