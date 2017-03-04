@@ -120,7 +120,7 @@ void buildSA(unsigned char* s, int* SA, int n, int K, int cs) {
 }
 
 struct SuffixArray {
-    static const int MAXN = 1e6 + 5;
+    static const int MAXN = 1e5 + 5;
     static const int MAXC = 256;
     static const unsigned char SEP = '$';
     int SA[MAXN], RA[MAXN];
