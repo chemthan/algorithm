@@ -47,7 +47,7 @@ struct BinaryMatrix {
         }
         return res;
     }
-    //Caculate geometric series: A^0 + A^1 + ... + A^k
+    //Calculate geometric series: A^0 + A^1 + ... + A^k
     friend BinaryMatrix geometricseries(BinaryMatrix A, long long k) {
         if (k == 0) return unit();
         if (k == 1) return A + unit();
