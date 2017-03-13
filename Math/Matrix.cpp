@@ -9,31 +9,34 @@ struct Matrix {
     Matrix() {
         memset(x, 0, sizeof(x));
     }
+    int* operator [] (int r) {
+        return x[r];
+    }
     static Matrix unit() {
         Matrix res;
-        for (int i = 0; i < MAXN; i++) res.x[i][i] = 1;
+        for (int i = 0; i < MAXN; i++) res[i][i] = 1;
         return res;
     }
-    Matrix operator + (Matrix A) {
+    friend Matrix operator + (Matrix A, Matrix B) {
         Matrix res;
         for (int i = 0; i < MAXN; i++) for (int j = 0; j < MAXN; j++) {
-            res.x[i][j] = x[i][j] + A.x[i][j];
-            if (res.x[i][j] >= MOD) res.x[i][j] -= MOD;
+            res[i][j] = A[i][j] + B[i][j];
+            if (res[i][j] >= MOD) res[i][j] -= MOD;
         }
         return res;
     }
-    Matrix operator * (Matrix A) {
+    friend Matrix operator * (Matrix A, Matrix B) {
         Matrix res;
         for (int i = 0; i < MAXN; i++) for (int k = 0; k < MAXN; k++) for (int j = 0; j < MAXN; j++) {
-            res.x[i][j] = (res.x[i][j] + (long long) x[i][k] * A.x[k][j]) % MOD;
+            res[i][j] = (res[i][j] + (long long) A[i][k] * B[k][j]) % MOD;
         }
         return res;
     }
-    Matrix operator ^ (long long k) {
+    friend Matrix operator ^ (Matrix A, long long k) {
         if (k == 0) return unit();
         Matrix res, tmp;
         for (int i = 0; i < MAXN; i++) for (int j = 0; j < MAXN; j++) {
-            res.x[i][j] = tmp.x[i][j] = x[i][j];
+            res[i][j] = tmp[i][j] = A[i][j];
         }
         k--;
         while (k) {
@@ -67,5 +70,5 @@ struct Matrix {
 };
 
 int main() {
-	return 0;
+    return 0;
 }
