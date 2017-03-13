@@ -46,7 +46,7 @@ struct Matrix {
     //Caculate geometric series: A^0 + A^1 + ... + A^k
     friend Matrix geometricseries(Matrix A, long long k) {
         if (k == 0) return unit();
-        if (k == 1) return A;
+        if (k == 1) return A + unit();
         vector<int> bit;
         while (k) {
             bit.push_back(k & 1);
