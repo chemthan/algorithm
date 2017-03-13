@@ -8,33 +8,36 @@ struct BinaryMatrix {
     BinaryMatrix() {
         memset(x, 0, sizeof(x));
     }
+    bitset<MAXN>& operator [] (int r) {
+        return x[r];
+    }
     static BinaryMatrix unit() {
         BinaryMatrix res;
-        for (int i = 0; i < MAXN; i++) res.x[i][i] = 1;
+        for (int i = 0; i < MAXN; i++) res[i][i] = 1;
         return res;
     }
-    BinaryMatrix operator + (BinaryMatrix A) {
+    friend BinaryMatrix operator + (BinaryMatrix A, BinaryMatrix B) {
         BinaryMatrix res;
         for (int i = 0; i < MAXN; i++) for (int j = 0; j < MAXN; j++) {
-            res.x[i][j] = x[i][j] ^ A.x[i][j];
+            res[i][j] = A[i][j] ^ B[i][j];
         }
         return res;
     }
-    BinaryMatrix operator * (BinaryMatrix A) {
+    friend BinaryMatrix operator * (BinaryMatrix A, BinaryMatrix B) {
         BinaryMatrix res, tmp;
         for (int i = 0; i < MAXN; i++) for (int j = 0; j < MAXN; j++) {
-            tmp.x[i][j] = A.x[j][i];
+            tmp[i][j] = B[j][i];
         }
         for (int i = 0; i < MAXN; i++) for (int j = 0; j < MAXN; j++) {
-            res.x[i][j] = (x[i] & tmp.x[j]).any();
+            res[i][j] = (A[i] & tmp[j]).any();
         }
         return res;
     }
-    BinaryMatrix operator ^ (long long k) {
+    friend BinaryMatrix operator ^ (BinaryMatrix A, long long k) {
         if (k == 0) return unit();
         BinaryMatrix res, tmp;
         for (int i = 0; i < MAXN; i++) for (int j = 0; j < MAXN; j++) {
-            res.x[i][j] = tmp.x[i][j] = x[i][j];
+            res[i][j] = tmp[i][j] = A[i][j];
         }
         k--;
         while (k) {
@@ -68,5 +71,5 @@ struct BinaryMatrix {
 };
 
 int main() {
-  return 0;
+    return 0;
 }
