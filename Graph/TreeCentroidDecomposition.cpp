@@ -2,7 +2,7 @@
 using namespace std;
 
 /*
-* Comlexity: O(nlogn)
+* Comlexity: O(NlogN)
 */
 const int MAXN = 1e5 + 5;
 int n;
