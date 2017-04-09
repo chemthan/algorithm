@@ -2,7 +2,6 @@
 using namespace std;
 
 template<class TK, class TV> struct HashTable {
-	
 	static const int MAXN = 10000000;
 	static const int MAGIC = 7654321;
 	int ptr;
