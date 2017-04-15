@@ -115,7 +115,9 @@ inline void insert(Node*& x, int key) {
 }
 inline Node* findkey(Node*& x, int key) {
 	normalize(x);
+    Node* p = nil;
 	while (x != nil) {
+        p = x;
 		pushdown(x);
 		if (x->key < key) x = x->r;
 		else if (key < x->key) x = x->l;
@@ -124,11 +126,14 @@ inline Node* findkey(Node*& x, int key) {
 			return x;
 		}
 	}
+    x = p, splay(x);
 	return nil;
 }
 inline Node* findpos(Node*& x, int pos) {
 	normalize(x);
-	while (1) {
+    Node* p = nil;
+	while (x != nil) {
+        p = x;
 		pushdown(x);
 		int k = x->l ? x->l->size + 1 : 1;
 		if (pos == k) {
@@ -138,6 +143,7 @@ inline Node* findpos(Node*& x, int pos) {
 		else if (pos < k) x = x->l;
 		else {x = x->r; pos -= k;}
 	}
+    x = p, splay(x);
 	return nil;
 }
 inline Node* join(Node* x, Node* y) {
