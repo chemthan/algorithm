@@ -166,7 +166,7 @@ inline void erase(Node*& x, int key) {
 	normalize(x);
 	Node* y = findkey(x, key);
 	y->l->p = y->r->p = nil;
-	x = join(y->p, y->r);
+	x = join(y->l, y->r);
 }
 inline void split(Node* x, int pos, Node*& l, Node*& r) {
 	normalize(x);
