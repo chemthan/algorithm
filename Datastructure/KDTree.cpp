@@ -19,7 +19,7 @@ template<class TC, class TD> struct KDTree {
     void build(int l, int r, int divX, pair<TC, TC> p[]) {
         if (l >= r) return;
         int m = l + r >> 1;
-        nth_element(p + l, p + m, p + r, divX ? KDTree::cmpX : KDTree::cmpY);
+        nth_element(p + l, p + m, p + r, divX ? cmpX : cmpY);
         tx[m] = p[m].first;
         ty[m] = p[m].second;
         build(l, m, !divX, p);
