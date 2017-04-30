@@ -47,6 +47,5 @@ int main() {
 		}
 	}
 	cout << "Correct!\n";
-	cout << "Correct!\n";
 	return 0;
 }
