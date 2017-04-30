@@ -4,7 +4,7 @@ using namespace std;
 /*
 * Complexity: O(logN)
 */
-const int MAXN = 2e6 + 5;
+const int MAXN = 3e6 + 5;
 int ptr;
 struct Node {
     Node *l, *r;
