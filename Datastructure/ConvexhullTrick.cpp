@@ -148,7 +148,7 @@ struct DynamicConvexhullTrick {
 };
 
 //O(logN) for updating, O(logN^2) for query
-const int MAXN = 100000 + 10;
+const int MAXN = 1e5 + 5;
 ConvexhullTrick st[MAXN << 2];
 void update(int node, int i, int L, int R, T a, T b) {
     if (i < L || i > R) return;
@@ -165,7 +165,7 @@ T query(int node, int l, int r, int L, int R, T x) {
 
 //O(logN) for updating, query
 struct LineSegmentTree {
-    static const int MAXN = 100000 + 10;
+    static const int MAXN = 1e5 + 5;
     struct Line {
         T a, b;
         Line() {a = 0; b = oo;}
