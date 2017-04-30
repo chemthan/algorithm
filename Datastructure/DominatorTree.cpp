@@ -2,7 +2,7 @@
 using namespace std;
 
 /*
-* Complexity: O((N + M)logN)
+* Complexity: O(NlogN)
 * Problems:
 1. http://codeforces.com/problemset/problem/757/F
 */
