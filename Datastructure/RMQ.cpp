@@ -7,7 +7,7 @@ template<class T, class cmp = less<T> > struct RMQ {
 	int n;
 	T a[MAXN];
 	T f[LOGN][MAXN];
-	
+
 	T best(T a, T b) {
 		if (cmp()(a, b)) return a;
 		return b;
