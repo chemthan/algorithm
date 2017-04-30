@@ -213,14 +213,14 @@ public:
 typedef FiniteField<int, mul<int>, dvd<int>, mod<int> > FF;
 
 int main() {
-	FF a = 7, b = 3;
-	cout << a / 11 * 11 << "\n";
-	cout << a + a << "\n";
-	cout << a++ << "\n";
-	cout << ++a << "\n";
-	a *= b;
-	cout << a << "\n";
-	a /= b;
-	cout << a << "\n";
-	return 0;
+    FF a = 7, b = 3;
+    cout << a / 11 * 11 << "\n";
+    cout << a + a << "\n";
+    cout << a++ << "\n";
+    cout << ++a << "\n";
+    a *= b;
+    cout << a << "\n";
+    a /= b;
+    cout << a << "\n";
+    return 0;
 }
