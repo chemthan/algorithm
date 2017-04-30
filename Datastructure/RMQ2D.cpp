@@ -1,6 +1,9 @@
 #include <bits/stdc++.h>
 using namespace std;
 
+/*
+* Complexity: O(logN^2)
+*/
 template<class T, class cmp = less<T> > struct RMQ2D {
     static const int MAXN = 1e3 + 5;
     static const int MAXM = 1e3 + 5;
