@@ -2,7 +2,7 @@
 using namespace std;
 
 template<class T, class cmp = less<T> > struct RMQ {
-    static const int MAXN = 100000 + 10;
+    static const int MAXN = 1e5 + 5;
     static const int LOGN = 20;
     int n;
     T a[MAXN];
