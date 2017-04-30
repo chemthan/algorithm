@@ -1,6 +1,9 @@
 #include <bits/stdc++.h>
 using namespace std;
 
+/*
+* Complexity: O(logN)
+*/
 template<class T> struct SegmenTree {
     static const int MAXN = 1e5 + 5;
     T st[MAXN << 2];
