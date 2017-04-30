@@ -4,9 +4,9 @@ using namespace std;
 /*
 Complexity: O(1) for updating, O(sqrt(n)) for query
 Problem:
- 1. http://codeforces.com/gym/100818/status/B
- 2. http://codeforces.com/gym/100962/status/F
- 3. https://www.codechef.com/problems/CUBTOWER
+1. http://codeforces.com/gym/100818/status/B
+2. http://codeforces.com/gym/100962/status/F
+3. https://www.codechef.com/problems/CUBTOWER
 */
 struct RangeQuery {
 	static const int maxn = 100000 + 10;
@@ -15,7 +15,7 @@ struct RangeQuery {
 	int b[maxn];
 	int block[magic];
 	vector<int> his;
-	
+
 	void clear() {
 		while (his.size()) {
 			int k = his.back();
