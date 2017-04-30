@@ -1,7 +1,7 @@
 #include <bits/stdc++.h>
 using namespace std;
 
-const int MAXN = 1e7 + 5;
+const int MAXN = 3e6 + 5;
 int ptr;
 struct Node {
     Node *l, *r;
