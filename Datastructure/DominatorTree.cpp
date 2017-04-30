@@ -1,6 +1,11 @@
 #include <bits/stdc++.h>
 using namespace std;
 
+/*
+* Complexity: O((N + M)logN)
+* Problems:
+1. http://codeforces.com/problemset/problem/757/F
+*/
 struct DominatorTree {
     static const int maxn = 1e5 + 5;
     int n, rt;
