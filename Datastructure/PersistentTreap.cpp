@@ -1,6 +1,9 @@
 #include <bits/stdc++.h>
 using namespace std;
 
+/*
+* Complexity: O(logN)
+*/
 const int MAXN = 3e6 + 5;
 int ptr;
 struct Node {
