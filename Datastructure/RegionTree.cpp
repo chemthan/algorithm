@@ -1,12 +1,6 @@
 #include <bits/stdc++.h>
 using namespace std;
 
-int ix;
-int compare(int x, int y) {
-    if (x > ix && y < ix) return 0;
-    if (x < ix && y > ix) return 1;
-    return x > y;
-}
 struct RegionTree {
     static const int maxn = 1e5 + 5;
     int n;
@@ -15,6 +9,13 @@ struct RegionTree {
     map<pair<int, int>, int> hs; //hs[a, b] index of region below diagonal (a, b)
     vector<pair<int, int> > g[maxn]; //edges of a region
     vector<int> tree[maxn]; //region tree
+    
+    static int ix;
+    static int compare(int x, int y) {
+        if (x > ix && y < ix) return 0;
+        if (x < ix && y > ix) return 1;
+        return x > y;
+    }
     
     void init(int n) {
         this->n = n;
@@ -73,4 +74,3 @@ struct RegionTree {
 int main() {
     return 0;
 }
-
