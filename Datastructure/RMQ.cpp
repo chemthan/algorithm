@@ -25,7 +25,6 @@ template<class T, class cmp = less<T> > struct RMQ {
 		return best(f[l][a], f[l][b - (1 << l) + 1]);
 	}
 };
-
 RMQ<int> rmq;
 
 int main() {
