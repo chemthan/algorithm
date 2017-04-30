@@ -2,8 +2,8 @@
 using namespace std;
 
 /*
-Complexity: amortized O(logn)
-Problems:
+* Complexity: amortized O(logn)
+* Problems:
 1. http://codeforces.com/gym/100796/problem/J
 2. https://www.codechef.com/problems/SUMBITS
 3. https://www.codechef.com/problems/BRCKMT
