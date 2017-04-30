@@ -2,7 +2,7 @@
 using namespace std;
 
 typedef long long T;
-const int maxn = 2e5 + 10;
+const int maxn = 2e5 + 5;
 const T oo = (T) 1e18;
 int n, q;
 int x[maxn];
