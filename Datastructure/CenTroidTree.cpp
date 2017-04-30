@@ -2,8 +2,7 @@
 using namespace std;
 
 /*
-* Complexity: NlogN
-* Space: NlogN
+* Complexity: O(NlogN)
 */
 struct CentroidTree {
     struct Info {
