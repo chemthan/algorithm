@@ -1,6 +1,9 @@
 #include <bits/stdc++.h>
 using namespace std;
 
+/*
+* Complexity: average O(logN)
+*/
 template<class TC, class TD> struct KDTree {
     static const int maxn = 1e5 + 5;
     static const TD oo = (TD) 1e18;
