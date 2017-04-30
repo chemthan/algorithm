@@ -1,6 +1,9 @@
 #include <bits/stdc++.h>
 using namespace std;
 
+/*
+* Complexity: O(logN)
+*/
 template<class T> struct FastSegmentTree {
     static const int MAXN = 1e5 + 5;
     static const int LOGN = 20;
