@@ -54,7 +54,6 @@ template<class T, class cmp = less<T> > struct RMQ2D {
         return res;
     }
 };
-
 RMQ2D<int> rmq;
 
 int main() {
