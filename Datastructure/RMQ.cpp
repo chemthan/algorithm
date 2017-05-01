@@ -1,6 +1,9 @@
 #include <bits/stdc++.h>
 using namespace std;
 
+/*
+* Complexity: build O(NlogN), query O(1)
+*/
 template<class T, class cmp = less<T> > struct RMQ {
     static const int MAXN = 1e5 + 5;
     static const int LOGN = 20 + 1;
