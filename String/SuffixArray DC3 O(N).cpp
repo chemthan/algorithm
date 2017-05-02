@@ -1,4 +1,4 @@
-#include <bits/stdc++.h
+#include <bits/stdc++.h>
 using namespace std;
 
 /*
@@ -129,7 +129,7 @@ struct SuffixArray {
     int n;
     unsigned char s[MAXN];
     
-    void init(char* t) {
+    void build(char* t) {
         n = strlen(t);
         for (int i = 0; i < n; i++) {
             s[i] = t[i];
