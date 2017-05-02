@@ -4,7 +4,7 @@ using namespace std;
 /*
 * Complexity: O(NlogN)
 * Problems:
-1. http://codeforces.com/problemset/problem/757/F
+* 1. http://codeforces.com/problemset/problem/757/F
 */
 struct DominatorTree {
     static const int maxn = 1e5 + 5;

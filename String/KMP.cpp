@@ -1,6 +1,9 @@
 #include <bits/stdc++.h>
 using namespace std;
 
+/*
+* Complexity: O(N)
+*/
 struct KMP {
     string s;
     int nsz;

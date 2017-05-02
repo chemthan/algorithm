@@ -3,10 +3,10 @@ using namespace std;
 
 /*
 * Complexity: O(1) for updating, O(sqrt(N)) for query
-* Problem:
-1. http://codeforces.com/gym/100818/status/B
-2. http://codeforces.com/gym/100962/status/F
-3. https://www.codechef.com/problems/CUBTOWER
+* Problems:
+* 1. http://codeforces.com/gym/100818/status/B
+* 2. http://codeforces.com/gym/100962/status/F
+* 3. https://www.codechef.com/problems/CUBTOWER
 */
 struct RangeQuery {
     static const int maxn = 1e5 + 5;

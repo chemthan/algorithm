@@ -1,7 +1,10 @@
 #include <bits/stdc++.h>
 using namespace std;
 
-//Index from 1
+/*
+* Complexity: O(NlogN)
+* Indexing from 1
+*/
 struct FullLinkCutTree {
     static const int maxn = 1e5 + 5;
     static const int oo = (int) 1e9;

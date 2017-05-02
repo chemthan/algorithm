@@ -2,13 +2,13 @@
 using namespace std;
 
 /*
-* Problems
-1. http://codeforces.com/contest/631/problem/E
-2. http://codeforces.com/contest/660/problem/F
-3. http://codeforces.com/gym/100739/problem/K
-4. http://codeforces.com/contest/455/problem/E
-5. https://www.codechef.com/problems/CYCLRACE
-6. http://vn.spoj.com/problems/VOMARIO/Problems
+* Problems:
+* 1. http://codeforces.com/contest/631/problem/E
+* 2. http://codeforces.com/contest/660/problem/F
+* 3. http://codeforces.com/gym/100739/problem/K
+* 4. http://codeforces.com/contest/455/problem/E
+* 5. https://www.codechef.com/problems/CYCLRACE
+* 6. http://vn.spoj.com/problems/VOMARIO/Problems
 */
 typedef long long T;
 const T oo = (T) 1e18;

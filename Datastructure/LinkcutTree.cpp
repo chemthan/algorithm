@@ -4,9 +4,9 @@ using namespace std;
 /*
 * Complexity: amortized O(logn)
 * Problems:
-1. http://codeforces.com/problemset/problem/650/E
-2. http://www.spoj.com/problems/DYNALCA
-3. http://www.spoj.com/problems/DYNACON1
+* 1. http://codeforces.com/problemset/problem/650/E
+* 2. http://www.spoj.com/problems/DYNALCA
+* 3. http://www.spoj.com/problems/DYNACON1
 */
 struct Node {
     Node();

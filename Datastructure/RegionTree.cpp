@@ -1,6 +1,9 @@
 #include <bits/stdc++.h>
 using namespace std;
 
+/*
+* Complexity: O(NlogN)
+*/
 struct RegionTree {
     static const int maxn = 1e5 + 5;
     int n;

@@ -1,10 +1,12 @@
 #include <bits/stdc++.h>
 using namespace std;
 
-//O(n)
-//Problem:
-//http://codeforces.com/problemset/problem/128/B
-const int MAXN = 100000 + 10;
+/*
+* Complexity: O(N)
+* Problem:
+* 1. http://codeforces.com/problemset/problem/128/B
+*/
+const int MAXN = 1e5 + 5;
 const int MAXC = 26;
 struct state {
 	int len, link, fpos;
@@ -129,9 +131,7 @@ struct SuffixAutomaton {
 		}
 		return st[vtx].fpos - str.size() + 1;
 	}
-};
-
-SuffixAutomaton sa;
+} sa;
 
 string lcs(string s, string t) {
 	sa.init();

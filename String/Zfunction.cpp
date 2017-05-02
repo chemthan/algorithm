@@ -1,42 +1,39 @@
 #include <bits/stdc++.h>
 using namespace std;
 
-//z[i] the length of the longest substr begins at i
-const int MAXN = 100000 + 10;
-char S[MAXN];
-int n;
-int z[MAXN];
-void zfunction() {
-	int L = 0, R = 0;
-	z[0] = n;
-	for (int i = 1; i < n; i++) {
-		if (i > R)
-		{
-			L = R = i;
-			while (R < n && S[R] == S[R - L]) R++;
-			z[i] = R - L; R--;
-		}
-		else
-		{
-			int k = i - L;
-			if (z[k] < R - i + 1) z[i] = z[k];
-			else
-			{
-				L = i;
-				while (R < n && S[R] == S[R - L]) R++;
-				z[i] = R - L; R--;
-			}
-		}
-	}
-}
+/*
+* Complexity: O(N)
+*/
+struct ZFuntion {
+    int n;
+    vector<int> f; //the length of the longest substr begins at i
+    void build(char* s) {
+        n = strlen(s), f.resize(n);
+        int l = 0, r = 0;
+        f[0] = n;
+        for (int i = 1; i < n; i++) {
+            if (i > r) {
+                l = r = i;
+                while (r < n && s[r] == s[r - l]) r++;
+                f[i] = r - l, r--;
+            }
+            else {
+                int k = i - l;
+                if (f[k] < r - i + 1) f[i] = f[k];
+                else {
+                    l = i;
+                    while (r < n && s[r] == s[r - l]) r++;
+                    f[i] = r - l, r--;
+                }
+            }
+        }
+    }
+} zf;
 
 int main() {
-	strcpy(S, "stringsrandom");
-	n = strlen(S);
-	zfunction();
-	for (int i = 0; i < n; i++) {
-		cout << z[i] << " ";
-	}
-	cout << "\n";
-	return 0;
+    zf.build((char*) "stringsrandom");
+    for (int i = 0; i < zf.n; i++) {
+        cout << zf.f[i] << " \n"[i == zf.n - 1];
+    }
+    return 0;
 }

@@ -4,7 +4,7 @@ using namespace std;
 /*
 * Complexity: O(logN^2)
 * Problems:
-1. http://codeforces.com/contest/341/problem/D
+* 1. http://codeforces.com/contest/341/problem/D
 */
 template<class T> struct RangeFenwick2D {
     int n, m;
