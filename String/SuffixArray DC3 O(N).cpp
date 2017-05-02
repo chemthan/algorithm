@@ -118,7 +118,6 @@ void buildSA(unsigned char* s, int* SA, int n, int K, int cs) {
     free(bkt);
     free(t);
 }
-
 struct SuffixArray {
     static const int MAXN = 1e5 + 5;
     static const int MAXC = 256;
@@ -155,7 +154,7 @@ struct SuffixArray {
         }
         for (int i = 0; i < n; i++) LCP[i] = PLCP[SA[i]];
     }
-};
+} sa;
 
 int main() {
     return 0;
