@@ -5,12 +5,11 @@ using namespace std;
 * Complexity: O(N)
 */
 struct Manachar {
-    static const int MAXN = 1e5 + 5;
     int n;
-    int d[MAXN]; //Radius of odd palindromes
-    int e[MAXN]; //Radius of even palindromes
+    vector<int> d; //Radius of odd palindromes
+    vector<int> e; //Radius of even palindromes
     int build(char* s) {
-        n = strlen(s);
+        n = strlen(s), d.resize(n), e.resize(n);
         int res = 0;
         int l = 0, r = -1;
         for (int i = 0; i < n; ++i) {
@@ -40,13 +39,11 @@ struct Manachar {
 
 int main() {
     cout << mnc.build((char*) "aaadefede") << "\n";
-    for (int i = 0; i < 9; i++) {
-        cout << mnc.d[i] << " ";
+    for (int i = 0; i < mnc.n; i++) {
+        cout << mnc.d[i] << " \n"[i == mnc.n - 1];
     }
-    cout << "\n";
-    for (int i = 0; i < 9; i++) {
-        cout << mnc.e[i] << " ";
+    for (int i = 0; i < mnc.n; i++) {
+        cout << mnc.e[i] << " \n"[i == mnc.n - 1];
     }
-    cout << "\n";
     return 0;
 }

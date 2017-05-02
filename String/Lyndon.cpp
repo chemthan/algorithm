@@ -4,7 +4,8 @@ using namespace std;
 /*
 * Complexity: O(N)
 */
-void lyndon(string s) {
+vector<string> lyndon(string s) {
+    vector<string> res;
     int n = s.size(), i = 0;
     while (i < n) {
         int j = i + 1, k = i;
@@ -14,15 +15,17 @@ void lyndon(string s) {
             j++;
         }
         while (i <= k) {
-            cout << s.substr(i, j - k) << " ";
+            res.push_back(s.substr(i, j - k));
             i += j - k;
         }
     }
-    cout << "\n";
+    return res;
 }
 
 int main() {
-    string s = "basdafswaer";
-    lyndon(s);
+    vector<string> res = lyndon("basdafswaer");
+    for (int i = 0; i < (int) res.size(); i++) {
+        cout << res[i] << " \n"[i == res.size() - 1];
+    }
     return 0;
 }
