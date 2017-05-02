@@ -9,7 +9,7 @@ using namespace std;
 * 3. https://www.codechef.com/problems/BRCKMT
 * 4. https://www.codechef.com/problems/FURGRAPH
 */
-const int MAXN = 1e6 + 5;
+const int MAXN = 1e5 + 5;
 int ptr;
 struct Node {
     Node *l, *r, *p;
@@ -17,8 +17,7 @@ struct Node {
     int rev, lz;
     Node();
     void clear();
-} mem[MAXN], *nil = (mem + ptr++);
-
+} mem[MAXN], *nil = mem + MAXN - 1;
 Node::Node() {
     clear();
 }
@@ -26,7 +25,6 @@ void Node::clear() {
     l = r = p = nil;
     size = 1, key = rev = lz = 0;
 }
-
 inline Node* newNode(int key) {
     mem[ptr].clear();
     mem[ptr].key = key;
