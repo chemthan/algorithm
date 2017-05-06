@@ -6,8 +6,8 @@ using namespace std;
 * Indexing from 1
 */
 struct HopcroftKarp {
-	static const int MAXV = 1000 + 5;
-	static const int MAXE = 1000000 + 5;
+	static const int MAXV = 1e3 + 5;
+	static const int MAXE = 1e6 + 5;
 	int nx, ny, E, adj[MAXE], nxt[MAXE], lst[MAXV], cur[MAXV], lev[MAXV], que[MAXV], matx[MAXV], maty[MAXV];
 	void init(int nx, int ny) {
 		this->nx = nx, this->ny = ny;
