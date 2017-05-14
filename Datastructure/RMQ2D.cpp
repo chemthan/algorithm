@@ -18,6 +18,12 @@ template<class T, class cmp = less<T> > struct RMQ2D {
         if (cmp()(a, b)) return a;
         return b;
     }
+    void init(int n, int m) {
+        this->n = n, this->m = m;
+    }
+    void upd(int u, int v, T x) {
+        a[u][v] = x;
+    }
     void build() {
         for (int k = 1; k <= n; k++) {
             for (int i = 1; i <= m; i++) {
@@ -59,10 +65,10 @@ RMQ2D<int> rmq;
 int main() {
     srand(time(NULL));
     for (int it = 0; it < 10; it++) {
-        rmq.n = rmq.m = rand() % 1000 + 1;
+        rmq.init(rand() % 1000 + 1, rand() % 1000 + 1);
         for (int i = 0; i < rmq.n; i++) {
             for (int j = 0; j < rmq.m; j++) {
-                rmq.a[i][j] = rand();
+                rmq.upd(i, j, rand());
             }
         }
         rmq.build();

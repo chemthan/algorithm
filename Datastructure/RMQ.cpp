@@ -5,15 +5,24 @@ using namespace std;
 * Complexity: build O(NlogN), query O(1)
 */
 template<class T, class cmp = less<T> > struct RMQ {
-    static const int MAXN = 1e5 + 5;
-    static const int LOGN = 20 + 1;
     int n;
-    T a[MAXN];
-    T f[LOGN][MAXN];
+    vector<T> a;
+    vector<vector<T> > f;
 
     T best(T a, T b) {
         if (cmp()(a, b)) return a;
         return b;
+    }
+    void init(int n) {
+        this->n = n;
+        int p = 1; while ((1 << p) < n) p++;
+        a.resize(n), f.resize(p + 1);
+        for (int i = 0; i < (int) f.size(); i++) {
+            f[i].resize(n);
+        }
+    }
+    void upd(int u, T x) {
+        a[u] = x;
     }
     void build() {
         for (int i = 0; i < n; i++) f[0][i] = a[i];
@@ -32,10 +41,10 @@ RMQ<int> rmq;
 
 int main() {
     srand(time(NULL));
-    for (int it = 0; it < 10; it++) {
-        rmq.n = rand() % 100000 + 1;
+    for (int it = 0; it < 2; it++) {
+        rmq.init(rand() % 100000 + 1);
         for (int i = 0; i < rmq.n; i++) {
-            rmq.a[i] = rand();
+            rmq.upd(i, rand());
         }
         rmq.build();
         for (int test = 0; test < 1000; test++) {
