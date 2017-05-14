@@ -11,7 +11,7 @@ using namespace std;
 * 5. https://www.codechef.com/problems/CYCLRACE
 */
 typedef long long T;
-const T oo = 1e18;
+const T oo = (T) 1e18;
 struct DynamicLineHull {
     struct Line {
         T a, b;
