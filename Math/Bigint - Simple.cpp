@@ -1,9 +1,9 @@
 #include <bits/stdc++.h>
 using namespace std;
 
-const int BASE = 1000000000;
-const int NBLOCK = 9;
 struct Bigint {
+    static const int BASE = 1000000000;
+    static const int NBLOCK = 9;
 	vector<int> data;
 	Bigint() {data.push_back(0);}
 	Bigint(long long x) {
@@ -21,7 +21,7 @@ Bigint operator + (Bigint a, Bigint b) {
 	int r = 0;
 	for (int i = 0; i < c.len(); i++) {
 		c[i] += ((i < b.len()) ? b[i] : 0) + r;
-		if ((r = (c[i] >= BASE))) c[i] -= BASE;
+		if ((r = (c[i] >= Bigint::BASE))) c[i] -= Bigint::BASE;
 	}
 	c.trim();
 	return c;
@@ -30,17 +30,17 @@ Bigint operator * (Bigint a, int m) {
 	long long r = 0;
 	for (int i = 0; i < a.len(); i++) {
 		r += (long long) a[i] * m;
-		a[i] = r % BASE;
-		r /= BASE;
+		a[i] = r % Bigint::BASE;
+		r /= Bigint::BASE;
 	}
-	while (r) a.data.push_back(r % BASE), r /= BASE;
+	while (r) a.data.push_back(r % Bigint::BASE), r /= Bigint::BASE;
 	a.trim();
 	return a;
 }
 pair<Bigint, int> divmod(Bigint a, int m) {
 	long long r = 0;
 	for (int i = a.len() - 1; i >= 0; i--) {
-		r = r * BASE + a[i];
+		r = r * Bigint::BASE + a[i];
 		a[i] = r / m;
 		r %= m;
 	}
@@ -60,8 +60,8 @@ Bigint operator * (const Bigint& a, const Bigint& b) {
 		long long carry = 0;
 		for (int j = 0; j < b.data.size() || carry > 0; j++) {
 			long long s = res[i + j] + carry + (long long) a.data[i] * (j < b.data.size() ? (long long) b.data[j] : 0);
-			res[i + j] = s % BASE;
-			carry = s / BASE;
+			res[i + j] = s % Bigint::BASE;
+			carry = s / Bigint::BASE;
 		}
 	}
 	res.trim();
@@ -69,7 +69,7 @@ Bigint operator * (const Bigint& a, const Bigint& b) {
 }
 ostream& operator << (ostream& stream, const Bigint& a) {
 	stream << (a.data.empty() ? 0 : a.data.back());
-	for (int i = (int) a.data.size() - 2; i >= 0; i--) stream << setw(NBLOCK) << setfill('0') << a.data[i];
+	for (int i = (int) a.data.size() - 2; i >= 0; i--) stream << setw(Bigint::NBLOCK) << setfill('0') << a.data[i];
 	return stream;
 }
 
