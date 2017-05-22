@@ -67,6 +67,7 @@ inline void pushdown(Node* x) {
 }
 inline void pushup(Node* x) {
     normalize(x);
+    if (x == nil) return;
     x->size = x->l->size + x->r->size + 1;
 }
 inline void rotate(Node* x) {
