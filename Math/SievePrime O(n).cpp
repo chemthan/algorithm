@@ -1,26 +1,26 @@
 #include <bits/stdc++.h>
 using namespace std;
 
-const int MAXN = 100000 + 5;
+const int MAXN = 1e5 + 5;
 int t[MAXN];
-int nprime;
-int prime[MAXN / 10];
+int npr;
+int pr[MAXN / 10];
 void build() {
-	memset(t, 0, sizeof(t));
-	nprime = 0;
-	for (int i = 2; i < MAXN; i++) {
-		if (!t[i]) {
-			prime[++nprime] = i;
-			t[i] = nprime;
-		}
-		for(int j = 1; j <= t[i] && (long long) i * prime[j] < MAXN; j++) t[i * prime[j]] = j;
-	}
+    memset(t, 0, sizeof(t));
+    npr = 0;
+    for (int i = 2; i < MAXN; i++) {
+        if (!t[i]) {
+            pr[++npr] = i;
+            t[i] = npr;
+        }
+        for(int j = 1; j <= t[i] && (long long) i * pr[j] < MAXN; j++) t[i * pr[j]] = j;
+    }
 }
 
 int main() {
-	build();
-	for (int i = 1; i <= 100; i++) {
-		cout << prime[i] << "\n";
-	}
-	return 0;
+    build();
+    for (int i = 1; i <= 100; i++) {
+        cout << pr[i] << " \n"[i == 100];
+    }
+    return 0;
 }
