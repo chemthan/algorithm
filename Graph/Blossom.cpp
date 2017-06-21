@@ -6,8 +6,8 @@ using namespace std;
 * Indexing from 1
 */
 struct Blossom {
-	static const int MAXV = 1000 + 5;
-	static const int MAXE = 1000000 + 5;
+	static const int MAXV = 1e3 + 5;
+	static const int MAXE = 1e6 + 5;
 	int n, E, lst[MAXV], next[MAXE], adj[MAXE];
 	int nxt[MAXV], mat[MAXV], dad[MAXV], col[MAXV];
 	int que[MAXV], qh, qt;

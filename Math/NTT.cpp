@@ -15,9 +15,11 @@ void fft(int a[], int p, int r, int n) {
     for (int m = n, h; h = m / 2, m >= 2; r = (long long) r * r % p, m = h) {
         for (int i = 0, w = 1; i < h; i++, w = (long long) w * r % p) {
             for (int j = i; j < n; j += m) {
-                int k = j + h, x = (a[j] - a[k] + p) % p;
+                int k = j + h;
+                int x = a[j] - a[k];
+                if (x < 0) x += p;
                 a[j] += a[k];
-                a[j] %= p;
+                if (a[j] >= p) a[j] -= p;
                 a[k] = (long long) w * x % p;
             }
         }
