@@ -21,6 +21,9 @@ struct Interpolation {
         }
         return r;
     }
+    void upd(int u, int v) {
+        a[u] = v;
+    }
     void build() {
         fac[0] = ifac[0] = 1;
         for (int i = 1; i < MAXN; i++) {
@@ -28,7 +31,8 @@ struct Interpolation {
             ifac[i] = fpow(fac[i], MOD - 2);
         }
     }
-    //Calculate P(x) of degree k - 1, k values at k distinct points are given
+    //Calculate P(x) of degree k - 1, k values form 1 to k
+    //P(i) = a[i]
     int calc(int x, int k) {
         prf[0] = suf[k + 1] = 1;
         for (int i = 1; i <= k; i++) {
