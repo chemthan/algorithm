@@ -12,27 +12,27 @@ using namespace std;
 */
 
 const int oo = (int) 1e9;
-const int MAXN = 1000 + 10;
-const int MAXM = 1000 + 10;
+const int MAXN = 1e3 + 5;
+const int MAXM = 1e3 + 5;
 int n;
 int f[MAXN][MAXM];
 int c[MAXN][MAXM];
 
 void divide(int i, int L, int R, int optL, int optR) {
     if (L > R) return;
-    int M = L + R >> 1, savek = optL;
+    int M = L + R >> 1, ptr = optL;
     f[i][M] = oo;
     for (int k = optL; k <= min(M - 1, optR); k++) {
         int cur = f[i - 1][k] + c[k][M];
         if (f[i][M] > cur) {
             f[i][M] = cur;
-            savek = k;
+            ptr = k;
         }
     }
-    divide(i, L, M - 1, optL, savek);
-    divide(i, M + 1, R, savek, optR);
+    divide(i, L, M - 1, optL, ptr);
+    divide(i, M + 1, R, ptr, optR);
 }
 
 int main() {
-	return 0;
+    return 0;
 }
