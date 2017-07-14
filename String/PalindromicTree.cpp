@@ -22,9 +22,9 @@ struct PalindromicTree {
     }
     void init() {
         p = 0;
-        newnode(0); newnode(-1);
+        newnode(0), newnode(-1);
         n = last = 0;
-        s[n] = -1; link[0] = 1;
+        s[n] = -1, link[0] = 1;
     }
     int getlink(int x) {
         while (s[n - len[x] - 1] != s[n]) {
@@ -37,7 +37,7 @@ struct PalindromicTree {
         c -= 'a';
         s[++n] = c;
         int cur = getlink(last);
-        if(next[cur][c] == 0) {
+        if (!next[cur][c]) {
             int now = newnode(len[cur] + 2);
             link[now] = next[getlink(link[cur])][c];
             next[cur][c] = now;
@@ -57,7 +57,9 @@ struct PalindromicTree {
         cnt[last]++;
     }
     void count() {
-        for (int i = p - 1; i >= 0; i--) cnt[link[i]] += cnt[i];
+        for (int i = p - 1; i >= 0; i--) {
+            cnt[link[i]] += cnt[i];
+        }
     }
 } pdt;
 
