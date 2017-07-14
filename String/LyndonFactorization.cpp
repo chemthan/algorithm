@@ -4,7 +4,7 @@ using namespace std;
 /*
 * Complexity: O(N)
 */
-vector<string> lyndon(string s) {
+vector<string> factorize(string s) {
     vector<string> res;
     int n = s.size(), i = 0;
     while (i < n) {

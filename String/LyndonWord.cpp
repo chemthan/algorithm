@@ -2,10 +2,10 @@
 using namespace std;
 
 /*
-* Find rotation position such that received string is the smallest
+* Find rotation position of Lyndon word
 * Complexity: O(N)
 */
-int minmove(char* s) {
+int calc(char* s) {
     int n = strlen(s);
     int x, y, i, j, u, v; //x is the smallest string before string y
     for (x = 0, y = 1; y < n; y++) {
