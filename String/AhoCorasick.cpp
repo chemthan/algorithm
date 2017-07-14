@@ -10,93 +10,85 @@ using namespace std;
 const int MAXN = 1e5 + 5;
 const int MAXC = 26;
 struct Node {
-    Node* parent;
-    Node* child[MAXC];
-    Node* bfail;
-    Node* gfail;
+    Node* p;
+    Node* c[MAXC];
+    Node *bf, *gf;
     int key;
     char val;
-    Node() {
-        parent = 0;
-        for (int i = 0; i < MAXC; i++) {
-            child[i] = 0;
-        }
-        bfail = 0;
-        gfail = 0;
-        key = -1;
-        val = 0;
-    }
+    Node();
+    void clear();
 } mem[MAXN], *ptr = mem;
-void init() {
+Node::Node() {
+    clear();
+}
+void Node::clear() {
+    p = 0;
+    for (int i = 0; i < MAXC; i++) c[i] = 0;
+    bf = gf = 0, key = -1, val = 0;
+}
+void clear() {
     Node* st = mem;
     while (st != ptr) {
-        st->parent = 0;
-        for (int i = 0; i < MAXC; i++) {
-            st->child[i] = 0;
-        }
-        st->bfail = 0;
-        st->gfail = 0;
-        st->key = -1;
-        st->val = 0;
+        st->clear();
         st++;
     }
     ptr = mem;
 }
 Node* insert(Node* x, char* s, int key) {
     while (*s) {
-        int c = *s - 'a';
-        if (!x->child[c]) {
-            x->child[c] = ptr++;
-            x->child[c]->parent = x;
-            x->child[c]->val = c;
+        int k = *s - 'a';
+        if (!x->c[k]) {
+            x->c[k] = ptr++;
+            x->c[k]->p = x;
+            x->c[k]->val = k;
         }
-        x = x->child[c];
+        x = x->c[k];
         s++;
     }
     x->key = key;
     return x;
 }
-void pushlink(Node* root) {
+void pushlink(Node* rt) {
     static Node* q[MAXN];
     int b = 0, e = 0;
-    q[e++] = root;
+    q[e++] = rt;
     while (b < e) {
         Node* x = q[b++];
         for (int i = 0; i < MAXC; i++) {
-            if (x->child[i]) q[e++] = x->child[i];
+            if (x->c[i]) q[e++] = x->c[i];
         }
-        if (x == root || x->parent == root) {
-            x->bfail = root;
-            x->gfail = 0;
+        if (x == rt || x->p == rt) {
+            x->bf = rt;
+            x->gf = 0;
         }
         else {
-            x->bfail = x->parent->bfail;
-            while (x->bfail != root && !x->bfail->child[x->val]) x->bfail = x->bfail->bfail;
-            if (x->bfail->child[x->val]) x->bfail = x->bfail->child[x->val];
-            if (x->bfail->key != -1) x->gfail = x->bfail;
-            else x->gfail = x->bfail->gfail;
-            //x->info += x->bfail->info;
+            x->bf = x->p->bf;
+            while (x->bf != rt && !x->bf->c[x->val]) x->bf = x->bf->bf;
+            if (x->bf->c[x->val]) x->bf = x->bf->c[x->val];
+            if (x->bf->key != -1) x->gf = x->bf;
+            else x->gf = x->bf->gf;
+            //x->info += x->bf->info;
         }
     }
 }
-void search(Node* root, char* s) {
-    Node* cur = root;
+void search(Node* rt, char* s) {
+    Node* cur = rt;
     while (*s) {
-        if (cur == root && !cur->child[*s - 'a']) {
+        if (cur == rt && !cur->c[*s - 'a']) {
             s++;
             continue;
         }
-        while (cur != root && !cur->child[*s - 'a']) cur = cur->bfail;
-        cur = cur->child[*s - 'a'];
+        while (cur != rt && !cur->c[*s - 'a']) cur = cur->bf;
+        cur = cur->c[*s - 'a'];
         if (!cur) {
-            cur = root;
+            cur = rt;
             continue;
         }
         Node* tmp = cur;
-        if (tmp->key == -1) tmp = tmp->gfail;
+        if (tmp->key == -1) tmp = tmp->gf;
         while (tmp) {
             cout << tmp->key << " ";
-            tmp = tmp->gfail;
+            tmp = tmp->gf;
         }
         s++;
     }
@@ -104,13 +96,13 @@ void search(Node* root, char* s) {
 }
 
 int main() {
-    Node* root = ptr++;
-    insert(root, (char*) "abab", 0);
-    insert(root, (char*) "aba", 1);
-    insert(root, (char*) "aabab", 2);
-    insert(root, (char*) "ababb", 3);
-    insert(root, (char*) "bab", 4);
-    pushlink(root);
-    search(root, (char*) "aabab");
+    Node* rt = ptr++;
+    insert(rt, (char*) "abab", 0);
+    insert(rt, (char*) "aba", 1);
+    insert(rt, (char*) "aabab", 2);
+    insert(rt, (char*) "ababb", 3);
+    insert(rt, (char*) "bab", 4);
+    pushlink(rt);
+    search(rt, (char*) "aabab");
     return 0;
 }
