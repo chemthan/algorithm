@@ -5,8 +5,8 @@ using namespace std;
 * Find rotation position of Lyndon word
 * Complexity: O(N)
 */
-int calc(char* s) {
-    int n = strlen(s);
+int calc(string s) {
+    int n = (int) s.size();
     int x, y, i, j, u, v; //x is the smallest string before string y
     for (x = 0, y = 1; y < n; y++) {
         i = u = x;
@@ -27,6 +27,6 @@ int calc(char* s) {
 }
 
 int main() {
-    cout << minmove((char*) "stringrandom") << "\n";
+    cout << calc("stringrandom") << "\n";
     return 0;
 }

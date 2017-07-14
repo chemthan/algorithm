@@ -23,7 +23,7 @@ vector<string> factorize(string s) {
 }
 
 int main() {
-    vector<string> res = lyndon("basdafswaer");
+    vector<string> res = factorize("basdafswaer");
     for (int i = 0; i < (int) res.size(); i++) {
         cout << res[i] << " \n"[i == res.size() - 1];
     }
