@@ -2,8 +2,7 @@
 using namespace std;
 
 /*
-* Complexity: O(E*sqrt(V))
-* Indexing from 1
+* Complexity: O(E * sqrt(V))
 */
 struct HopcroftKarp {
     static const int MAXV = 1e3 + 5;
@@ -11,25 +10,25 @@ struct HopcroftKarp {
     int nx, ny, E, adj[MAXE], nxt[MAXE], lst[MAXV], cur[MAXV], lev[MAXV], que[MAXV], matx[MAXV], maty[MAXV];
     void init(int nx, int ny) {
         this->nx = nx, this->ny = ny;
-        E = 0, fill_n(lst, nx + 1, -1);
-        fill_n(matx, nx + 1, -1), fill_n(maty, ny + 1, -1);
+        E = 0, fill_n(lst, nx, -1);
+        fill_n(matx, nx, -1), fill_n(maty, ny, -1);
     }
     void add(int x, int y) {
         adj[E] = y, nxt[E] = lst[x], lst[x] = E++;
     }
     int bfs() {
         int qsize = 0;
-        for (int x = 1; x <= nx; x++) if (matx[x] != -1) lev[x] = -1;
+        for (int x = 0; x < nx; x++) if (matx[x] != -1) lev[x] = 0;
         else {
-            lev[x] = 0;
+            lev[x] = 1;
             que[qsize++] = x;
         }
         int found = 0;
         for (int i = 0; i < qsize; i++) {
-            for (int x = que[i], e = lst[x]; e != -1; e = nxt[e]) {
+            for (int x = que[i], e = lst[x]; ~e; e = nxt[e]) {
                 int y = adj[e];
-                if (maty[y] == -1) found = 1;
-                else if (lev[maty[y]] == -1) {
+                if (!~maty[y]) found = 1;
+                else if (!lev[maty[y]]) {
                     lev[maty[y]] = lev[x] + 1;
                     que[qsize++] = maty[y];
                 }
@@ -38,9 +37,9 @@ struct HopcroftKarp {
         return found;
     }
     int dfs(int x) {
-        for (int &e = cur[x]; e != -1; e = nxt[e]) {
+        for (int& e = cur[x]; ~e; e = nxt[e]) {
             int y = adj[e];
-            if (maty[y] == -1 || (lev[maty[y]] == lev[x] + 1 && dfs(maty[y]))) {
+            if (!~maty[y] || (lev[maty[y]] == lev[x] + 1 && dfs(maty[y]))) {
                 matx[x] = y;
                 maty[y] = x;
                 return 1;
@@ -51,8 +50,8 @@ struct HopcroftKarp {
     int maxmat() {
         int res = 0;
         while (bfs()) {
-            for (int x = 1; x <= nx; x++) cur[x] = lst[x];
-            for (int x = 1; x <= nx; x++) if (matx[x] == -1) res += dfs(x);
+            for (int x = 0; x < nx; x++) cur[x] = lst[x];
+            for (int x = 0; x < nx; x++) if (!~matx[x]) res += dfs(x);
         }
         return res;
     }
@@ -60,9 +59,9 @@ struct HopcroftKarp {
 
 int main() {
     hopkarp.init(3, 3);
+    hopkarp.add(0, 1);
+    hopkarp.add(0, 2);
     hopkarp.add(1, 2);
-    hopkarp.add(1, 3);
-    hopkarp.add(2, 3);
     cout << hopkarp.maxmat() << "\n";
     return 0;
 }
