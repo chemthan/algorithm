@@ -63,7 +63,7 @@ struct SuffixArray {
     
     void buildlcp() {
         for (int i = 0, k = 0; i < n; i++) {
-            if (!ra[i]) lcp[ra[0][i]] = 0;
+            if (!ra[0][i]) lcp[ra[0][i]] = 0;
             else {
                 for (int j = sa[ra[0][i] - 1]; s[i + k] == s[j + k] && s[i + k] != SEP; k++);
                 lcp[ra[0][i]] = k;
