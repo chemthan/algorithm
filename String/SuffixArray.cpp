@@ -3,6 +3,8 @@ using namespace std;
 
 /*
 * Complexity: O(NlogN)
+* Problems:
+* 1. http://www.spoj.com/problems/SUBST1/
 */
 struct SuffixArray {
     static const int maxn = 1e5 + 5;
