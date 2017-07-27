@@ -5,67 +5,84 @@ using namespace std;
 * Complexity: O(NlogN)
 */
 struct SuffixArray {
-    static const int MAXN = 1e5 + 5;
+    static const int maxn = 1e5 + 5;
     static const char SEP = '$';
-    char T[MAXN];
+    
     int n;
-    int RA[MAXN], tmpRA[MAXN];
-    int SA[MAXN], tmpSA[MAXN];
-    int c[MAXN];
-    int Phi[MAXN], PLCP[MAXN];
-    int LCP[MAXN];
-    void build(char* str) {
-        strcpy(T, str);
-        n = strlen(T);
+    char s[maxn];
+    int sa[maxn], ra[2][maxn];
+    int lcp[maxn];
+    
+    void build(char* t) {
+        strcpy(s, t), n = strlen(s);
         for (int i = 0; i < n; i++) {
-            RA[i] = tmpRA[i] = 0;
-            SA[i] = tmpSA[i] = 0;
-            Phi[i] = PLCP[i] = LCP[i] = 0;
+            sa[i] = i, ra[0][i] = 0, ra[1][i] = s[i];
         }
-        constructSA();
-        computeLCP();
+        for (int d = 1; radixsort(); d <<= 1) {
+            for (int i = 0; i < n; i++) {
+                if (i + d < n) {
+                    ra[1][i] = ra[0][i + d];
+                }
+                else {
+                    ra[1][i] = 0;
+                }
+            }
+        }
+        buildlcp();
     }
-    void countingsort(int k) {
-        int sum = 0, maxi = max(300, n);
-        memset(c, 0, sizeof(c));
-        for (int i = 0; i < n; i++) c[i + k < n ? RA[i + k] : 0]++;
-        for (int i = 0; i < maxi; i++) {
-            int t = c[i]; c[i] = sum; sum += t;
+    
+    int radixsort() {
+        static int p[maxn];
+        static int tmpsa[maxn];
+        static int tmpra[maxn];
+        int mx = max(256, n);
+        for (int step = 1; step >= 0; step--) {
+            fill_n(p, mx, 0);
+            for (int i = 0; i < n; i++) {
+                p[ra[step][i] + 1]++;
+                tmpsa[i] = sa[i];
+            }
+            partial_sum(p, p + mx, p);
+            for (int i = 0; i < n; i++) {
+                sa[p[ra[step][tmpsa[i]]]++] = tmpsa[i];
+            }
         }
-        for (int i = 0; i < n; i++) tmpSA[c[SA[i] + k < n ? RA[SA[i] + k] : 0]++] = SA[i];
-        for (int i = 0; i < n; i++) SA[i] = tmpSA[i];
+        int ptr = 0;
+        tmpra[sa[0]] = ptr;
+        for (int i = 1; i < n; i++) {
+            int u = sa[i - 1];
+            int v = sa[i];
+            if (ra[0][u] < ra[0][v] || ra[1][u] < ra[1][v]) {
+                ptr++;
+            }
+            tmpra[v] = ptr;
+        }
+        for (int i = 0; i < n; i++) ra[0][i] = tmpra[i];
+        return ptr < n - 1;
     }
-    void constructSA() {
-        int r;
-        for (int i = 0; i < n; i++) RA[i] = T[i];
-        for (int i = 0; i < n; i++) SA[i] = i;
-        for (int k = 1; k < n; k <<= 1) {
-            countingsort(k);
-            countingsort(0);
-            tmpSA[SA[0]] = r = 0;
-            for (int i = 1; i < n; i++) tmpRA[SA[i]] = (RA[SA[i]] == RA[SA[i - 1]] && RA[SA[i] + k] == RA[SA[i - 1] + k]) ? r : ++r;
-            for (int i = 0; i < n; i++) RA[i] = tmpRA[i];
-            if (RA[SA[n - 1]] == n - 1) break;
+    
+    void buildlcp() {
+        for (int i = 0, k = 0; i < n; i++) {
+            if (!ra[i]) lcp[ra[0][i]] = 0;
+            else {
+                for (int j = sa[ra[0][i] - 1]; s[i + k] == s[j + k] && s[i + k] != SEP; k++);
+                lcp[ra[0][i]] = k;
+                k = max(k - 1, 0);
+            }
         }
-    }
-    void computeLCP() {
-        int L = 0;
-        Phi[SA[0]] = -1;
-        for (int i = 1; i < n; i++) Phi[SA[i]] = SA[i - 1];
-        for (int i = 0; i < n; i++) {
-            if (!~Phi[i]) {PLCP[i] = 0; continue;}
-            while (T[i + L] == T[Phi[i] + L] && T[i + L] != SEP) L++;
-            PLCP[i] = L;
-            L = max(L - 1, 0);
-        }
-        for (int i = 0; i < n; i++) LCP[i] = PLCP[SA[i]];
     }
 } sa;
 
 int main() {
-    sa.build((char*) "stringsrandom$");
-    for (int i = 0; i < sa.n; i++) cout << sa.SA[i] << " \n"[i == sa.n - 1];
-    for (int i = 0; i < sa.n; i++) cout << sa.RA[i] << " \n"[i == sa.n - 1];
-    for (int i = 0; i < sa.n; i++) cout << sa.LCP[i] << " \n"[i == sa.n - 1];
+    sa.build((char*) "randomstring");
+    for (int i = 0; i < sa.n; i++) cout << sa.sa[i] << " \n"[i == sa.n - 1];
+    for (int i = 0; i < sa.n; i++) cout << sa.ra[0][i] << " \n"[i == sa.n - 1];
+    for (int i = 0; i < sa.n; i++) cout << sa.lcp[i] << " \n"[i == sa.n - 1];
+    /*
+    Expected:
+        12 1 3 11 9 5 2 10 4 0 8 6 7
+        9 1 6 2 8 5 11 12 10 4 7 3 0
+        0 0 0 0 0 0 0 1 0 0 1 0 0
+    */
     return 0;
 }

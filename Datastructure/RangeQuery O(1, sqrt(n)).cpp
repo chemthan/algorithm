@@ -23,7 +23,7 @@ struct RangeQuery {
             his.pop_back();
         }
     }
-    int upd(int n, int val) {
+    void upd(int n, int val) {
         if (!(b[n]++)) {
             his.push_back(n);
         }
@@ -73,4 +73,3 @@ int main() {
     cout << "Correct!\n";
     return 0;
 }
-
