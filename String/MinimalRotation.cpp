@@ -4,6 +4,8 @@ using namespace std;
 /*
 * Find minimal rotation
 * Complexity: O(N)
+* Problems:
+* 1. http://www.spoj.com/problems/MINMOVE/
 */
 
 int min_rotation(string s) {
