@@ -7,7 +7,7 @@ using namespace std;
 struct HopcroftKarp {
     static const int MAXV = 1e3 + 5;
     static const int MAXE = 1e6 + 5;
-    int nx, ny, E, adj[MAXE], nxt[MAXE], lst[MAXV], cur[MAXV], lev[MAXV], que[MAXV], matx[MAXV], maty[MAXV];
+    int nx, ny, E, adj[MAXE], nxt[MAXE], lst[MAXV], ptr[MAXV], lev[MAXV], que[MAXV], matx[MAXV], maty[MAXV];
     void init(int nx, int ny) {
         this->nx = nx, this->ny = ny;
         E = 0, fill_n(lst, nx, -1);
@@ -37,7 +37,7 @@ struct HopcroftKarp {
         return found;
     }
     int dfs(int x) {
-        for (int& e = cur[x]; ~e; e = nxt[e]) {
+        for (int& e = ptr[x]; ~e; e = nxt[e]) {
             int y = adj[e];
             if (!~maty[y] || (lev[maty[y]] == lev[x] + 1 && dfs(maty[y]))) {
                 matx[x] = y;
@@ -50,7 +50,7 @@ struct HopcroftKarp {
     int maxmat() {
         int res = 0;
         while (bfs()) {
-            for (int x = 0; x < nx; x++) cur[x] = lst[x];
+            for (int x = 0; x < nx; x++) ptr[x] = lst[x];
             for (int x = 0; x < nx; x++) if (!~matx[x]) res += dfs(x);
         }
         return res;
