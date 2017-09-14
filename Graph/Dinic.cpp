@@ -21,19 +21,19 @@ template<class T, T oo> struct Dinic {
         adj[E] = u, flw[E] = 0, cap[E] = c2, nxt[E] = lst[v], lst[v] = E++;
     }
     int bfs() {
-        fill_n(lev, n, -1), lev[s] = 0;
+        fill_n(lev, n, 0), lev[s] = 1;
         int qsize = 0;
         que[qsize++] = s;
         for (int i = 0; i < qsize; i++) {
             for (int u = que[i], e = lst[u]; ~e; e = nxt[e]) {
                 int v = adj[e];
-                if (flw[e] < cap[e] && !~lev[v]) {
+                if (flw[e] < cap[e] && !lev[v]) {
                     lev[v] = lev[u] + 1;
                     que[qsize++] = v;
                 }
             }
         }
-        return lev[t] != -1;
+        return lev[t];
     }
     T dfs(int u, T bot) {
         if (u == t) return bot;
@@ -47,13 +47,31 @@ template<class T, T oo> struct Dinic {
         }
         return 0;
     }
-    T maxflow() {
+    T maxflow(int _s = -1, int _t = -1) {
+        if (~_s) s = _s;
+        if (~_t) t = _t;
+        for (int e = 0; e < E; e++) {
+            flw[e] = 0;
+        }
         T total = 0;
         while (bfs()) {
             for (int i = 0; i < n; i++) ptr[i] = lst[i];
             for (T delta = dfs(s, oo); delta > 0; delta = dfs(s, oo)) total += delta;
         }
         return total;
+    }
+    vector<pair<pair<int, int>, T> > gomory_hu() {
+        vector<pair<pair<int, int>, T> > tree;
+        vector<int> p(n);
+        for (int u = 1; u < n; u++) {
+            tree.push_back(make_pair(make_pair(p[u], u), maxflow(u, p[u])));
+            for (int v = u + 1; v < n; ++v) {
+                if (lev[v] && p[v] == p[u]) {
+                    p[v] = u;
+                }
+            }
+        }
+        return tree;
     }
 };
 Dinic<int, (int) 1e9> dinic;
