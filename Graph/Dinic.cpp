@@ -47,9 +47,9 @@ template<class T, T oo> struct Dinic {
         }
         return 0;
     }
-    T maxflow(int _s = -1, int _t = -1) {
-        if (~_s) s = _s;
-        if (~_t) t = _t;
+    T maxflow(int ss = -1, int tt = -1) {
+        if (~ss) s = ss;
+        if (~ss) t = tt;
         for (int e = 0; e < E; e++) {
             flw[e] = 0;
         }

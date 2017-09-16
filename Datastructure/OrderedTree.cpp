@@ -4,7 +4,7 @@ using namespace std;
 /*
 * Complexity: O(logN)
 */
-template<class TE, class TS> struct KthTree {
+template<class TE, class TS> struct OrderedTree {
     static const int MAXN = 1e5 + 5;
     static const int LOGN = 20;
     int tr[LOGN + 1][MAXN];
@@ -47,14 +47,14 @@ template<class TE, class TS> struct KthTree {
         return res;
     }
 };
-KthTree<int, long long> ktree;
+OrderedTree<int, long long> odtree;
 
 int main() {
-    ktree.insert(0, 0), ktree.insert(1, 1), ktree.insert(1, 1);
-    ktree.insert(1, 1), ktree.insert(1, 1), ktree.insert(1, 1);
-    ktree.insert(2, 2);
-    cout << ktree.kthsum(7) << "\n"; //Expected 7
-    ktree.erase(2, 2);
-    cout << ktree.kthsum(6) << "\n"; //Expected 5
+    odtree.insert(0, 0), odtree.insert(1, 1), odtree.insert(1, 1);
+    odtree.insert(1, 1), odtree.insert(1, 1), odtree.insert(1, 1);
+    odtree.insert(2, 2);
+    cout << odtree.kthsum(7) << "\n"; //Expected 7
+    odtree.erase(2, 2);
+    cout << odtree.kthsum(6) << "\n"; //Expected 5
     return 0;
 }
