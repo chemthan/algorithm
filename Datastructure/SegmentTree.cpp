@@ -8,33 +8,33 @@ template<class T> struct SegmenTree {
     static const int MAXN = 1e5 + 5;
     T st[MAXN << 2];
     T lz[MAXN << 2];
-    void pushdown(int node, int L, int R) {
-        if (lz[node]) {
-            st[node] += (R - L + 1) * lz[node];
+    void pushdown(int p, int L, int R) {
+        if (lz[p]) {
+            st[p] += (R - L + 1) * lz[p];
             if (L < R) {
-                lz[node << 1] += lz[node];
-                lz[node << 1 | 1] += lz[node];
+                lz[p << 1] += lz[p];
+                lz[p << 1 | 1] += lz[p];
             }
-            lz[node] = 0;
+            lz[p] = 0;
         }
     }
-    void upd(int node, int l, int r, int L, int R, T val) {
-        pushdown(node, L, R);
+    void upd(int p, int l, int r, int L, int R, T val) {
+        pushdown(p, L, R);
         if (l > R || r < L) return;
         if (l <= L && r >= R) {
-            lz[node] = val;
-            pushdown(node, L, R);
+            lz[p] = val;
+            pushdown(p, L, R);
             return;
         }
-        upd(node << 1, l, r, L, L + R >> 1, val);
-        upd(node << 1 | 1, l, r, (L + R >> 1) + 1, R, val);
-        st[node] = st[node << 1] + st[node << 1 | 1];
+        upd(p << 1, l, r, L, L + R >> 1, val);
+        upd(p << 1 | 1, l, r, (L + R >> 1) + 1, R, val);
+        st[p] = st[p << 1] + st[p << 1 | 1];
     }
-    T query(int node, int l, int r, int L, int R) {
-        pushdown(node, L, R);
+    T query(int p, int l, int r, int L, int R) {
+        pushdown(p, L, R);
         if (l > R || r < L) return 0;
-        if (l <= L && r >= R) return st[node];
-        return query(node << 1, l, r, L, L + R >> 1) + query(node << 1 | 1, l, r, (L + R >> 1) + 1, R);
+        if (l <= L && r >= R) return st[p];
+        return query(p << 1, l, r, L, L + R >> 1) + query(p << 1 | 1, l, r, (L + R >> 1) + 1, R);
     }
 };
 SegmenTree<int> seg;
