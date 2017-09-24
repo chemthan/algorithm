@@ -27,8 +27,14 @@ struct Matrix {
     }
     friend Matrix operator * (Matrix A, Matrix B) {
         Matrix res;
-        for (int i = 0; i < MAXN; i++) for (int k = 0; k < MAXN; k++) for (int j = 0; j < MAXN; j++) {
-            res[i][j] = (res[i][j] + (long long) A[i][k] * B[k][j]) % MOD;
+        for (int i = 0; i < MAXN; i++) for (int j = 0; j < MAXN; j++) {
+            long long SQMOD = (long long) MOD * MOD;
+            long long sum = 0;
+            for (int k = 0; k < MAXN; k++) {
+                sum += (long long) A[i][k] * B[k][j];
+                if (sum >= SQMOD) sum -= SQMOD;
+            }
+            res[i][j] = sum % MOD;
         }
         return res;
     }
