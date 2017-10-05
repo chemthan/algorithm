@@ -35,18 +35,19 @@ void rotate(node_t* x) {
     node_t *p = x->p, *g = p->p;
     int l = left(x);
     setchild(l ? x->r : x->l, p, l);
-    if (g) setchild(x, g, left(p));
+    if (!isrt(p)) setchild(x, g, left(p));
     else x->p = g;
     setchild(p, x, !l);
     pull(p);
 }
 
 node_t* splay(node_t* x) {
+    push(x);
     while (!isrt(x)) {
         node_t *p = x->p, *g = p->p;
         if (g) push(g);
         push(p), push(x);
-        if (!isrt(p)) rotate(left(x) == left(p) ? x : p);
+        if (!isrt(p)) rotate(left(x) != left(p) ? x : p);
         rotate(x);
     }
     pull(x);
@@ -55,10 +56,10 @@ node_t* splay(node_t* x) {
 
 node_t* join(node_t* x, node_t* y) {
     if (!x) return y;
+    while (x->r) push(x), x = x->r;
     push(x);
-    while (x->r) x = x->r, push(x);
     setchild(y, x, 0);
-    return splay(x);;
+    return splay(x);
 }
 
 void split(node_t*& x, node_t*& y, int pos) {
