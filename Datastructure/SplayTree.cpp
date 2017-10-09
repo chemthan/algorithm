@@ -62,33 +62,34 @@ node_t* join(node_t* x, node_t* y) {
     return splay(x);
 }
 
-void split(node_t*& x, node_t*& y, int pos) {
+void split(node_t* t, node_t*& x, node_t*& y, int pos) {
     if (pos < 0) {
-        swap(x, y), x = 0;
+    		x = 0, y = t;
         return;
     }
     if (pos == size(x) - 1) {
-        y = 0;
+        x = t, y = 0;
         return;
     }
-    while (size(x->l) != pos) {
-        push(x);
-        if (size(x->l) > pos) {
-            x = x->l;
+    while (size(t->l) != pos) {
+        push(t);
+        if (size(t->l) > pos) {
+            t = t->l;
         }
         else {
-            pos -= size(x->l) + 1;
-            x = x->r;
+            pos -= size(t->l) + 1;
+            t = t->r;
         }
     }
-    splay(x);
+    splay(t);
+    x = t;
     y = x->r;
     x->r = y->p = 0;
     pull(x);
 }
 
-void split(node_t*& x, node_t*& y, node_t*& z, int l, int r) {
-    split(x, y, l - 1), split(y, z, r - l);
+void split(node_t* t, node_t*& x, node_t*& y, node_t*& z, int l, int r) {
+    split(t, x, y, l - 1), split(y, y, z, r - l);
 }
 
 void trace(node_t* x) {

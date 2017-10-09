@@ -4,86 +4,77 @@ using namespace std;
 /*
 * Complexity: O(logN)
 */
-const int MAXN = 3e6 + 5;
-int ptr;
-struct Node {
-    Node *l, *r;
-    int key, size;
-} mem[MAXN], *nil = mem + MAXN - 1;
-void init() {
-    nil->l = nil->r = nil;
-    nil->size = 0;
+struct node_t {
+    node_t *l, *r;
+    int h, size, key;
+    node_t(int key = 0, node_t* l = 0, node_t* r = 0) : l(l), r(r), h(rand()), size(1), key(key) {}
+};
+int size(node_t* x) {
+	return x ? x->size : 0;
 }
-int rd() {
-    static int seed = 0;
-    seed = (seed * 1001 + 100621) % 999983;
-    return seed;
+void push(node_t* x) {
 }
-void pushdown(Node* x) {
-    if (x == nil) return;
+void pull(node_t* x) {
+    x->size = size(x->l) + 1 + size(x->r);
 }
-void pushup(Node* x) {
-    if (x == nil) return;
-    x->size = x->l->size + 1 + x->r->size;
-}
-Node* newNode(int key, Node* l = nil, Node* r = nil) {
-    Node* x = mem + (ptr++);
-    x->l = l, x->r = r, x->key = key;
-    pushup(x);
-    return x;
-}
-Node* join(Node* l, Node* r) {
-    if (l == nil) return r;
-    if (r == nil) return l;
-    if (rd() % (l->size + r->size) < l->size) {
-        pushdown(l);
-        return newNode(l->key, l->l, join(l->r, r));
+node_t* join(node_t* l, node_t* r) {
+    if (!l) return r;
+    if (!r) return l;
+    if (l->h < r->h) {
+        push(l);
+        node_t* res = new node_t(l->key, l->l, join(l->r, r));
+        pull(res);
+        return res;
     }
-    pushdown(r);
-    return newNode(r->key, join(l, r->l), r->r);
+    push(r);
+    node_t* res = new node_t(r->key, join(l, r->l), r->r);
+    pull(res);
+    return res;
 }
-Node* splitL(Node* x, int pos) {
-    if (x == nil || !pos) return nil;
-    pushdown(x);
+node_t* splitL(node_t* x, int pos) {
+    if (!x || !pos) return 0;
+    push(x);
     if (x->l->size >= pos) return splitL(x->l, pos);
-    return newNode(x->key, x->l, splitL(x->r, pos - x->l->size - 1));
+    node_t* res = new node_t(x->key, x->l, splitL(x->r, pos - x->l->size - 1));
+    pull(res);
+    return res;
 }
-Node* splitR(Node* x, int pos) {
-    if (x == nil || !pos) return nil;
-    pushdown(x);
+node_t* splitR(node_t* x, int pos) {
+    if (!x || !pos) return 0;
+    push(x);
     if (x->r->size >= pos) return splitR(x->r, pos);
-    return newNode(x->key, splitR(x->l, pos - 1 - x->r->size), x->r);
+    node_t* res = new node_t(x->key, splitR(x->l, pos - 1 - x->r->size), x->r);
+    pull(res);
+    return res;
 }
-Node* split(Node* x, int pos1, int pos2) {
-    x = splitL(x, pos2);
-    return splitR(x, pos2 - pos1 + 1);
+node_t* split(node_t* x, int l, int r) {
+    x = splitL(x, r);
+    return splitR(x, r - l + 1);
 }
-int depth(Node* x) {
-    if (x == nil) return 0;
-    pushdown(x);
+int depth(node_t* x) {
+    if (!x) return 0;
+    push(x);
     return 1 + max(depth(x->l), depth(x->r));
 }
-void trace(Node* x) {
-    if (x == nil) return;
-    pushdown(x);
+void trace(node_t* x) {
+    if (!x) return;
+    push(x);
     trace(x->l);
     cout << x->key << " ";
     trace(x->r);
 }
 
 const int maxn = 1e5 + 5;
-Node* node[maxn];
+node_t* node[maxn];
 
 int main() {
-    init();
-    node[0] = nil;
-    node[1] = join(node[0], newNode(5));
-    node[2] = join(newNode(1), node[1]);
-    node[3] = join(newNode(2), node[1]);
+    node[1] = join(node[0], new node_t(5));
+    node[2] = join(new node_t(1), node[1]);
+    node[3] = join(new node_t(2), node[1]);
     trace(node[1]); cout << "\n";
     trace(node[2]); cout << "\n";
     trace(node[3]); cout << "\n";
-    node[4] = join(node[2], newNode(10));
+    node[4] = join(node[2], new node_t(10));
     trace(node[4]); cout << "\n";
     return 0;
 }
