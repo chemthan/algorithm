@@ -10,7 +10,7 @@ struct node_t {
     node_t(int key = 0, node_t* l = 0, node_t* r = 0) : l(l), r(r), h(rand()), size(1), key(key) {}
 };
 int size(node_t* x) {
-	return x ? x->size : 0;
+    return x ? x->size : 0;
 }
 void push(node_t* x) {
 }
