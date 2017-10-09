@@ -90,7 +90,6 @@ void trace(node_t* x) {
     cout << x->key << " ";
     trace(x->r);
 }
-
 int main() {
 	srand(time(NULL));
     node_t* rt = 0;
