@@ -94,6 +94,7 @@ void split(node_t* t, node_t*& x, node_t*& y, node_t*& z, int l, int r) {
 
 void trace(node_t* x) {
     if (!x) return;
+    push(x);
     trace(x->l);
     cout << x->key << " ";
     trace(x->r);
