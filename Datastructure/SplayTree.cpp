@@ -64,10 +64,10 @@ node_t* join(node_t* x, node_t* y) {
 
 void split(node_t* t, node_t*& x, node_t*& y, int pos) {
     if (pos < 0) {
-    		x = 0, y = t;
+    	x = 0, y = t;
         return;
     }
-    if (pos == size(x) - 1) {
+    if (pos == size(t) - 1) {
         x = t, y = 0;
         return;
     }
