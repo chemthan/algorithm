@@ -1,80 +1,116 @@
 #include <bits/stdc++.h>
 using namespace std;
 
-const int MAXN = 1 << 20;
 const int pr[3] = {1004535809, 1007681537, 1012924417}; //2 ^ 20 * {958, 961, 966} + 1
 const int pw[3] = {3, 3, 5}; //primitive roots
+struct NTT {
+    static const int MAXF = 1 << 18;
+    int pr;
+    int rts[MAXF + 1];
+    int bitrev[MAXF];
 
-int add(int a, int b, int p = (int) 1e9 + 7) {return a + b - (a + b >= p) * p;}
-int sub(int a, int b, int p = (int) 1e9 + 7) {return a - b + (a - b < 0) * p;}
-int mul(int a, int b, int p = (int) 1e9 + 7) {return ((long long) a * b) % p;}
-int fpow(int a, int k, int p = (int) 1e9 + 7) {int r = 1; while (k) {if (k & 1) r = mul(r, a, p); k >>= 1; a = mul(a, a, p);} return r;}
-int inv(int a, int p = (int) 1e9 + 7) {return fpow(a, p - 2, p);}
-
-void fft(int a[], int p, int r, int n) {
-    for (int m = n, h; h = m / 2, m >= 2; r = (long long) r * r % p, m = h) {
-        for (int i = 0, w = 1; i < h; i++, w = (long long) w * r % p) {
-            for (int j = i; j < n; j += m) {
-                int k = j + h;
-                int x = a[j] - a[k];
-                if (x < 0) x += p;
-                a[j] += a[k];
-                if (a[j] >= p) a[j] -= p;
-                a[k] = (long long) w * x % p;
+    int fpow(int a, int k, int p) {
+        if (!k) return 1;
+        int res = a, tmp = a;
+        k--;
+        while (k) {
+            if (k & 1) {
+                res = (long long) res * tmp % p;
+            }
+            tmp = (long long) tmp * tmp % p;
+            k >>= 1;
+        }
+        return res;
+    }
+    void init(int pr, int pw) {
+        this->pr = pr;
+        int k = 0; while ((1 << k) < MAXF) k++;
+        bitrev[0] = 0;
+        for (int i = 1; i < MAXF; i++) {
+            bitrev[i] = bitrev[i >> 1] >> 1 | ((i & 1) << k - 1);
+        }
+        pw = fpow(pw, (pr - 1) / MAXF, pr);
+        rts[0] = 1;
+        for (int i = 1; i <= MAXF; i++) {
+            rts[i] = (long long) rts[i - 1] * pw % pr;
+        }
+    }
+    void dft(int a[], int n, int sign) {
+        int d = 0; while ((1 << d) * n != MAXF) d++;
+        for (int i = 0; i < n; i++) {
+            if (i < (bitrev[i] >> d)) {
+                swap(a[i], a[bitrev[i] >> d]);
+            }
+        }
+        for (int len = 2; len <= n; len <<= 1) {
+            int delta = MAXF / len * sign;
+            for (int i = 0; i < n; i += len) {
+                int *x = a + i,*y = a + i + (len >> 1), *w = sign > 0 ? rts : rts + MAXF;
+                for (int k = 0; k + k < len; k++) {
+                    int z = (long long) *y * *w % pr;
+                    *y = *x - z, *x = *x + z;
+                    if (*y < 0) *y += pr;
+                    if (*x >= pr) *x -= pr;
+                    x++, y++, w += delta;
+                }
+            }
+        }
+        if (sign < 0) {
+            int in = fpow(n, pr - 2, pr);
+            for (int i = 0; i < n; i++) {
+                a[i] = (long long) a[i] * in % pr;
             }
         }
     }
-    for (int i = 0, j = 1; j < n - 1; j++) {
-        for (int k = n / 2; k > (i ^= k); k /= 2);
-        if (j < i) swap(a[i], a[j]);
+    void multiply(int a[], int b[], int na, int nb, int c[]) {
+        static int fa[MAXF], fb[MAXF];
+        int n = na + nb - 1; while (n != (n & -n)) n += n & -n;
+        for (int i = 0; i < n; i++) fa[i] = fb[i] = 0;
+        for (int i = 0; i < na; i++) fa[i] = a[i];
+        for (int i = 0; i < nb; i++) fb[i] = b[i];
+        dft(fa, n, 1), dft(fb, n, 1);
+        for (int i = 0; i < n; i++) fa[i] = (long long) fa[i] * fb[i] % pr;
+        dft(fa, n, -1);
+        for (int i = 0; i < n; i++) c[i] = fa[i];
     }
-}
-void multiply(int a[], int b[], int c[], int na, int nb, int p, int prt) {
-    static int fa[MAXN], fb[MAXN];
-    int len = na + nb - 1;
-    int k = 0; while ((1 << k) < na + nb - 1) k++;
-    for (int i = 0; i < (1 << k); i++) fa[i] = fb[i] = 0;
-    for (int i = 0; i < na; i++) fa[i] = a[i];
-    for (int i = 0; i < nb; i++) fb[i] = b[i];
-    int w = fpow(prt, (p - 1) / (1 << k), p);
-    fft(fa, p, w, 1 << k);
-    fft(fb, p, w, 1 << k);
-    for (int i = 0; i < (1 << k); i++) c[i] = mul(fa[i], fb[i], p);
-    fft(c, p, inv(w, p), 1 << k);
-    int rem = inv(1 << k, p);
-    for (int i = 0; i < (1 << k); i++) c[i] = mul(c[i], rem, p);
-}
-void multiply(int a[], int b[], int c[], int na, int nb, int mod) {
-    static int fc[3][MAXN];
-    for (int r = 0; r < 3; r++) multiply(a, b, fc[r], na, nb, pr[r], pw[r]);
-    for (int i = 0; i < na + nb - 1; i++) {
-        long long cur1 = (long long) mul(sub(fc[1][i], fc[0][i], pr[1]), inv(pr[0], pr[1]), pr[1]) * pr[0] + fc[0][i];
-        long long cur2 = mul(sub(fc[2][i], cur1 % pr[2], pr[2]), inv(mul(pr[0], pr[1], pr[2]), pr[2]), pr[2]);
-        cur2 = add(mul(cur2 % mod, mul(pr[0], pr[1], mod), mod), cur1 % mod, mod);
-        c[i] = cur2;
+    vector<int> multiply(vector<int>& a, vector<int>& b) {
+        static int fa[MAXF], fb[MAXF], fc[MAXF];
+        int na = a.size(), nb = b.size();
+        for (int i = 0; i < na; i++) fa[i] = a[i];
+        for (int i = 0; i < nb; i++) fb[i] = b[i];
+        multiply(fa, fb, na, nb, fc);
+        int k = na + nb - 1;
+        vector<int> res(k);
+        for (int i = 0; i < k; i++) res[i] = fc[i];
+        return res;
     }
-}
+} ntt;
 
-const int maxn = 1 << 20;
-int a[maxn];
-int b[maxn];
-int c[maxn << 1];
-int d[maxn << 1];
+const int MAXF = 1 << 18;
+int n;
+int a[MAXF];
+int b[MAXF];
+int c[MAXF];
+int d[MAXF];
 
 int main() {
     srand(time(NULL));
-    int n = rand() % 10000, p = (int) 1e9 + 7;
-    for (int i = 0; i < n; i++) a[i] = rand();
-    for (int i = 0; i < n; i++) b[i] = rand();
-    multiply(a, b, c, n, n, p);
+    ntt.init(pr[0], pw[0]);
+    n = 1000;
+    for (int i = 0; i < n; i++) {
+        a[i] = rand() % pr[0];
+        b[i] = rand() % pr[0];
+    }
+    ntt.multiply(a, b, n, n, c);
     for (int i = 0; i < n; i++) {
         for (int j = 0; j < n; j++) {
-            d[i + j] = (d[i + j] + (long long) a[i] * b[j]) % p;
+            d[i + j] = (d[i + j] + (long long) a[i] * b[j]) % pr[0];
         }
     }
-    for (int i = 0; i < (n << 1) - 1; i++) {
+    for (int i = 0; i < n + n - 1; i++) {
         assert(c[i] == d[i]);
     }
-    cout << "Correct!\n";
+    cerr << "Correct\n";
+    cerr << "\nTime elapsed: " << 1000 * clock() / CLOCKS_PER_SEC << "ms\n";
     return 0;
 }
