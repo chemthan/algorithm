@@ -141,6 +141,9 @@ vector<int> invert(vector<int> a, int n, int mod) {
 }
 pair<vector<int>, vector<int> > divmod(vector<int> a, vector<int> b, int mod) {
     int n = a.size(), m = b.size();
+    if (n < m) {
+        return make_pair(vector<int>(), a);
+    }
     reverse(a.begin(), a.end());
     reverse(b.begin(), b.end());
     vector<int> rb = invert(b, n - m + 1, mod);
@@ -158,31 +161,87 @@ pair<vector<int>, vector<int> > divmod(vector<int> a, vector<int> b, int mod) {
     return make_pair(d, r);
 }
 
-int main() {
-    srand(time(NULL));
-    fftinit();
+const int maxn = 1e5 + 5;
+const int mod = (int) 1e9 + 7;
+int n, m;
+int a[maxn];
+vector<int> st[maxn << 2];
+
+void build(int p, int L, int R) {
+    if (L == R) {
+        st[p].resize(2);
+        st[p][0] = mod - a[L + R >> 1];
+        st[p][1] = 1;
+        return;
+    }
+    build(p << 1, L, L + R >> 1);
+    build(p << 1 | 1, (L + R >> 1) + 1, R);
+    st[p] = multiply(st[p << 1], st[p << 1 | 1]);
+    while (st[p].size() > R - L + 2) st[p].pop_back();
+}
+
+void divide(int p, int L, int R, vector<int> poly, vector<int>& vals) {
+    poly = divmod(poly, st[p], mod).second;
+    if (L == R) {
+        vals[L + R >> 1] = poly[0];
+        return;
+    }
+    divide(p << 1, L, L + R >> 1, poly, vals);
+    divide(p << 1 | 1, (L + R >> 1) + 1, R, poly, vals);
+}
+
+void testdivmod() {
     int n = 1000 + rand() % 100, m = 100 + rand() % 10;
     vector<int> a, b;
     for (int i = 0; i < n; i++) {
-        a.push_back(rand() % 1000000007);
+        a.push_back(rand() % mod);
     }
     for (int i = 0; i < m; i++) {
-        b.push_back(rand() % 1000000007);
+        b.push_back(rand() % mod);
     }
-    pair<vector<int>, vector<int> > res = divmod(a, b, (int) 1e9 + 7);
+    pair<vector<int>, vector<int> > res = divmod(a, b, mod);
     vector<int> d = res.first;
     vector<int> r = res.second;
     assert(r.size() < b.size());
-    vector<int> c = multiply(b, d, (int) 1e9 + 7);
+    vector<int> c = multiply(b, d, mod);
     for (int i = 0; i < r.size(); i++) {
         c[i] += r[i];
-        if (c[i] >= (int) 1e9 + 7) {
-            c[i] -= (int) 1e9 + 7;
+        if (c[i] >= mod) {
+            c[i] -= mod;
         }
     }
     for (int i = 0; i < n; i++) {
         assert(a[i] == c[i]);
     }
+}
+
+void testmuleval() {
+    n = 50000, m = 50000;
+    vector<int> poly;
+    for (int i = 0; i < n; i++) {
+        a[i] = rand() % mod;
+    }
+    for (int i = 0; i < m; i++) {
+        poly.push_back(rand() % mod);
+    }
+    build(1, 0, n - 1);
+    vector<int> vals(n);
+    divide(1, 0, n - 1, poly, vals);
+    //for (int i = 0; i < n; i++) {
+    //    int t = 0;
+    //    for (int j = (int) poly.size() - 1; j >= 0; j--) {
+    //        t = ((long long) t * a[i] + poly[j]) % mod;
+    //    }
+    //    assert(t == vals[i]);
+    //}
+}
+
+int main() {
+    srand(time(NULL));
+    fftinit();
+    testdivmod();
+    testmuleval();
     cerr << "Correct!\n";
+    cerr << 1000 * clock() / CLOCKS_PER_SEC << "ms\n";
     return 0;
 }
