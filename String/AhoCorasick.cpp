@@ -2,39 +2,39 @@
 using namespace std;
 
 /*
-* Complexity: O(N)
-* Problems:
-* 1. http://codeforces.com/problemset/problem/434/C
-* 2. https://www.codechef.com/problems/MSDBIN
-*/
-const int MAXN = 1e5 + 5;
-const int MAXC = 26;
-struct Node {
-    Node* p;
-    Node* c[MAXC];
-    Node *bf, *gf;
+ * Complexity: O(N)
+ * Problems:
+ * 1. http://codeforces.com/problemset/problem/434/C
+ * 2. https://www.codechef.com/problems/MSDBIN
+ */
+const int maxn = 1e5 + 5;
+const int maxc = 26;
+struct node_t {
+    node_t* p;
+    node_t* c[maxc];
+    node_t *bf, *gf;
     int key;
     char val;
-    Node();
+    node_t();
     void clear();
-} mem[MAXN], *ptr = mem;
-Node::Node() {
+} pool[maxn], *ptr = pool;
+node_t::node_t() {
     clear();
 }
-void Node::clear() {
+void node_t::clear() {
     p = 0;
-    for (int i = 0; i < MAXC; i++) c[i] = 0;
+    for (int i = 0; i < maxc; i++) c[i] = 0;
     bf = gf = 0, key = -1, val = 0;
 }
 void clear() {
-    Node* st = mem;
+    node_t* st = pool;
     while (st != ptr) {
         st->clear();
         st++;
     }
-    ptr = mem;
+    ptr = pool;
 }
-Node* insert(Node* x, char* s, int key) {
+node_t* insert(node_t* x, char* s, int key) {
     while (*s) {
         int k = *s - 'a';
         if (!x->c[k]) {
@@ -48,13 +48,13 @@ Node* insert(Node* x, char* s, int key) {
     x->key = key;
     return x;
 }
-void pushlink(Node* rt) {
-    static Node* q[MAXN];
+void pushlink(node_t* rt) {
+    static node_t* q[maxn];
     int b = 0, e = 0;
     q[e++] = rt;
     while (b < e) {
-        Node* x = q[b++];
-        for (int i = 0; i < MAXC; i++) {
+        node_t* x = q[b++];
+        for (int i = 0; i < maxc; i++) {
             if (x->c[i]) q[e++] = x->c[i];
         }
         if (x == rt || x->p == rt) {
@@ -71,8 +71,8 @@ void pushlink(Node* rt) {
         }
     }
 }
-void search(Node* rt, char* s) {
-    Node* cur = rt;
+void search(node_t* rt, char* s) {
+    node_t* cur = rt;
     while (*s) {
         if (cur == rt && !cur->c[*s - 'a']) {
             s++;
@@ -84,7 +84,7 @@ void search(Node* rt, char* s) {
             cur = rt;
             continue;
         }
-        Node* tmp = cur;
+        node_t* tmp = cur;
         if (tmp->key == -1) tmp = tmp->gf;
         while (tmp) {
             cout << tmp->key << " ";
@@ -96,7 +96,7 @@ void search(Node* rt, char* s) {
 }
 
 int main() {
-    Node* rt = ptr++;
+    node_t* rt = ptr++;
     insert(rt, (char*) "abab", 0);
     insert(rt, (char*) "aba", 1);
     insert(rt, (char*) "aabab", 2);
