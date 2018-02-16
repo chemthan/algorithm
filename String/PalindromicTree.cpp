@@ -56,7 +56,7 @@ struct PalindromicTree {
         last = next[cur][c];
         cnt[last]++;
     }
-    void count() {
+    void upd() {
         for (int i = p - 1; i >= 0; i--) {
             cnt[link[i]] += cnt[i];
         }
