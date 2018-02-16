@@ -1,31 +1,31 @@
 #include <bits/stdc++.h>
 using namespace std;
 
-#define RL double
+#define double double
 #define EPS 1e-9
 struct PT {
-    RL x, y;
+    double x, y;
     PT() : x(0), y(0) {}
-    PT(RL x, RL y) : x(x), y(y) {}
+    PT(double x, double y) : x(x), y(y) {}
     PT(const PT& p) : x(p.x), y(p.y) {}
     int operator < (const PT& rhs) const {return make_pair(y, x) < make_pair(rhs.y, rhs.x);}
     int operator == (const PT& rhs) const {return make_pair(y, x) == make_pair(rhs.y, rhs.x);}
     PT operator + (const PT& p) const {return PT(x + p.x, y + p.y);}
     PT operator - (const PT& p) const {return PT(x - p.x, y - p.y);}
-    PT operator * (RL c) const {return PT(x * c, y * c);}
-    PT operator / (RL c) const {return PT(x / c, y / c);}
+    PT operator * (double c) const {return PT(x * c, y * c);}
+    PT operator / (double c) const {return PT(x / c, y / c);}
 };
-RL cross(PT p, PT q) {return p.x * q.y - p.y * q.x;}
-RL area(PT a, PT b, PT c) {return fabs(cross(a, b) + cross(b, c) + cross(c, a)) / 2;}
-RL area2(PT a, PT b, PT c) {return cross(a, b) + cross(b, c) + cross(c, a);}
-RL dot(PT p, PT q) {return p.x * q.x + p.y * q.y;}
-RL dist(PT p, PT q) {return sqrt(dot(p - q, p - q));}
-RL dist2(PT p, PT q) {return dot(p - q, p - q);}
+double cross(PT p, PT q) {return p.x * q.y - p.y * q.x;}
+double area(PT a, PT b, PT c) {return fabs(cross(a, b) + cross(b, c) + cross(c, a)) / 2;}
+double area2(PT a, PT b, PT c) {return cross(a, b) + cross(b, c) + cross(c, a);}
+double dot(PT p, PT q) {return p.x * q.x + p.y * q.y;}
+double dist(PT p, PT q) {return sqrt(dot(p - q, p - q));}
+double dist2(PT p, PT q) {return dot(p - q, p - q);}
 PT RotateCCW90(PT p) {return PT(-p.y, p.x);}
 PT RotateCW90(PT p) {return PT(p.y, -p.x);}
-PT RotateCCW(PT p, RL t) {return PT(p.x * cos(t) - p.y * sin(t), p.x * sin(t) + p.y * cos(t));}
-int sign(RL x) {return x < -EPS ? -1 : x > EPS;}
-int sign(RL x, RL y) {return sign(x - y);}
+PT RotateCCW(PT p, double t) {return PT(p.x * cos(t) - p.y * sin(t), p.x * sin(t) + p.y * cos(t));}
+int sign(double x) {return x < -EPS ? -1 : x > EPS;}
+int sign(double x, double y) {return sign(x - y);}
 ostream& operator << (ostream& os, const PT& p) {
     os << "(" << p.x << "," << p.y << ")";
     return os;
@@ -36,18 +36,18 @@ PT ProjectPointLine(PT a, PT b, PT c) {
     return a + (b - a) * dot(c - a, b - a) / dot(b - a, b - a);
 }
 PT ProjectPointSegment(PT a, PT b, PT c) {
-    RL r = dot(b - a, b - a);
+    double r = dot(b - a, b - a);
     if (fabs(r) < EPS) return a;
     r = dot(c - a, b - a) / r;
     if (r < 0) return a;
     if (r > 1) return b;
     return a + (b - a) * r;
 }
-RL DistancePointSegment(PT a, PT b, PT c) {
+double DistancePointSegment(PT a, PT b, PT c) {
     return dist(c, ProjectPointSegment(a, b, c));
 }
 //Compute distance between PT (x, y, z) and plane ax + by + cz = d
-RL DistancePointPlane(RL x, RL y, RL z, RL a, RL b, RL c, RL d) {
+double DistancePointPlane(double x, double y, double z, double a, double b, double c, double d) {
     return fabs(a * x + b * y + c * z - d) / sqrt(a * a + b * b + c * c);
 }
 //Determine if lines from a to b and c to d are parallel or collinear
@@ -113,25 +113,25 @@ int PointOnPolygon(const vector<PT>& p, PT q) {
     return 0;
 }
 //Compute intersection of line through points a and b with circle centered at c with radius r > 0
-vector<PT> CircleLineIntersection(PT a, PT b, PT c, RL r) {
+vector<PT> CircleLineIntersection(PT a, PT b, PT c, double r) {
     vector<PT> res;
     b = b - a; a = a - c;
-    RL A = dot(b, b);
-    RL B = dot(a, b);
-    RL C = dot(a, a) - r * r;
-    RL D = B * B - A * C;
+    double A = dot(b, b);
+    double B = dot(a, b);
+    double C = dot(a, a) - r * r;
+    double D = B * B - A * C;
     if (D < -EPS) return res;
     res.push_back(c + a + b * (-B + sqrt(D + EPS)) / A);
     if (D > EPS) res.push_back(c + a + b * (-B - sqrt(D)) / A);
     return res;
 }
 //Compute intersection of circle centered at a with radius r with circle centered at b with radius R
-vector<PT> CircleCircleIntersection(PT a, PT b, RL r, RL R) {
+vector<PT> CircleCircleIntersection(PT a, PT b, double r, double R) {
     vector<PT> res;
-    RL d = sqrt(dist2(a, b));
+    double d = sqrt(dist2(a, b));
     if (d > r + R || d + min(r, R) < max(r, R)) return res;
-    RL x = (d * d - R * R + r * r) / (2 * d);
-    RL y = sqrt(r * r - x * x);
+    double x = (d * d - R * R + r * r) / (2 * d);
+    double y = sqrt(r * r - x * x);
     PT v = (b - a) / d;
     res.push_back(a + v * x + RotateCCW90(v) * y);
     if (y > 0) res.push_back(a + v * x - RotateCCW90(v) * y);
@@ -141,20 +141,20 @@ vector<PT> CircleCircleIntersection(PT a, PT b, RL r, RL R) {
 //polygon, assuming that the coordinates are listed in a clockwise or
 //counterclockwise fashion.  Note that the centroid is often known as
 //the "center of gravity" or "center of mass".
-RL ComputeSignedArea(const vector<PT>& p) {
-    RL area = 0;
+double ComputeSignedArea(const vector<PT>& p) {
+    double area = 0;
     for(int i = 0; i < p.size(); i++) {
         int j = (i + 1) % p.size();
         area += p[i].x * p[j].y - p[j].x * p[i].y;
     }
     return area / 2.0;
 }
-RL ComputeArea(const vector<PT>& p) {
+double ComputeArea(const vector<PT>& p) {
     return fabs(ComputeSignedArea(p));
 }
 PT ComputeCentroid(const vector<PT>& p) {
     PT c(0, 0);
-    RL scale = 6.0 * ComputeSignedArea(p);
+    double scale = 6.0 * ComputeSignedArea(p);
     for (int i = 0; i < p.size(); i++) {
         int j = (i + 1) % p.size();
         c = c + (p[i] + p[j]) * (p[i].x * p[j].y - p[j].x * p[i].y);
@@ -173,8 +173,8 @@ int IsSimple(const vector<PT>& p) {
     }
     return 1;
 }
-RL Angle(PT a) {
-    RL PI = acos((RL) - 1);
+double Angle(PT a) {
+    double PI = acos((double) - 1);
     if (a.x == 0) {
         if (a.y > 0) return PI / 2;
         return 3 * PI / 2;
@@ -183,7 +183,7 @@ RL Angle(PT a) {
         if (a.x > 0) return 0;
         return PI;
     }
-    RL res = atan(a.y / a.x);
+    double res = atan(a.y / a.x);
     if (a.x < 0) return res + PI;
     if (a.y < 0) return res + 2 * PI;
     return res;
