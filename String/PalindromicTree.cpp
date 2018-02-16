@@ -7,10 +7,10 @@ using namespace std;
 * 1. http://codeforces.com/gym/100548/status/G
 */
 struct PalindromicTree {
-    static const int MAXN = 1e5 + 5;
+    static const int maxn = 1e5 + 5;
     static const int MAXC = 26;
-    int next[MAXN][MAXC], link[MAXN], qlink[MAXN], dlink[MAXN][MAXC], cnt[MAXN];
-    int num[MAXN], len[MAXN], s[MAXN];
+    int next[maxn][MAXC], link[maxn], qlink[maxn], dlink[maxn][MAXC], cnt[maxn];
+    int num[maxn], len[maxn], s[maxn];
     int last, n, p;
     int newnode(int l) {
         for (int i = 0; i < MAXC; i++) next[p][i] = 0;
