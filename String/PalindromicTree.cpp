@@ -8,14 +8,14 @@ using namespace std;
 */
 struct PalindromicTree {
     static const int maxn = 1e5 + 5;
-    static const int MAXC = 26;
-    int next[maxn][MAXC], link[maxn], qlink[maxn], dlink[maxn][MAXC], cnt[maxn];
+    static const int maxc = 26;
+    int next[maxn][maxc], link[maxn], qlink[maxn], dlink[maxn][maxc], cnt[maxn];
     int num[maxn], len[maxn], s[maxn];
     int last, n, p;
     int newnode(int l) {
-        for (int i = 0; i < MAXC; i++) next[p][i] = 0;
+        for (int i = 0; i < maxc; i++) next[p][i] = 0;
         qlink[p] = 0;
-        for (int i = 0; i < MAXC; i++) dlink[p][i] = 0;
+        for (int i = 0; i < maxc; i++) dlink[p][i] = 0;
         cnt[p] = num[p] = 0;
         len[p] = l;
         return p++;
@@ -48,7 +48,7 @@ struct PalindromicTree {
             else {
                 qlink[now] = link[link[now]];
             }
-            for (int i = 0; i < MAXC; i++) {
+            for (int i = 0; i < maxc; i++) {
                 dlink[now][i] = dlink[link[now]][i];
             }
             dlink[now][s[n - len[link[now]]]] = link[now];
