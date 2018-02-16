@@ -1,86 +1,86 @@
 #include <bits/stdc++.h>
 using namespace std;
 
-#define RL long double
+#define double long double
 #define EPS 1e-12
-const RL PI = acos((RL) -1);
+const double PI = acos((double) -1);
 struct PT {
-    RL x, y;
+    double x, y;
     PT() : x(0), y(0) {}
-    PT(RL x, RL y) : x(x), y(y) {}
+    PT(double x, double y) : x(x), y(y) {}
     PT(const PT& p) : x(p.x), y(p.y) {}
     int operator < (const PT& rhs) const {return make_pair(y, x) < make_pair(rhs.y, rhs.x);}
     int operator == (const PT& rhs) const {return make_pair(y, x) == make_pair(rhs.y, rhs.x);}
     PT operator + (const PT& p) const {return PT(x + p.x, y + p.y);}
     PT operator - (const PT& p) const {return PT(x - p.x, y - p.y);}
-    PT operator * (RL c) const {return PT(x * c, y * c);}
-    PT operator / (RL c) const {return PT(x / c, y / c);}
+    PT operator * (double c) const {return PT(x * c, y * c);}
+    PT operator / (double c) const {return PT(x / c, y / c);}
 };
-RL cross(PT p, PT q) {return p.x * q.y - p.y * q.x;}
-RL area(PT a, PT b, PT c) {return fabs(cross(a, b) + cross(b, c) + cross(c, a)) / 2;}
-RL area2(PT a, PT b, PT c) {return cross(a, b) + cross(b, c) + cross(c, a);}
-RL dot(PT p, PT q) {return p.x * q.x + p.y * q.y;}
-RL dist(PT p, PT q) {return sqrt(dot(p - q, p - q));}
-RL dist2(PT p, PT q) {return dot(p - q, p - q);}
+double cross(PT p, PT q) {return p.x * q.y - p.y * q.x;}
+double area(PT a, PT b, PT c) {return fabs(cross(a, b) + cross(b, c) + cross(c, a)) / 2;}
+double area2(PT a, PT b, PT c) {return cross(a, b) + cross(b, c) + cross(c, a);}
+double dot(PT p, PT q) {return p.x * q.x + p.y * q.y;}
+double dist(PT p, PT q) {return sqrt(dot(p - q, p - q));}
+double dist2(PT p, PT q) {return dot(p - q, p - q);}
 PT RotateCCW90(PT p) {return PT(-p.y, p.x);}
 PT RotateCW90(PT p) {return PT(p.y, -p.x);}
-PT RotateCCW(PT p, RL t) {return PT(p.x * cos(t) - p.y * sin(t), p.x * sin(t) + p.y * cos(t));}
-int sign(RL x) {return x < -EPS ? -1 : x > EPS;}
-int sign(RL x, RL y) {return sign(x - y);}
+PT RotateCCW(PT p, double t) {return PT(p.x * cos(t) - p.y * sin(t), p.x * sin(t) + p.y * cos(t));}
+int sign(double x) {return x < -EPS ? -1 : x > EPS;}
+int sign(double x, double y) {return sign(x - y);}
 ostream& operator << (ostream& os, const PT& p) {
     os << "(" << p.x << "," << p.y << ")";
     return os;
 }
-vector<PT> CircleLineIntersection(PT a, PT b, PT c, RL r) {
+vector<PT> CircleLineIntersection(PT a, PT b, PT c, double r) {
     vector<PT> res;
     b = b - a; a = a - c;
-    RL A = dot(b, b);
-    RL B = dot(a, b);
-    RL C = dot(a, a) - r * r;
-    RL D = B * B - A * C;
+    double A = dot(b, b);
+    double B = dot(a, b);
+    double C = dot(a, a) - r * r;
+    double D = B * B - A * C;
     if (D < -EPS) return res;
     res.push_back(c + a + b * (-B + sqrt(D + EPS)) / A);
     if (D > EPS) res.push_back(c + a + b * (-B - sqrt(D)) / A);
     return res;
 }
-vector<PT> CircleCircleIntersection(PT a, PT b, RL r, RL R) {
+vector<PT> CircleCircleIntersection(PT a, PT b, double r, double R) {
     vector<PT> res;
-    RL d = sqrt(dist2(a, b));
+    double d = sqrt(dist2(a, b));
     if (d > r + R - EPS || d + min(r, R) < max(r, R) + EPS) return res;
-    RL x = (d * d - R * R + r * r) / (2 * d);
-    RL y = sqrt(r * r - x * x);
+    double x = (d * d - R * R + r * r) / (2 * d);
+    double y = sqrt(r * r - x * x);
     PT v = (b - a) / d;
     res.push_back(a + v * x + RotateCCW90(v) * y);
     res.push_back(a + v * x - RotateCCW90(v) * y);
     return res;
 }
-RL Angle(PT a, PT b) {
-    RL x = dist(PT(0, 0), a);
-    RL y = dist(PT(0, 0), b);
-    RL z = dist(a, b);
-    RL r = (x * x + y * y - z * z) / 2 / x / y;
+double Angle(PT a, PT b) {
+    double x = dist(PT(0, 0), a);
+    double y = dist(PT(0, 0), b);
+    double z = dist(a, b);
+    double r = (x * x + y * y - z * z) / 2 / x / y;
     if (sign(r, +1) >= 0) return 0.0;
     if (sign(r, -1) <= 0) return PI;
     return acos(r);
 }
-RL Area(PT ct, RL r, PT a, PT b) {
+double Area(PT ct, double r, PT a, PT b) {
     a = a - ct; b = b - ct; ct = PT(0, 0);
-    RL alpha = Angle(a, b);
+    double alpha = Angle(a, b);
     return r * r * alpha / 2 - dist(ct, a) * dist(ct, b) * sin(alpha) / 2;
 }
 struct Circle {
     PT c;
-    RL r;
+    double r;
     Circle() : r(0.0) {}
-    Circle(PT c, RL r) : c(c), r(r) {}
+    Circle(PT c, double r) : c(c), r(r) {}
     Circle(const Circle& rhs) : c(rhs.c), r(rhs.r) {}
 };
 
-RL calc(RL lo, RL hi, vector<Circle>& vc) {
-    RL res = 0.0;
-    vector<pair<pair<RL, int>, pair<pair<PT, PT>, int> > > vx;
+double calc(double lo, double hi, vector<Circle>& vc) {
+    double res = 0.0;
+    vector<pair<pair<double, int>, pair<pair<PT, PT>, int> > > vx;
     for (int i = 0; i < vc.size(); i++) {
-        vector<RL> vl, vr;
+        vector<double> vl, vr;
         if (!sign(lo, vc[i].c.y - vc[i].r)) {
             vl.push_back(vc[i].c.x);
             vl.push_back(vc[i].c.x);
@@ -133,8 +133,8 @@ RL calc(RL lo, RL hi, vector<Circle>& vc) {
     }
     return res;
 }
-RL calc(vector<Circle> vc) {
-    vector<RL> vy;
+double calc(vector<Circle> vc) {
+    vector<double> vy;
     for (int i = 0; i < vc.size(); i++) {
         vy.push_back(vc[i].c.y);
         vy.push_back(vc[i].c.y - vc[i].r);
@@ -147,7 +147,7 @@ RL calc(vector<Circle> vc) {
         }
     }
     sort(vy.begin(), vy.end()), vy.erase(unique(vy.begin(), vy.end()), vy.end());
-    RL res = 0.0;
+    double res = 0.0;
     for (int i = 0; i < vy.size() - 1; i++) {
         if (sign(vy[i], vy[i + 1])) {
             res += calc(vy[i], vy[i + 1], vc);
