@@ -22,14 +22,14 @@ struct node_t {
     T query(T x) {return f.query(x);}
 };
 node_t* upd(node_t* p, int l, int r, int L, int R, func_t f) {
-    int M = L + R >> 1;
     if (l > R || r < L) return p;
+    int M = L + (R - L >> 1);
     node_t* res = p ? new node_t(p->l, p->r, p->f) : new node_t();
     if (l <= L && r >= R) {
-        int fl = f.query(L) >= p->query(L);
-        int fr = f.query(R) >= p->query(R);
-        int fm1 = f.query(M) >= p->query(M);
-        int fm2 = f.query(M + 1) >= p->query(M + 1);
+        int fl = f.query(L) >= (p ? p->query(L) : oo);
+        int fm1 = f.query(M) >= (p ? p->query(M) : oo);
+        int fm2 = f.query(M + 1) >= (p ? p->query(M + 1) : oo);
+        int fr = f.query(R) >= (p ? p->query(R) : oo);
         if (fl && fr) return res;
         if (!fl && !fr) {
             res->f = f;
@@ -55,10 +55,9 @@ node_t* upd(node_t* p, int l, int r, int L, int R, func_t f) {
         }
         assert(0);
     }
-    else if (L < R) {
-        res->l = upd(res->l, l, r, L, L + R >> 1, f);
-        res->r = upd(res->r, l, r, (L + R >> 1) + 1, R, f);
-    }
+    res->l = upd(res->l, l, r, L, M, f);
+    res->r = upd(res->r, l, r, M + 1, R, f);
+    return res;
 }
 node_t* upd(node_t* p, int l, int r, int L, int R, T a, T b) {
     return upd(p, l, r, L, R, func_t(a, b));
