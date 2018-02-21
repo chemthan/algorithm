@@ -4,7 +4,7 @@ using namespace std;
 /*
  * Complexity: O(logN)
  * Memory: O(QlogN)
- * Necessary and sufficient condition: Two func_ttions have at most one common point
+ * Necessary and sufficient condition: Two functions have at most one common point
  * Problem:
  * 1. http://vn.spoj.com/problems/VOMARIO/Problems
  */
