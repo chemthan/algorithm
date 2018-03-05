@@ -8,6 +8,7 @@ struct NTT {
     int pr;
     int rts[MAXF + 1];
     int bitrev[MAXF];
+    int iv[MAXF + 1];
 
     int fpow(int a, int k, int p) {
         if (!k) return 1;
@@ -34,6 +35,9 @@ struct NTT {
         for (int i = 1; i <= MAXF; i++) {
             rts[i] = (long long) rts[i - 1] * pw % pr;
         }
+        for (int i = 1; i <= MAXF; i <<= 1) {
+            iv[i] = fpow(i, MOD - 2, MOD);
+        }
     }
     void dft(int a[], int n, int sign) {
         int d = 0; while ((1 << d) * n != MAXF) d++;
@@ -45,18 +49,20 @@ struct NTT {
         for (int len = 2; len <= n; len <<= 1) {
             int delta = MAXF / len * sign;
             for (int i = 0; i < n; i += len) {
-                int *x = a + i,*y = a + i + (len >> 1), *w = sign > 0 ? rts : rts + MAXF;
+                int *w = sign > 0 ? rts : rts + MAXF;
                 for (int k = 0; k + k < len; k++) {
-                    int z = (long long) *y * *w % pr;
-                    *y = *x - z, *x = *x + z;
-                    if (*y < 0) *y += pr;
-                    if (*x >= pr) *x -= pr;
-                    x++, y++, w += delta;
+                    int &a1 = a[i + k + (len >> 1)], &a2 = a[i + k];
+                    int t = (long long) *w * a1 % MOD;
+                    a1 = a2 - t;
+                    a2 = a2 + t;
+                    a1 += a1 < 0 ? MOD : 0;
+                    a2 -= a2 >= MOD ? MOD : 0;
+                    w += delta;
                 }
             }
         }
         if (sign < 0) {
-            int in = fpow(n, pr - 2, pr);
+            int in = iv[n];
             for (int i = 0; i < n; i++) {
                 a[i] = (long long) a[i] * in % pr;
             }
@@ -73,7 +79,7 @@ struct NTT {
         dft(fa, n, -1);
         for (int i = 0; i < n; i++) c[i] = fa[i];
     }
-    vector<int> multiply(vector<int>& a, vector<int>& b) {
+    vector<int> multiply(vector<int> a, vector<int> b) {
         static int fa[MAXF], fb[MAXF], fc[MAXF];
         int na = a.size(), nb = b.size();
         for (int i = 0; i < na; i++) fa[i] = a[i];
