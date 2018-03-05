@@ -1,0 +1,89 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.1//EN" "http://www.w3.org/TR/xhtml11/DTD/xhtml11.dtd">
+<!-- saved from url=(0059)https://www.bnuoj.com/v3/contest_problem_merge.php?cid=8541 -->
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en"><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+  
+  <style>
+html
+{ height: 100%;}
+
+*
+{ margin: 0;
+  padding: 0;
+}
+
+body
+{ font-family:  arial, sans-serif;
+  font-size: .80em;}
+
+p
+{ padding: 0 0 20px 0;
+  line-height: 1.7em;}
+
+img
+{ border: 0;}
+
+a
+{ text-decoration: underline;}
+
+a:hover
+{ text-decoration: none;}
+
+table {
+border-collapse:collapse;
+border-spacing:0px;
+}
+
+table td, table th {
+border:solid 1px black;
+padding: 5px;
+}
+
+  </style>
+</head>
+<body>
+
+<center><h1>A. Different Circle Permutation</h1></center>You may not know this but it's a fact that Xinghai Square is Asia's largest city square. It is located in Dalian and, of course, a landmark of the city. It's an ideal place for outing any time of the year. And now:<br>&nbsp;&nbsp;<br>&nbsp;&nbsp;There are $  N $ children from a nearby primary school flying kites with a teacher. When they have a rest at noon, part of them (maybe none) sit around the circle flower beds. The angle between any two of them relative to the center of the circle is always a multiple of $\dfrac{2\pi}{N}$ but always not $\dfrac{2\pi}{N}$.<br>&nbsp;&nbsp;<br>&nbsp;&nbsp;Now, the teacher raises a question: How many different ways there are to arrange students sitting around the flower beds according to the rule stated above. To simplify the problem, every student is seen as the same. And to make the answer looks not so great, the teacher adds another specification: two ways are considered the same if they coincide after rotating.<h2 style="margin-top:10px">Input</h2>There are $ T $ tests ($ T\le50 $). Each test contains one integer $ N $. $ 1\le N\le1000000000\ (10^9) $. Process till the end of input.<h2 style="margin-top:10px">Output</h2>For each test, output the answer mod 1000000007 ($10^9+7$)  in one line.<h2 style="margin-top:10px">Sample Input</h2><pre>4
+7
+10</pre><h2 style="margin-top:10px">Sample Output</h2><pre>3
+5
+15</pre><div style="PAGE-BREAK-AFTER: always"></div><center><h1>B. Different GCD Subarray Query</h1></center>This is a simple problem. The teacher gives Bob a list of  problems about GCD (Greatest Common Divisor). After studying some of them, Bob thinks that GCD is so interesting. One day, he comes up with a new problem about GCD. Easy as it looks, Bob cannot figure it out himself. Now he turns to you for help, and here is the problem:<br>&nbsp;&nbsp;<br>&nbsp;&nbsp;Given an array $a$ of $N$ positive integers $a_1, a_2, \cdots a_{N-1}, a_N$; a subarray of $a$ is defined as a continuous interval between $a_1$ and $a_N$. In other words, $a_i, a_{i+1}, \cdots, a_{j-1}, a_j$ is a subarray of $a$, for $1\le i\le j\le N$. For a query in the form $(L, R)$, tell the number of different GCDs contributed by all subarrays of the interval $[L, R]$.<br>&nbsp;&nbsp;<h2 style="margin-top:10px">Input</h2>There are several tests, process till the end of input.<br>&nbsp;&nbsp;<br>&nbsp;&nbsp;For each test, the first line consists of two integers $N$ and $Q$, denoting the length of the array and the number of queries, respectively. $N$ positive integers are listed in the second line, followed by $Q$ lines each containing two integers $L,R$ for a query.<br><br>You can assume that <br>&nbsp;&nbsp;<br>&nbsp;&nbsp;&nbsp;&nbsp;$1\le N,Q\le100000$ <br>&nbsp;&nbsp;&nbsp;&nbsp;<br>&nbsp;&nbsp;  $1\le a_i\le1000000$<h2 style="margin-top:10px">Output</h2>For each query, output the answer in one line.<h2 style="margin-top:10px">Sample Input</h2><pre>5 3
+1 3 4 6 9
+3 5
+2 5
+1 5</pre><h2 style="margin-top:10px">Sample Output</h2><pre>6
+6
+6</pre><div style="PAGE-BREAK-AFTER: always"></div><center><h1>C. Alice's Adventure in Wonderland</h1></center>Alice studies in one university in Dalian. You may not know that she is an idiot in finding the right way to somewhere. One day, she got lost on her way to a teaching building. Believe it or not, she got lost on the campus where she had lived for three years. By the way, she is a little lazy, so she always chooses the shortest possible way to go.<br>&nbsp;&nbsp;<br>&nbsp;&nbsp;Last night, Alice had a dream that she was in Wonderland. She was shown a map of this place. As far as she can remember, there are $N$ towns numbered from 1 to $N$, connected by $M$ bi-directed roads. Now, she was in the #$1$ town, heading for the #$N$ town. Alice had an ability in her dream that she could build another (only one) road  not existing on the map before, the length was arbitrarily selected by Alice. Note that multiple edges and self-loops are not allowed after the edge added. <br>&nbsp;&nbsp;<br>&nbsp;&nbsp;Now, she gets an idea that she adds one road so that the number of the shortest paths from the #$1$ town to the #$N$ town increased would be no less than $X$ ($X$ is given). To get the job done, Alice needs to choose two distinct towns which are not yet connected directly by an existing road and then links them up with a new road. As to the weight, it is a positive integer determined at her will. By the way, Alice is quite clever much of the time, but sometimes gets confused just for no reason and unfortunately, in her dream, she was confused by this problem. Alice wanted to know how many different choices she had when choosing those two towns. Note that choosing town A and B is considered the same as choosing town B and A. Can you help her?<h2 style="margin-top:10px">Input</h2>There are several test cases. For each case, the first line  contains two  integers $N$ and $M$ as described above. The second line is an integer $X$. Then $M$ lines follow, each contains three integers $u, v, w$ meaning a bi-directed road between $u$ and $v$ of length $w$. Tests end with the case $N=M=0$, which shouldn't be processed. <br><br>You can assume that<br>&nbsp;&nbsp;<br>&nbsp;&nbsp;&nbsp;&nbsp;$2\le N\le20 000$ <br>&nbsp;&nbsp;&nbsp;&nbsp;<br>&nbsp;&nbsp;&nbsp;&nbsp; $0\le M \le 100 000$ <br>&nbsp;&nbsp;&nbsp;&nbsp; <br>&nbsp;&nbsp;&nbsp;&nbsp; $1\le u,v \le N$ <br>&nbsp;&nbsp;&nbsp;&nbsp; <br>&nbsp;&nbsp;&nbsp;&nbsp; $1\le w\le 10 000$<br>&nbsp;&nbsp;&nbsp;&nbsp; <br>&nbsp;&nbsp;&nbsp;&nbsp; $1\le X\le 1000 000 000$<h2 style="margin-top:10px">Output</h2>For each case output the answer on a single line.<h2 style="margin-top:10px">Sample Input</h2><pre>3 2
+1
+1 2 1
+2 3 1
+0 0</pre><h2 style="margin-top:10px">Sample Output</h2><pre>1</pre><div style="PAGE-BREAK-AFTER: always"></div><center><h1>D. Number of Connected Subgraph</h1></center>A cactus is a connected undirected graph in which every edge belongs to at most one simple cycle. Intuitively, cactus is a generalization of a tree where some cycles are allowed. Given an undirected graph $G(V,E)$, where $ V $ is the set of vertices and $ E $ of edges, where an edge is a set of two distinct vertices $ \{v_1,v_2\}\subseteq V $. An $induced\ subgraph$ of a graph is another graph, formed from a subset of the vertices of the graph and $all$ of the edges connecting pairs of vertices in that subset. Now, here comes the problem: How many induced subgraphs of a cactus are still cactuses?<h2 style="margin-top:10px">Input</h2>There are several cases, process till end of input. <br>&nbsp;&nbsp;<br>&nbsp;&nbsp;For each case, the first line contains an integer $ N $, the second line an integer $ M $, denoting respectively the number of vertices and edges of the given directed graph. Each of the following $ M $ lines contains two integers $ u$ and $v$, meaning there is one edge between $ u $ and $ v $. <br><br> You can assume that<br>&nbsp;&nbsp;&nbsp;&nbsp;$\cdot$ the given graph is always a cactus <br>&nbsp;&nbsp;&nbsp;&nbsp;$\cdot$ $ N,M\le  100000 $<br><h2 style="margin-top:10px">Output</h2>For each case output your answer mod 1000000007 on a single line.<h2 style="margin-top:10px">Sample Input</h2><pre>4
+4
+1 2
+2 3
+3 4
+4 1
+5
+6
+1 2
+2 3
+3 1
+2 4
+4 5
+5 2</pre><h2 style="margin-top:10px">Sample Output</h2><pre>13
+22</pre><div style="PAGE-BREAK-AFTER: always"></div><center><h1>E. Seats</h1></center>The yearly sports meeting is approaching in Hail university and $M$ departments, conveniently numbered from 1 to $M$, are going to take part in. Each department has no more than $h$ students.<br>&nbsp;&nbsp;Now send $a_i$ students from the $i$-th department as spectators, such that $\sum\limits_{i=1}^{M}a_i=L$. There are $k$ seats every row on the grandstand and $L \bmod k = 0$. Students from the same department are required to sit in the same row. The question is how many rows should be arranged at least, to ensure that no matter of the values of $M$ and $a_1, \cdots, a_m$, all the students will be able to get seated.<h2 style="margin-top:10px">Input</h2>Multiple test cases, process till end of input.<br>&nbsp;&nbsp;<br>&nbsp;&nbsp;For each case, the one and only line contains three space-separated integers $h, L, k$ as stated above.<br>&nbsp;&nbsp;<br>&nbsp;&nbsp;You can assume that<br>&nbsp;&nbsp;<br>&nbsp;&nbsp;&nbsp;&nbsp; $0&lt;h\le1000$<br>&nbsp;&nbsp;&nbsp;&nbsp; <br>&nbsp;&nbsp;&nbsp;&nbsp; $0&lt;L\le1000000000$,<br>&nbsp;&nbsp;&nbsp;&nbsp; <br>&nbsp;&nbsp;&nbsp;&nbsp; $0&lt;k\le1000000$, and<br>&nbsp;&nbsp;&nbsp;&nbsp; <br>&nbsp;&nbsp;&nbsp;&nbsp; $L \bmod k=0$.<h2 style="margin-top:10px">Output</h2>Output a positive integer $X$ on a single line showing the least rows needed.<h2 style="margin-top:10px">Sample Input</h2><pre>39 2020 202</pre><h2 style="margin-top:10px">Sample Output</h2><pre>12</pre><div style="PAGE-BREAK-AFTER: always"></div><center><h1>F. Football Games</h1></center>A mysterious country will hold a football world championships---Abnormal Cup, attracting football teams and fans from all around the world. This country is so mysterious that none of the information of the games will be open to the public till the end of all the matches. And finally only the score of each team will be announced. <br>&nbsp;&nbsp;<br>&nbsp;&nbsp;At the first phase of the championships, teams are divided into $ M $ groups using the single round robin rule where one and only one game will be played between each pair of teams within each group. The winner of a game scores 2 points, the loser scores 0, when the game is tied both score 1 point. The schedule of these games are unknown, only the scores of each team in each group are available.<br>&nbsp;&nbsp;<br>&nbsp;&nbsp;When those games finished, some insider revealed that there were some false scores in some groups. This has aroused great concern among the pubic, so the the Association of Credit Management (ACM) asks you to judge which groups' scores must be false.<h2 style="margin-top:10px">Input</h2>Multiple test cases, process till end of the input.<br>&nbsp;&nbsp;<br>&nbsp;&nbsp;For each case, the first line contains a positive integers $M$, which is  the number of groups.<br>&nbsp;&nbsp;The $ i $-th of the next $ M $ lines begins with a positive integer $ B_i $ representing the  number of teams in the $i$-th group, followed by $ B_i $ nonnegative integers representing the score of each team in this group.<br><br><b><br>number of test cases &lt;= 10<br>M&lt;= 100<br>B[i]&lt;= 20000<br>score of each team &lt;= 20000<br></b><h2 style="margin-top:10px">Output</h2>For each test case, output $ M $ lines. Output ``F" (without quotes) if the scores in the i-th group must be false, output ``T" (without quotes) otherwise. See samples for detail.<h2 style="margin-top:10px">Sample Input</h2><pre>2
+3 0 5 1
+2 1 1</pre><h2 style="margin-top:10px">Sample Output</h2><pre>F
+T</pre><div style="PAGE-BREAK-AFTER: always"></div><center><h1>G. Friends and Enemies</h1></center>On an isolated island,  lived some dwarves. A king (not a dwarf) ruled the island and the seas nearby, there  are abundant cobblestones of varying colors on the island. Every two dwarves on the island are either friends or enemies. One day, the king demanded that each dwarf on the island (not including the king himself, of course) wear a stone necklace according to the following rules:<br>&nbsp;&nbsp;<br>&nbsp;&nbsp;For any two dwarves, if they are friends, at least one of the stones from each of their necklaces are of the same color; and if they are enemies, any two stones from each of their necklaces should be of different colors. Note that a necklace can be empty.<br>&nbsp;&nbsp;<br>&nbsp;&nbsp;Now, given the population and the number of colors of stones on the island, you are going to judge if it's possible for each dwarf to prepare himself a necklace.<h2 style="margin-top:10px">Input</h2>Multiple test cases, process till end of the input. <br>&nbsp;&nbsp;<br>&nbsp;&nbsp;For each test case, the one and only line contains 2 positive integers $M, N\ (M,N&lt;2^{31})$ representing the total number of dwarves (not including the king) and the number of colors of stones on the island.<h2 style="margin-top:10px">Output</h2>For each test case, The one and only line of output should contain a character indicating if it is possible to finish the  king's assignment. Output ``T" (without quotes) if possible, ``F" (without quotes) otherwise.<h2 style="margin-top:10px">Sample Input</h2><pre>20 100</pre><h2 style="margin-top:10px">Sample Output</h2><pre>T</pre><div style="PAGE-BREAK-AFTER: always"></div><center><h1>H. Function</h1></center>The shorter, the simpler. With this problem, you should be convinced of this truth.<br>&nbsp;&nbsp;<br>&nbsp;&nbsp;You are given an array $A$ of $N$ postive integers, and $M$ queries in the form $(l, r)$. A function $F(l, r)\ (1\le l \le r \le N)$ is defined as:<br>$F(l,r)=\left\{\begin{matrix}<br> A_{l}&amp;l=r; \\ <br> F(l, r-1)\ mod A_{r}&amp; l&lt;r.<br>\end{matrix}\right.$<br>You job is to calculate $F(l, r)$, for each query $(l, r)$.<h2 style="margin-top:10px">Input</h2>There are multiple test cases.<br>&nbsp;&nbsp;<br>&nbsp;&nbsp;The first line of input contains a integer $T$, indicating number of test cases, and $T$ test cases follow. <br>&nbsp;&nbsp;<br>&nbsp;&nbsp;For each test case, the first line contains an integer $N (1\le N \le 100000)$.<br>&nbsp;&nbsp;The second line contains $N$ space-separated positive integers: $A_{1},\dots, A_{N}\ (0\le A_{i} \le 10^9)$.<br>&nbsp;&nbsp;The third line contains an integer $M$ denoting the number of queries. <br>&nbsp;&nbsp;The following $M$ lines each contain two integers $l, r \ (1 \le l \le r \le N)$, representing a query.<h2 style="margin-top:10px">Output</h2>For each query$ (l, r)$, output $F(l, r)$ on one line.<h2 style="margin-top:10px">Sample Input</h2><pre>1
+3
+2 3 3
+1
+1 3</pre><h2 style="margin-top:10px">Sample Output</h2><pre>2</pre><div style="PAGE-BREAK-AFTER: always"></div><center><h1>I. Sparse Graph</h1></center>In graph theory, the $complement$ of a graph $ G $ is a graph $  H $ on the same vertices such that two distinct vertices of $ H $ are adjacent if and only if they are $not$ adjacent in $  G $. <br><br>Now you are given an undirected graph $  G $ of $ N $ nodes and $  M $ bidirectional edges of $unit$ length. Consider the complement of $G$, i.e., $H$. For a given vertex $ S $ on $  H $, you are required to compute the shortest distances from $ S $ to all $ N-1 $ other vertices.<h2 style="margin-top:10px">Input</h2>There are multiple test cases. The first line of input is an integer $T(1\le  T&lt;35) $ denoting the number of test cases. For each test case, the first line contains two integers $ N(2\le  N\le  200000) $ and $ M(0\le  M\le  20000) $. The following $  M $ lines each contains two distinct integers $ u, v(1\le  u,v\le  N) $ denoting an edge. And $ S\ (1\le  S\le  N) $ is given on the last line.<h2 style="margin-top:10px">Output</h2>For each of $ T $ test cases, print a single line consisting of $N-1 $ space separated integers, denoting shortest distances of the remaining $ N-1 $ vertices from $ S $ (if a vertex cannot be reached from S, output ``-1" (without quotes) instead) in ascending order of vertex number.<h2 style="margin-top:10px">Sample Input</h2><pre>1
+2 0
+1</pre><h2 style="margin-top:10px">Sample Output</h2><pre>1</pre><div style="PAGE-BREAK-AFTER: always"></div><center><h1>J. Weak Pair</h1></center>You are given a $rooted$ tree of $ N $ nodes, labeled from 1 to $ N $. To the $ i $th node a non-negative value $ a_i $ is assigned.An $ordered$ pair of nodes $ (u, v) $ is said to be $weak$ if<br>&nbsp;&nbsp;(1) $ u $ is an ancestor of $ v $ (Note: In this problem a node $ u $ is not considered an ancestor of itself);<br>&nbsp;&nbsp;(2) $a_u\times a_v \le k$.<br><br> Can you find the number of weak pairs in the tree?<h2 style="margin-top:10px">Input</h2>There are multiple cases in the data set.<br>&nbsp;&nbsp;The first line of input contains an integer $ T $ denoting number of test cases.<br>&nbsp;&nbsp;For each case, the first line contains two space-separated integers, $ N $ and $ k $, respectively.<br>&nbsp;&nbsp;The second line contains $ N $ space-separated integers, denoting $ a_1 $ to $ a_N $.<br>&nbsp;&nbsp;Each of the subsequent lines contains two space-separated integers defining an edge connecting nodes $u$ and $ v $ , where node $ u $ is the parent of node $ v $.<br><br>&nbsp;&nbsp;Constrains: <br>&nbsp;&nbsp;<br>&nbsp;&nbsp;$ 1 \le   N \le   10^5 $ <br>&nbsp;&nbsp;<br>&nbsp;&nbsp;$ 0 \le   a_i \le   10^9 $ <br>&nbsp;&nbsp;<br>&nbsp;&nbsp;$ 0 \le   k \le   10^{18} $<h2 style="margin-top:10px">Output</h2>For each test case, print a single integer on a single line denoting the number of weak pairs in the tree.<h2 style="margin-top:10px">Sample Input</h2><pre>1
+2 3
+1 2
+1 2</pre><h2 style="margin-top:10px">Sample Output</h2><pre>1</pre><div style="PAGE-BREAK-AFTER: always"></div>
+
+
+
+</body></html>
