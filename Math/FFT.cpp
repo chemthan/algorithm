@@ -2,7 +2,7 @@
 using namespace std;
 
 #define double long double
-const int MAXF = 1 << 18;
+const int MAXF = 1 << 17;
 struct cp {
     double x, y;
     cp(double x = 0, double y = 0) : x(x), y(y) {}
@@ -99,7 +99,7 @@ void multiply(int a[], int b[], int na, int nb, int c[], int mod = (int) 1e9 + 7
         c[i] = ((u << 15) + v + (w << 30)) % mod;
     }
 }
-vector<int> multiply(vector<int>& a, vector<int>& b, int mod = (int) 1e9 + 7) {
+vector<int> multiply(vector<int> a, vector<int> b, int mod = (int) 1e9 + 7) {
     static int fa[MAXF], fb[MAXF], fc[MAXF];
     int na = a.size(), nb = b.size();
     for (int i = 0; i < na; i++) fa[i] = a[i];
@@ -118,9 +118,19 @@ int b[MAXF];
 int c[MAXF];
 int d[MAXF];
 
+vector<int> divide(int L, int R) {
+    if (L == R) {
+        vector<int> res(L + 1, 0);
+        res[0] = 1;
+        res[L] = mod - 1;
+        return res;
+    }
+    return multiply(divide(L, L + R >> 1), divide((L + R >> 1) + 1, R));
+}
+
 int main() {
-    fftinit();
     srand(time(NULL));
+    fftinit();
     n = 1000;
     for (int i = 0; i < n; i++) {
         a[i] = rand();

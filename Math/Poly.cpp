@@ -2,7 +2,7 @@
 using namespace std;
 
 #define double long double
-const int MAXF = 1 << 18;
+const int MAXF = 1 << 17;
 struct cp {
     double x, y;
     cp(double x = 0, double y = 0) : x(x), y(y) {}
