@@ -36,7 +36,7 @@ struct NTT {
             rts[i] = (long long) rts[i - 1] * pw % pr;
         }
         for (int i = 1; i <= MAXF; i <<= 1) {
-            iv[i] = fpow(i, MOD - 2, MOD);
+            iv[i] = fpow(i, pr - 2, pr);
         }
     }
     void dft(int a[], int n, int sign) {
@@ -52,11 +52,11 @@ struct NTT {
                 int *w = sign > 0 ? rts : rts + MAXF;
                 for (int k = 0; k + k < len; k++) {
                     int &a1 = a[i + k + (len >> 1)], &a2 = a[i + k];
-                    int t = (long long) *w * a1 % MOD;
+                    int t = (long long) *w * a1 % pr;
                     a1 = a2 - t;
                     a2 = a2 + t;
-                    a1 += a1 < 0 ? MOD : 0;
-                    a2 -= a2 >= MOD ? MOD : 0;
+                    a1 += a1 < 0 ? pr : 0;
+                    a2 -= a2 >= pr ? pr : 0;
                     w += delta;
                 }
             }
