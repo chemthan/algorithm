@@ -30,16 +30,20 @@ void fftinit() {
         bitrev[i] = bitrev[i >> 1] >> 1 | ((i & 1) << k - 1);
     }
     double PI = acos((double) -1.0);
-    cp w = cp(cos(2 * PI / MAXF), sin(2 * PI / MAXF));
     rts[0] = rts[MAXF] = cp(1, 0);
     for (int i = 1; i + i <= MAXF; i++) {
-        rts[i] = rts[i - 1] * w;
+        rts[i] = cp(cos(i * 2 * PI / MAXF), sin(i * 2 * PI / MAXF));
     }
     for (int i = MAXF / 2 + 1; i < MAXF; i++) {
         rts[i] = !rts[MAXF - i];
     }
 }
 void dft(cp a[], int n, int sign) {
+    static int runinit = 0;
+    if (!runinit) {
+        runinit = 1;
+        fftinit();
+    }
     int d = 0; while ((1 << d) * n != MAXF) d++;
     for (int i = 0; i < n; i++) {
         if (i < (bitrev[i] >> d)) {
@@ -130,7 +134,6 @@ vector<int> divide(int L, int R) {
 
 int main() {
     srand(time(NULL));
-    fftinit();
     n = 1000;
     for (int i = 0; i < n; i++) {
         a[i] = rand();
