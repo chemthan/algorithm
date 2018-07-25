@@ -1,8 +1,8 @@
 #include <bits/stdc++.h>
 using namespace std;
 
-#define double long double
-const int MAXF = 1 << 17;
+//#define double long double
+const int MAXF = 1 << 20;
 struct cp {
     double x, y;
     cp(double x = 0, double y = 0) : x(x), y(y) {}
@@ -103,7 +103,7 @@ void multiply(int a[], int b[], int na, int nb, int c[], int mod = (int) 1e9 + 7
         c[i] = ((u << 15) + v + (w << 30)) % mod;
     }
 }
-vector<int> multiply(vector<int>& a, vector<int>& b, int mod = (int) 1e9 + 7) {
+vector<int> multiply(vector<int> a, vector<int> b, int mod = (int) 1e9 + 7) {
     static int fa[MAXF], fb[MAXF], fc[MAXF];
     int na = a.size(), nb = b.size();
     for (int i = 0; i < na; i++) fa[i] = a[i];
@@ -124,24 +124,22 @@ int fpow(int a, int k, int p) {
     }
     return res;
 }
-vector<int> invert(vector<int> a, int n, int mod) {
-    if (n == 1) {
-        vector<int> res(1);
-        res[0] = fpow(a[0], mod - 2, mod);
-        return res;
+vector<int> invert(vector<int> a, int n, int mod){
+    assert(a[0] != 0);
+    vector<int> x(1, fpow(a[0], mod - 2, mod));
+    while(x.size() < n){
+        vector<int> temp(a.begin(), a.begin() + min(a.size(), 2 * x.size()));
+        vector<int> nx = multiply(multiply(x, x, mod), temp, mod);
+        x.resize(2 * x.size());
+        for(int i = 0; i < x.size(); i++) {
+            x[i] += x[i];
+            x[i] -= nx[i];
+            if (x[i] < 0) x[i] += mod;
+            if (x[i] >= mod) x[i] -= mod;
+        }
     }
-    int nn = n + 1 >> 1;
-    vector<int> b = invert(a, nn, mod);
-    vector<int> c = multiply(b, b, mod);
-    c = multiply(a, c, mod);
-    while (b.size() < n) b.push_back(0);
-    while (b.size() > n) b.pop_back();
-    for (int i = 0; i < n; i++) {
-        b[i] = b[i] + b[i] - c[i];
-        if (b[i] >= mod) b[i] -= mod;
-        if (b[i] < 0) b[i] += mod;
-    }
-    return b;
+    x.resize(n);
+    return x;
 }
 pair<vector<int>, vector<int> > divmod(vector<int> a, vector<int> b, int mod) {
     int n = a.size(), m = b.size();
