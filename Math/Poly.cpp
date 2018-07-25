@@ -1,7 +1,7 @@
 #include <bits/stdc++.h>
 using namespace std;
 
-//#define double long double
+#define double long double
 const int MAXF = 1 << 20;
 struct cp {
     double x, y;
