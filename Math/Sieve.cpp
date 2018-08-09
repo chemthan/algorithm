@@ -1,9 +1,9 @@
 #include <bits/stdc++.h>
 using namespace std;
 
-struct Sieve {
-    static const int maxn = 123456;
-    static void work(int n) {
+namespace Sieve {
+    const int maxn = 123456;
+    void work(int n) {
         int k = sqrt(n) + 2;
         while (k * k > n) k--;
         static int ispr[maxn];
@@ -34,7 +34,8 @@ struct Sieve {
 };
 
 int main() {
-    int n; cin >> n;
-    Sieve::work(n);
+    Sieve::work((int) 1e9);
+    cerr << "Correct\n";
+    cerr << "\nTime elapsed: " << 1000 * clock() / CLOCKS_PER_SEC << "ms\n";
     return 0;
 }
