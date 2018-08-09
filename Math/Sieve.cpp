@@ -31,7 +31,7 @@ namespace Sieve {
             }
         }
     }
-};
+}
 
 int main() {
     Sieve::work((int) 1e9);

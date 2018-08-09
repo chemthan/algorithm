@@ -43,7 +43,7 @@ namespace CRT {
         }
         return N;
     }
-};
+}
 
 int main() {
     int p[] = {2, 3, 5};
