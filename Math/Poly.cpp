@@ -164,6 +164,7 @@ namespace FFT {
         return make_pair(d, r);
     }
 }
+#undef double
 
 const int maxn = 1e5 + 5;
 const int mod = (int) 1e9 + 7;

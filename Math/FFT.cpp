@@ -116,6 +116,7 @@ namespace FFT {
         return res;
     }
 }
+#undef double
 
 const int mod = (int) 1e9 + 7;
 const int maxn = 1 << 17;
