@@ -21,7 +21,7 @@ namespace NTT {
     void init(int _pr, int _pw) {
         pr = _pr, pw = _pw;
     }
-    void dft(int *a, int pr, int pw, int n) {
+    void dft(int a[], int pr, int pw, int n) {
         for (int m = n, h; h = m / 2, m >= 2; pw = (long long) pw * pw % pr, m = h) {
             for (int i = 0, w = 1; i < h; i++, w = (long long) w * pw % pr) {
                 for (int j = i; j < n; j += m) {
