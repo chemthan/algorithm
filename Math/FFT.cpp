@@ -115,44 +115,136 @@ namespace FFT {
         for (int i = 0; i < k; i++) res[i] = fc[i];
         return res;
     }
+    int fpow(int a, int k, int p) {
+        if (!k) return 1;
+        int res = a, t = a; k--;
+        while (k) {
+            if (k & 1) res = (long long) res * t % p;
+            t = (long long) t * t % p;
+            k >>= 1;
+        }
+        return res;
+    }
+    vector<int> invert(vector<int> a, int n, int mod){
+        assert(a[0] != 0);
+        vector<int> x(1, fpow(a[0], mod - 2, mod));
+        while (x.size() < n) {
+            vector<int> tmp(a.begin(), a.begin() + min(a.size(), 2 * x.size()));
+            vector<int> nx = multiply(multiply(x, x, mod), tmp, mod);
+            x.resize(2 * x.size());
+            for (int i = 0; i < x.size(); i++) {
+                x[i] += x[i];
+                x[i] -= nx[i];
+                if (x[i] < 0) x[i] += mod;
+                if (x[i] >= mod) x[i] -= mod;
+            }
+        }
+        x.resize(n);
+        return x;
+    }
+    pair<vector<int>, vector<int> > divmod(vector<int> a, vector<int> b, int mod) {
+        int n = a.size(), m = b.size();
+        if (n < m) {
+            return make_pair(vector<int>(), a);
+        }
+        reverse(a.begin(), a.end());
+        reverse(b.begin(), b.end());
+        vector<int> rb = invert(b, n - m + 1, mod);
+        vector<int> d = multiply(a, rb, mod);
+        reverse(a.begin(), a.end());
+        reverse(b.begin(), b.end());
+        while (d.size() > n - m + 1) d.pop_back();
+        reverse(d.begin(), d.end());
+        vector<int> r = multiply(d, b, mod);
+        while (r.size() >= m) r.pop_back();
+        for (int i = 0; i < m; i++) {
+            r[i] = a[i] - r[i];
+            if (r[i] < 0) r[i] += mod;
+        }
+        return make_pair(d, r);
+    }
 }
 #undef double
 
+const int maxn = 1e5 + 5;
 const int mod = (int) 1e9 + 7;
-const int maxn = 1 << 17;
-int n;
+int n, m;
 int a[maxn];
-int b[maxn];
-int c[maxn];
-int d[maxn];
+vector<int> st[maxn << 2];
 
-vector<int> divide(int L, int R) {
+void build(int p, int L, int R) {
     if (L == R) {
-        vector<int> res(L + 1, 0);
-        res[0] = 1;
-        res[L] = mod - 1;
-        return res;
+        st[p].resize(2);
+        st[p][0] = mod - a[L + R >> 1];
+        st[p][1] = 1;
+        return;
     }
-    return FFT::multiply(divide(L, L + R >> 1), divide((L + R >> 1) + 1, R));
+    build(p << 1, L, L + R >> 1);
+    build(p << 1 | 1, (L + R >> 1) + 1, R);
+    st[p] = FFT::multiply(st[p << 1], st[p << 1 | 1]);
+    while (st[p].size() > R - L + 2) st[p].pop_back();
+}
+
+void divide(int p, int L, int R, vector<int> poly, vector<int>& vals) {
+    poly = FFT::divmod(poly, st[p], mod).second;
+    if (L == R) {
+        vals[L + R >> 1] = poly[0];
+        return;
+    }
+    divide(p << 1, L, L + R >> 1, poly, vals);
+    divide(p << 1 | 1, (L + R >> 1) + 1, R, poly, vals);
+}
+
+void testdivmod() {
+    int n = 1000 + rand() % 100, m = 100 + rand() % 10;
+    vector<int> a, b;
+    for (int i = 0; i < n; i++) {
+        a.push_back(rand() % mod);
+    }
+    for (int i = 0; i < m; i++) {
+        b.push_back(rand() % mod);
+    }
+    pair<vector<int>, vector<int> > res = FFT::divmod(a, b, mod);
+    vector<int> d = res.first;
+    vector<int> r = res.second;
+    assert(r.size() < b.size());
+    vector<int> c = FFT::multiply(b, d, mod);
+    for (int i = 0; i < r.size(); i++) {
+        c[i] += r[i];
+        if (c[i] >= mod) {
+            c[i] -= mod;
+        }
+    }
+    for (int i = 0; i < n; i++) {
+        assert(a[i] == c[i]);
+    }
+}
+
+void testmuleval() {
+    n = 5000, m = 5000;
+    vector<int> poly;
+    for (int i = 0; i < n; i++) {
+        a[i] = rand() % mod;
+    }
+    for (int i = 0; i < m; i++) {
+        poly.push_back(rand() % mod);
+    }
+    build(1, 0, n - 1);
+    vector<int> vals(n);
+    divide(1, 0, n - 1, poly, vals);
+    for (int i = 0; i < n; i++) {
+        int t = 0;
+        for (int j = (int) poly.size() - 1; j >= 0; j--) {
+            t = ((long long) t * a[i] + poly[j]) % mod;
+        }
+        assert(t == vals[i]);
+    }
 }
 
 int main() {
     srand(time(NULL));
-    n = 1000;
-    for (int i = 0; i < n; i++) {
-        a[i] = rand();
-        b[i] = rand();
-    }
-    FFT::multiply(a, b, n, n, c, mod);
-    for (int i = 0; i < n; i++) {
-        for (int j = 0; j < n; j++) {
-            d[i + j] += (long long) a[i] * b[j] % mod;
-            d[i + j] %= mod;
-        }
-    }
-    for (int i = 0; i < n + n - 1; i++) {
-        assert(c[i] == d[i]);
-    }
+    testdivmod();
+    testmuleval();
     cerr << "Correct\n";
     cerr << "\nTime elapsed: " << 1000 * clock() / CLOCKS_PER_SEC << "ms\n";
     return 0;
