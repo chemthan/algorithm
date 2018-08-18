@@ -1,48 +1,54 @@
 #include <bits/stdc++.h>
 using namespace std;
 
-const int MAXN = 100000 + 5;
-const int LOGN = 20;
-int n;
-vector<int> adj[MAXN];
-vector<int> event;
-int st[MAXN];
-int tin[MAXN];
-int idx[MAXN];
-int tms;
+namespace LCA {
+    const int maxn = 1e5 + 5;
+    const int logn = 20;
+    vector<int> event;
+    int sta[maxn];
+    int tin[maxn];
+    int idx[maxn];
+    int tms;
+    int f[logn][maxn << 1];
+    int lg[maxn];
 
-int f[LOGN][MAXN << 1];
-void build() {
-	for (int i = 0; i < event.size(); i++) {
-		f[0][i] = event[i];
-	}
-	for (int i = 1; i < LOGN; i++) {
-		for (int j = 0; j + (1 << i - 1) < event.size(); j++) {
-			f[i][j] = min(f[i - 1][j], f[i - 1][j + (1 << i - 1)]);
-		}
-	}
-}
-int query(int u, int v) {
-	int l = u == v ? 0 : __lg(v - u);
-	return min(f[l][u], f[l][v - (1 << l) + 1]);
-}
-void dfs(int u, int p = -1) {
-	idx[tin[u] = tms++] = u;
-	st[u] = event.size();
-	event.push_back(tin[u]);
-	for (int i = 0; i < adj[u].size(); i++) {
-		int v = adj[u][i];
-		if (v != p) {
-			dfs(v, u);
-			event.push_back(tin[u]);
-		}
-	}
-}
-int lca(int u, int v) {
-	if (st[u] > st[v]) swap(u, v);
-	return idx[query(st[u], st[v])];
+    void dfs(int u, int p, vector<int> adj[]) {
+        idx[tin[u] = tms++] = u;
+        sta[u] = event.size();
+        event.push_back(tin[u]);
+        for (int i = 0; i < adj[u].size(); i++) {
+            int v = adj[u][i];
+            if (v != p) {
+                dfs(v, u, adj);
+                event.push_back(tin[u]);
+            }
+        }
+    }
+    int query(int u, int v) {
+        int l = u == v ? 0 : lg[v - u];
+        return min(f[l][u], f[l][v - (1 << l) + 1]);
+    }
+    int lca(int u, int v) {
+        if (sta[u] > sta[v]) swap(u, v);
+        return idx[query(sta[u], sta[v])];
+    }
+    void build(vector<int> adj[]) {
+        events.clear();
+        dfs(tms = 0, -1, adj);
+        for (int i = 0; i < event.size(); i++) {
+            f[0][i] = event[i];
+        }
+        for (int i = 1; i < logn; i++) {
+            for (int j = 0; j + (1 << i - 1) < event.size(); j++) {
+                f[i][j] = min(f[i - 1][j], f[i - 1][j + (1 << i - 1)]);
+            }
+        }
+        for (int i = 1; i < maxn; i++) {
+            lg[i] = __lg(i);
+        }
+    }
 }
 
 int main() {
-	return 0;
+    return 0;
 }
