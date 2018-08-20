@@ -6,11 +6,12 @@ using namespace std;
 * Problems:
 * 1. http://codeforces.com/problemset/problem/704/D
 */
+#define MF Maxflow
+#define flow_t int
+const flow_t foo = (flow_t) 1e9;
 namespace Maxflow {
-    typedef int flow_t;
     const int maxv = 1e5 + 5;
     const int maxe = 1e6 + 5;
-    const flow_t oo = (flow_t) 1e9;
     int n, s, t, E;
     int adj[maxe], nxt[maxe], lst[maxv], ptr[maxv], lev[maxv], que[maxv];
     flow_t flw[maxe], cap[maxe];
@@ -56,7 +57,7 @@ namespace Maxflow {
         flow_t total = 0;
         while (bfs()) {
             for (int i = 0; i < n; i++) ptr[i] = lst[i];
-            for (flow_t delta = dfs(s, oo); delta > 0; delta = dfs(s, oo)) total += delta;
+            for (flow_t delta = dfs(s, foo); delta > 0; delta = dfs(s, foo)) total += delta;
         }
         return total;
     }
@@ -74,7 +75,6 @@ namespace Maxflow {
         return tree;
     }
 }
-#define MF Maxflow
 
 int main() {
     MF::init(3, 0, 2);

@@ -5,13 +5,14 @@ using namespace std;
 * Problems:
 * 1. http://codeforces.com/contest/708/problem/D
 */
+#define MCMF MincostMaxflow
+#define flow_t int
+#define cost_t int
+const flow_t foo = (flow_t) 1e9;
+const cost_t coo = (cost_t) 1e9;
 namespace MincostMaxflow {
-    typedef int flow_t;
-    typedef int cost_t;
     const int maxv = 1e5 + 5;
     const int maxe = 1e6 + 5;
-    const flow_t foo = (flow_t) 1e9;
-    const cost_t coo = (cost_t) 1e9;
     int n, s, t, E;
     int adj[maxe], nxt[maxe], lst[maxv], frm[maxv], vis[maxv];
     flow_t cap[maxe], flw[maxe], totalFlow;
@@ -61,7 +62,6 @@ namespace MincostMaxflow {
         return totalCost;
     }
 }
-#define MCMF MincostMaxflow
 
 int main() {
     MCMF::init(3, 0, 2);
