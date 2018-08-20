@@ -74,12 +74,13 @@ namespace Maxflow {
         return tree;
     }
 }
+#define MF Maxflow
 
 int main() {
-    Maxflow::init(3, 0, 2);
-    Maxflow::add(0, 1, 3, 0);
-    Maxflow::add(1, 2, 4, 0);
-    assert(Maxflow::maxflow() == 3);
+    MF::init(3, 0, 2);
+    MF::add(0, 1, 3, 0);
+    MF::add(1, 2, 4, 0);
+    assert(MF::maxflow() == 3);
     cerr << "Correct!\n";
     cerr << "\nTime elapsed: " << 1000 * clock() / CLOCKS_PER_SEC << "ms\n";
     return 0;
