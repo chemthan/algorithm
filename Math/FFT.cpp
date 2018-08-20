@@ -245,7 +245,7 @@ int main() {
     srand(time(NULL));
     testdivmod();
     testmuleval();
-    cerr << "Correct\n";
+    cerr << "Correct!\n";
     cerr << "\nTime elapsed: " << 1000 * clock() / CLOCKS_PER_SEC << "ms\n";
     return 0;
 }
