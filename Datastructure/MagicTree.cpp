@@ -7,11 +7,12 @@ using namespace std;
  * Problem:
  * 1. http://vn.spoj.com/problems/VOMARIO/Problems
  */
-template<class T, const T oo> struct MagicTree {
+template<class num_t, const num_t oo>
+struct MagicTree {
     struct func_t {
-        T a, b;
-        func_t(T a = 0, T b = oo) : a(a), b(b) {}
-        T query(T x) {return a * x + b;}
+        num_t a, b;
+        func_t(num_t a = 0, num_t b = oo) : a(a), b(b) {}
+        num_t query(num_t x) {return a * x + b;}
     };
 
     static const int maxn = 1e5 + 5;
@@ -58,12 +59,12 @@ template<class T, const T oo> struct MagicTree {
             upd(p << 1 | 1, l, r, (L + R >> 1) + 1, R, f);
         }
     }
-    void upd(int p, int l, int r, int L, int R, T a, T b) {
+    void upd(int p, int l, int r, int L, int R, num_t a, num_t b) {
         upd(p, l, r, L, R, func_t(a, b));
     }
-    T query(int p, int i, int L, int R) {
+    num_t query(int p, int i, int L, int R) {
         if (i < L || i > R) return oo;
-        T res = st[p].query(i);
+        num_t res = st[p].query(i);
         if (L < R) {
             res = min(res, query(p << 1, i, L, L + R >> 1));
             res = min(res, query(p << 1 | 1, i, (L + R >> 1) + 1, R));
