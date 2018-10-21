@@ -2,13 +2,13 @@
 using namespace std;
 
 /*
-* Complexity: O(N)
-* f[j] = min(b[i][j] = d[i] + w[i][j]), 0 <= j < i
-* d[i] is computed from f[i] in constant time
-* Sufficient condition: w[a][c] + w[b][d] <= w[b][c] + w[a][d], a <= b <= c <= d
-* Problem:
-* 1. http://codeforces.com/problemset/problem/319/C
-*/
+ * Complexity: O(N)
+ * f[j] = min(b[i][j] = d[i] + w[i][j]), 0 <= i < j
+ * d[i] is computed from f[i] in constant time
+ * Sufficient condition: w[a][c] + w[b][d] <= w[b][c] + w[a][d], a <= b <= c <= d
+ * Problem:
+ * 1. http://codeforces.com/problemset/problem/319/C
+ */
 
 const int ar[9][18] = {
     {25, 21, 13, 10, 20, 13, 19, 35, 37, 41, 58, 66, 82, 99, 124, 133, 156, 178},
@@ -22,98 +22,103 @@ const int ar[9][18] = {
     {151, 130, 104, 88, 80, 59, 52, 49, 37, 29, 29, 24, 23, 20, 28, 25, 31, 39}
 };
 
-typedef int T;
-const T oo = (T) 1e9;
-const int MAXN = 1e5 + 5;
-int n, r, c;
-T f[MAXN];
-T g[MAXN];
-int h[MAXN];
+typedef int num_t;
+const num_t oo = (num_t) 1e9;
+namespace OneDOneD {
+    const int maxn = 1e5 + 5;
+    int n, r, c;
+    num_t f[maxn];
+    num_t g[maxn];
+    int h[maxn];
 
-T D(int i) {return f[i];} //Need to modify
-T W(int i, int j) {return ar[i][j];} //Need to modify
-T B(int i, int j) {return D(i) + W(i, j);}
-T lookup(int j, int i) {if (!i) return g[j + c]; return B(i + r - 1, j + c);}
+    num_t D(int i) {return f[i];} //Need to modify
+    num_t W(int i, int j) {return ar[i][j];} //Need to modify
+    num_t B(int i, int j) {return D(i) + W(i, j);}
+    num_t lookup(int j, int i) {if (!i) return g[j + c]; return B(i + r - 1, j + c);}
 
-void SMAWK(int n, int inc, vector<int> col, int row_minima[]) {
-    const int row_size = (n + inc - 1) / inc;
-    vector<int> sub_col;
-    for (int i = 0; i < col.size(); i++) {
-        while (sub_col.size() && lookup(inc * (sub_col.size() - 1), sub_col.back()) >= lookup(inc * (sub_col.size() - 1), col[i]))
-            sub_col.pop_back();
-        if (sub_col.size() < row_size) sub_col.push_back(col[i]);
-    }
-    col = sub_col;
-    if (row_size == 1) {
-        row_minima[0] = col[0];
-        return;
-    }
-    SMAWK(n, inc << 1, col, row_minima);
-    for (int i = inc, c = 0; i < n; i += 2 * inc) {
-        int pre = row_minima[i - inc];
-        int next = (i + inc < n) ? row_minima[i + inc] : col.back();
-        while (c < col.size() && col[c] < pre) c++;
-        int& res = row_minima[i];
-        res = col[c];
-        while (c < col.size() && col[c] <= next) {
-            if (lookup(i, col[c]) <= lookup(i, res)) res = col[c];
-            c++;
+    void SMAWK(int n, int inc, vector<int> col, int row_minima[]) {
+        const int row_size = (n + inc - 1) / inc;
+        vector<int> sub_col;
+        for (int i = 0; i < col.size(); i++) {
+            while (sub_col.size() && lookup(inc * (sub_col.size() - 1), sub_col.back()) >= lookup(inc * (sub_col.size() - 1), col[i]))
+                sub_col.pop_back();
+            if (sub_col.size() < row_size) sub_col.push_back(col[i]);
         }
-        c--;
+        col = sub_col;
+        if (row_size == 1) {
+            row_minima[0] = col[0];
+            return;
+        }
+        SMAWK(n, inc << 1, col, row_minima);
+        for (int i = inc, c = 0; i < n; i += 2 * inc) {
+            int pre = row_minima[i - inc];
+            int next = (i + inc < n) ? row_minima[i + inc] : col.back();
+            while (c < col.size() && col[c] < pre) c++;
+            int& res = row_minima[i];
+            res = col[c];
+            while (c < col.size() && col[c] <= next) {
+                if (lookup(i, col[c]) <= lookup(i, res)) res = col[c];
+                c++;
+            }
+            c--;
+        }
     }
-}
-void SMAWK(int n, int m, int row_minima[]) {
-    vector<int> col(m);
-    for (int i = 0; i < m; i++) col[i] = i;
-    SMAWK(n, 1, col, row_minima);
-}
-void solve() {
-    /*for (int a = 0; a < n; a++) {
-        for (int b = a; b < n; b++) {
-            for (int c = b; c < n; c++) {
-                for (int d = c; d < n; d++) {
-                    assert(W(a, c) + W(b, d) <= W(a, d) + W(b, c));
+    void SMAWK(int n, int m, int row_minima[]) {
+        vector<int> col(m);
+        for (int i = 0; i < m; i++) col[i] = i;
+        SMAWK(n, 1, col, row_minima);
+    }
+    num_t solve() {
+        /*for (int a = 0; a < n; a++) {
+            for (int b = a; b < n; b++) {
+                for (int c = b; c < n; c++) {
+                    for (int d = c; d < n; d++) {
+                        assert(W(a, c) + W(b, d) <= W(a, d) + W(b, c));
+                    }
                 }
             }
-        }
-    }*/
-    r = 0, c = 1;
-    f[0] = 0; //Need to modify
-    fill_n(g, n, +oo);
-    while (c < n) {
-        int p = min(2 * c - r, n - 1);
-        SMAWK(p - c + 1, c - r + 1, h + c);
-        f[c] = lookup(c - c, h[c]);
-        int j = 0;
-        for (j = c + 1; j <= p; j++) {
-            if (B(j - 1, j) < lookup(j - c, h[j])) {
-                f[j] = B(j - 1, j);
-                break;
-            }
-            else {
-                f[j] = lookup(j - c, h[j]);
-                if (B(j - 1, p) < lookup(p - c, h[p])) {
-                    for (int k = j + 1; k <= p; k++) {
-                        g[k] = lookup(k - c, h[k]);
-                    }
+        }*/
+        r = 0, c = 1;
+        f[0] = 0; //Need to modify
+        fill_n(g, n, +oo);
+        while (c < n) {
+            int p = min(2 * c - r, n - 1);
+            SMAWK(p - c + 1, c - r + 1, h + c);
+            f[c] = lookup(c - c, h[c]);
+            int j = 0;
+            for (j = c + 1; j <= p; j++) {
+                if (B(j - 1, j) < lookup(j - c, h[j])) {
+                    f[j] = B(j - 1, j);
                     break;
                 }
+                else {
+                    f[j] = lookup(j - c, h[j]);
+                    if (B(j - 1, p) < lookup(p - c, h[p])) {
+                        for (int k = j + 1; k <= p; k++) {
+                            g[k] = lookup(k - c, h[k]);
+                        }
+                        break;
+                    }
+                }
+            }
+            if (j <= p) {
+                c = j + 1;
+                r = j - 1;
+            }
+            else {
+                c = p + 1;
+                if (h[p]) r += h[p] - 1;
             }
         }
-        if (j <= p) {
-            c = j + 1;
-            r = j - 1;
-        }
-        else {
-            c = p + 1;
-            if (h[p]) r += h[p] - 1;
-        }
+        return f[n - 1];
     }
 }
+
+using namespace OneDOneD;
 
 int main() {
     n = 9;
-    solve();
+    cout << solve() << "\n";
     for (int i = 0; i < n; i++) {
         for (int j = 0; j < i; j++) {
             assert (f[i] <= D(j) + W(j, i));
