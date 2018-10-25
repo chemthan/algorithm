@@ -2,43 +2,36 @@
 using namespace std;
 
 /*
-* Complexity: O(logN)
-* Problems:
-* 1. http://codeforces.com/contest/631/problem/E
-* 2. http://codeforces.com/contest/660/problem/F
-* 3. http://codeforces.com/gym/100739/problem/K
-* 4. http://codeforces.com/contest/455/problem/E
-* 5. https://www.codechef.com/problems/CYCLRACE
-*/
-typedef long long T;
-const T oo = (T) 1e18;
+ * Complexity: O(logN)
+ * Problems:
+ * 1. http://codeforces.com/contest/631/problem/E
+ * 2. http://codeforces.com/contest/660/problem/F
+ * 3. http://codeforces.com/gym/100739/problem/K
+ * 4. http://codeforces.com/contest/455/problem/E
+ * 5. https://www.codechef.com/problems/CYCLRACE
+ */
+#define double long double
+typedef long long num_t;
+const num_t oo = (num_t) 1e18;
 struct DynamicLineHull {
     struct Line {
-        T a, b;
-        Line(T a = 0, T b = 0) : a(a), b(b) {}
-        int operator < (const Line& rhs) const {
-            return make_pair(-a, b) < make_pair(-rhs.a, rhs.b);
-        }
-        int operator == (const Line& rhs) const {
-            return make_pair(a, b) == make_pair(rhs.a, rhs.b);
-        }
-        int operator != (const Line& rhs) const {
-            return make_pair(a, b) != make_pair(rhs.a, rhs.b);
-        }
-        T query(T x) {
-            return a * x + b;
-        }
+        num_t a, b;
+        Line(num_t a = 0, num_t b = 0) : a(a), b(b) {}
+        int operator < (const Line& rhs) const {return make_pair(-a, b) < make_pair(-rhs.a, rhs.b);}
+        int operator == (const Line& rhs) const {return make_pair(a, b) == make_pair(rhs.a, rhs.b);}
+        int operator != (const Line& rhs) const {return make_pair(a, b) != make_pair(rhs.a, rhs.b);}
+        num_t query(num_t x) {return a * x + b;}
     };
-    long double intersect(Line ln1, Line ln2) {
-        return (long double) (ln2.b - ln1.b) / (ln1.a - ln2.a);
+    double intersect(Line ln1, Line ln2) {
+        return (double) (ln2.b - ln1.b) / (ln1.a - ln2.a);
     }
     int bad(Line ln1, Line ln2, Line ln3) {
-        return (long double) (ln1.a - ln2.a) * (ln2.b - ln3.b) >= (long double) (ln2.a - ln3.a) * (ln1.b - ln2.b);
+        return (double) (ln1.a - ln2.a) * (ln2.b - ln3.b) >= (double) (ln2.a - ln3.a) * (ln1.b - ln2.b);
         //return intersect(ln1, ln2) >= intersect(ln2, ln3);
     }
     set<Line> hull;
-    set<pair<long double, Line> > pos;
-    void add(T a, T b) {
+    set<pair<double, Line> > pos;
+    void add(num_t a, num_t b) {
         Line ln(a, b);
         if (hull.find(ln) != hull.end()) return;
         hull.insert(ln);
@@ -97,13 +90,14 @@ struct DynamicLineHull {
             it--;
         }
     }
-    T query(T x) {
+    num_t query(num_t x) {
         if (!pos.size()) return oo;
-        set<pair<long double, Line> >::iterator it = pos.upper_bound(make_pair(x, Line(-oo, -oo)));
+        set<pair<double, Line> >::iterator it = pos.upper_bound(make_pair(x, Line(-oo, -oo)));
         it--;
         return it->second.a * x + it->second.b;
     }
 } dlh;
+#undef double
 
 int main() {
     return 0;
