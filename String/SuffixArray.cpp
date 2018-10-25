@@ -8,7 +8,7 @@ using namespace std;
  */
 struct SuffixArray {
     static const int maxn = 1e5 + 5;
-    static const char SEP = '$';
+    static const char sep = '$';
 
     int n;
     char s[maxn];
@@ -67,7 +67,7 @@ struct SuffixArray {
         for (int i = 0, k = 0; i < n; i++) {
             if (!ra[0][i]) lcp[ra[0][i]] = 0;
             else {
-                for (int j = sa[ra[0][i] - 1]; s[i + k] == s[j + k] && s[i + k] != SEP; k++);
+                for (int j = sa[ra[0][i] - 1]; s[i + k] == s[j + k] && s[i + k] != sep; k++);
                 lcp[ra[0][i]] = k;
                 k = max(k - 1, 0);
             }
