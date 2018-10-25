@@ -2,9 +2,9 @@
 using namespace std;
 
 /*
-* SuffixArray DC3 Algorithm
-* Complexity: O(N)
-*/
+ * SuffixArray DC3 Algorithm
+ * Complexity: O(N)
+ */
 unsigned char mask[] = {0x80, 0x40, 0x20, 0x10, 0x08, 0x04, 0x02, 0x01};
 #define tget(i) ((t[(i) / 8] & mask[(i) % 8]) ? 1 : 0)
 #define tset(i, b) t[(i) / 8] = (b) ? (mask[(i) % 8] | t[(i) / 8]) : ((~mask[(i) % 8]) & t[(i) / 8])
@@ -119,43 +119,53 @@ void buildSA(unsigned char* s, int* SA, int n, int K, int cs) {
     free(t);
 }
 struct SuffixArray {
-    static const int MAXN = 1e5 + 5;
-    static const int MAXC = 256;
-    static const unsigned char SEP = '$';
-    int SA[MAXN], RA[MAXN];
-    int Phi[MAXN], PLCP[MAXN];
-    int LCP[MAXN];
+    static const int maxn = 1e5 + 5;
+    static const int maxc = 256;
+    static const unsigned char sep = '$';
+    int sa[maxn], ra[maxn];
+    int phi[maxn], pclp[maxn];
+    int lcp[maxn];
     int n;
-    unsigned char s[MAXN];
-    
+    unsigned char s[maxn];
+
     void build(char* t) {
         n = strlen(t);
         for (int i = 0; i < n; i++) {
             s[i] = t[i];
-            RA[i] = SA[i] = 0;
-            Phi[i] = PLCP[i] = LCP[i] = 0;
+            ra[i] = sa[i] = 0;
+            phi[i] = pclp[i] = lcp[i] = 0;
         }
         s[n] = 0;
-        buildSA(s, SA, n, MAXC, 1);
+        buildSA(s, sa, n, maxc, 1);
         for (int i = 0; i < n; i++) {
-            RA[SA[i]] = i;
+            ra[sa[i]] = i;
         }
         buildLCP();
     }
     void buildLCP() {
         int L = 0;
-        Phi[SA[0]] = -1;
-        for (int i = 1; i < n; i++) Phi[SA[i]] = SA[i - 1];
+        phi[sa[0]] = -1;
+        for (int i = 1; i < n; i++) phi[sa[i]] = sa[i - 1];
         for (int i = 0; i < n; i++) {
-            if (!~Phi[i]) {PLCP[i] = 0; continue;}
-            while (s[i + L] == s[Phi[i] + L] && s[i + L] != SEP) L++;
-            PLCP[i] = L;
+            if (!~phi[i]) {pclp[i] = 0; continue;}
+            while (s[i + L] == s[phi[i] + L] && s[i + L] != sep) L++;
+            pclp[i] = L;
             L = max(L - 1, 0);
         }
-        for (int i = 0; i < n; i++) LCP[i] = PLCP[SA[i]];
+        for (int i = 0; i < n; i++) lcp[i] = pclp[sa[i]];
     }
 } sa;
 
 int main() {
+    sa.build((char*) "randomstring");
+    for (int i = 0; i < sa.n; i++) cout << sa.sa[i] << " \n"[i == sa.n - 1];
+    for (int i = 0; i < sa.n; i++) cout << sa.ra[i] << " \n"[i == sa.n - 1];
+    for (int i = 0; i < sa.n; i++) cout << sa.lcp[i] << " \n"[i == sa.n - 1];
+    /*
+    Expected:
+    1 3 11 9 5 2 10 4 0 8 6 7
+    8 0 5 1 7 4 10 11 9 3 6 2
+    0 0 0 0 0 0 1 0 0 1 0 0
+     */
     return 0;
 }

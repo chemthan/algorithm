@@ -2,19 +2,19 @@
 using namespace std;
 
 /*
-* Complexity: O(NlogN)
-* Problems:
-* 1. http://www.spoj.com/problems/SUBST1/
-*/
+ * Complexity: O(NlogN)
+ * Problems:
+ * 1. http://www.spoj.com/problems/SUBST1/
+ */
 struct SuffixArray {
     static const int maxn = 1e5 + 5;
     static const char SEP = '$';
-    
+
     int n;
     char s[maxn];
     int sa[maxn], ra[2][maxn];
     int lcp[maxn];
-    
+
     void build(char* t) {
         strcpy(s, t), n = strlen(s);
         for (int i = 0; i < n; i++) {
@@ -32,7 +32,7 @@ struct SuffixArray {
         }
         buildlcp();
     }
-    
+
     int radixsort() {
         static int p[maxn];
         static int tmpsa[maxn];
@@ -62,7 +62,7 @@ struct SuffixArray {
         for (int i = 0; i < n; i++) ra[0][i] = tmpra[i];
         return ptr < n - 1;
     }
-    
+
     void buildlcp() {
         for (int i = 0, k = 0; i < n; i++) {
             if (!ra[0][i]) lcp[ra[0][i]] = 0;
@@ -82,9 +82,9 @@ int main() {
     for (int i = 0; i < sa.n; i++) cout << sa.lcp[i] << " \n"[i == sa.n - 1];
     /*
     Expected:
-        1 3 11 9 5 2 10 4 0 8 6 7
-        8 0 5 1 7 4 10 11 9 3 6 2
-        0 0 0 0 0 0 1 0 0 1 0 0
-    */
+    1 3 11 9 5 2 10 4 0 8 6 7
+    8 0 5 1 7 4 10 11 9 3 6 2
+    0 0 0 0 0 0 1 0 0 1 0 0
+     */
     return 0;
 }
