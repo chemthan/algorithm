@@ -2,59 +2,67 @@
 using namespace std;
 
 /*
-* Complexity: O(logN)
-*/
-template<class TE, class TS> struct OrderedTree {
-    static const int MAXN = 1e5 + 5;
-    static const int LOGN = 20;
-    int tr[LOGN + 1][MAXN];
-    TS sm[LOGN + 1][MAXN];
-    void insert(int x, TE t) {
-        for (int i = 0; i < LOGN; i++) {
-            tr[i][x]++;
-            sm[i][x] += t;
-            x >>= 1;
+ * Complexity: O(logN)
+ */
+template<class num_t>
+struct OrderedTree {
+    int n;
+    vector<num_t> a;
+    num_t tot;
+    vector<num_t> x;
+    vector<num_t> y;
+
+    void init(int _n) {
+        n = _n;
+        a.resize(n);
+        tot = 0;
+        x.resize(n + 1);
+        y.resize(n + 1);
+    }
+
+    void upd(int p, num_t val, num_t cnt) {
+        assert(0 <= p && p < n);
+        a[p] = val, tot += cnt;
+        for (p++; p <= n; p += p & -p) {
+            x[p] += cnt;
+            y[p] += cnt * val;
         }
     }
-    void erase(int x, TE t) {
-        for (int i = 0; i < LOGN; i++) {
-            tr[i][x]--;
-            sm[i][x] -= t;
-            x >>= 1;
-        }
-    }
-    TE kthelm(int k) {
-        TE res = 0;
-        int a = 0, b = LOGN;
-        while (b--) {
-            a <<= 1;
-            k -= tr[b][a] < k ? tr[b][a++] : 0;
-            res = sm[b][a] / tr[b][a];
-        }
-        return res;
-    }
-    TS kthsum(int k) {
-        TS res = 0;
-        int a = 0, b = LOGN;
-        while (b--) {
-            a <<= 1;
-            if (tr[b][a] < k) {
-                res += sm[b][a];
+
+    num_t find_by_order(num_t k) {
+        assert(0 <= k && k <= tot);
+        if (!k) return -1;
+        int p = 0;
+        for (int i = __lg(n); i >= 0; i--) {
+            if (p + (1 << i) <= n && x[p + (1 << i)] < k) {
+                k -= x[p + (1 << i)];
+                p += 1 << i;
             }
-            k -= tr[b][a] < k ? tr[b][a++] : 0;
-            if (!b) res += sm[b][a] / tr[b][a] * k;
         }
-        return res;
+        return a[p];
+    }
+    num_t find_sum_by_order(num_t k) {
+        assert(0 <= k && k <= tot);
+        if (!k) return 0;
+        num_t res = 0;
+        int p = 0;
+        for (int i = __lg(n); i >= 0; i--) {
+            if (p + (1 << i) <= n && x[p + (1 << i)] < k) {
+                k -= x[p + (1 << i)];
+                res += y[p + (1 << i)];
+                p += 1 << i;
+            }
+        }
+        return res + k * a[p];
     }
 };
-OrderedTree<int, long long> odtree;
+OrderedTree<long long> odtree;
 
 int main() {
-    odtree.insert(0, 0), odtree.insert(1, 1), odtree.insert(1, 1);
-    odtree.insert(1, 1), odtree.insert(1, 1), odtree.insert(1, 1);
-    odtree.insert(2, 2);
-    cout << odtree.kthsum(7) << "\n"; //Expected 7
-    odtree.erase(2, 2);
-    cout << odtree.kthsum(6) << "\n"; //Expected 5
+    odtree.init(1e5);
+    odtree.upd(5, 5, 5);
+    odtree.upd(6, 8, 5);
+    cout << odtree.find_by_order(6) << "\n";
+    cout << odtree.find_sum_by_order(6) << "\n";
     return 0;
 }
