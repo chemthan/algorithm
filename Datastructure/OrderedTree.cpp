@@ -15,9 +15,11 @@ struct OrderedTree {
     void init(int _n) {
         n = _n;
         a.resize(n);
+        for (int i = 0; i < n; i++) a[i] = 0;
         tot = 0;
         x.resize(n + 1);
         y.resize(n + 1);
+        for (int i = 0; i <= n; i++) x[i] = y[i] = 0;
     }
 
     void upd(int p, num_t val, num_t cnt) {
