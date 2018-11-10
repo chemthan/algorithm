@@ -5,10 +5,13 @@ using namespace std;
  * Find minimum cut in undirected weighted graph
  * Complexity: O(V^3)
  */
-struct MinCutMatrix {
-    typedef int cap_t;
+#define TW StoerWagner
+#define cap_t int
+namespace StoerWagner {
     int n;
     vector<vector<cap_t> > graph;
+    vector<int> cut;
+
     void init(int _n) {
         n = _n;
         graph = vector<vector<cap_t>>(n, vector<cap_t>(n, 0));
@@ -38,7 +41,6 @@ struct MinCutMatrix {
         }
         return make_pair(key[s], make_pair(s, t));
     }
-    vector<int> cut;
     cap_t solve() {
         cap_t res = numeric_limits <cap_t>::max();
         vector<vector<int>> grps;
@@ -69,7 +71,7 @@ struct MinCutMatrix {
         }
         return res;
     }
-};
+}
 
 int main() {
     return 0;
