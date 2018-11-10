@@ -107,9 +107,13 @@ namespace Arborescence {
 int main() {
     ABS::init(4);
     ABS::add(1, 0, 1, 2);
-    ABS::add(1, 1, 2, 8);
-    ABS::add(1, 0, 2, 5);
-    ABS::add(1, 2, 3, 1);
+    ABS::add(2, 1, 2, 8);
+    ABS::add(3, 0, 2, 5);
+    ABS::add(4, 2, 3, 1);
     cout << ABS::mst(0) << "\n"; //expected 8
+    for (int ix : ABS::trace()) {
+        cout << ix << " ";
+    }
+    cout << "\n";
     return 0;
 }
