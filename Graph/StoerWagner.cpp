@@ -5,7 +5,7 @@ using namespace std;
  * Find minimum cut in undirected weighted graph
  * Complexity: O(V^3)
  */
-#define TW StoerWagner
+#define SW StoerWagner
 #define cap_t int
 namespace StoerWagner {
     int n;
