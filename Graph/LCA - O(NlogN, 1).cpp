@@ -10,7 +10,7 @@ namespace LCA {
     int idx[maxn];
     int tms;
     int f[logn][maxn << 1];
-    int lg[maxn];
+    int lg[maxn << 1];
 
     void dfs(int u, int p, vector<int> adj[]) {
         idx[tin[u] = tms++] = u;
@@ -43,7 +43,7 @@ namespace LCA {
                 f[i][j] = min(f[i - 1][j], f[i - 1][j + (1 << i - 1)]);
             }
         }
-        for (int i = 1; i < maxn; i++) {
+        for (int i = 1; i < (maxn << 1); i++) {
             lg[i] = __lg(i);
         }
     }
