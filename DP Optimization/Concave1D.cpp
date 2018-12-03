@@ -26,37 +26,43 @@ typedef int num_t;
 const num_t oo = (num_t) 1e9;
 namespace OneDOneD {
     const int maxn = 1e5 + 5;
+    const int logn = 20;
     int n, r, c;
     num_t f[maxn];
     num_t g[maxn];
     int h[maxn];
+    int cols[logn][maxn];
 
     num_t D(int i) {return f[i];} //Need to modify
     num_t W(int i, int j) {return ar[i][j];} //Need to modify
     num_t B(int i, int j) {return D(i) + W(i, j);}
     num_t lookup(int j, int i) {if (!i) return g[j + c]; return B(i + r - 1, j + c);}
 
-    void SMAWK(int n, int inc, vector<int> col, int row_minima[]) {
-        const int row_size = (n + inc - 1) / inc;
-        vector<int> sub_col;
-        for (int i = 0; i < col.size(); i++) {
-            while (sub_col.size() && lookup(inc * (sub_col.size() - 1), sub_col.back()) >= lookup(inc * (sub_col.size() - 1), col[i]))
-                sub_col.pop_back();
-            if (sub_col.size() < row_size) sub_col.push_back(col[i]);
+    void SMAWK(int n, int inc, int ncol, int row_minima[]) {
+        int row_size = (n + inc - 1) / inc;
+        int lev = __lg(inc);
+        int* col = cols[lev];
+        static int sub_col[maxn];
+        int num = 0;
+        for (int i = 0; i < ncol; i++) {
+            while (num && lookup(inc * (num - 1), sub_col[num - 1]) >= lookup(inc * (num - 1), col[i]))
+                num--;
+            if (num < row_size) sub_col[num++] = col[i];
         }
-        col = sub_col;
+        ncol = num, col = cols[lev + 1];
+        for (int i = 0; i < ncol; i++) col[i] = sub_col[i];
         if (row_size == 1) {
             row_minima[0] = col[0];
             return;
         }
-        SMAWK(n, inc << 1, col, row_minima);
+        SMAWK(n, inc << 1, ncol, row_minima);
         for (int i = inc, c = 0; i < n; i += 2 * inc) {
             int pre = row_minima[i - inc];
-            int next = (i + inc < n) ? row_minima[i + inc] : col.back();
-            while (c < col.size() && col[c] < pre) c++;
+            int next = (i + inc < n) ? row_minima[i + inc] : col[ncol - 1];
+            while (c < ncol && col[c] < pre) c++;
             int& res = row_minima[i];
             res = col[c];
-            while (c < col.size() && col[c] <= next) {
+            while (c < ncol && col[c] <= next) {
                 if (lookup(i, col[c]) <= lookup(i, res)) res = col[c];
                 c++;
             }
@@ -64,9 +70,8 @@ namespace OneDOneD {
         }
     }
     void SMAWK(int n, int m, int row_minima[]) {
-        vector<int> col(m);
-        for (int i = 0; i < m; i++) col[i] = i;
-        SMAWK(n, 1, col, row_minima);
+        for (int i = 0; i < m; i++) cols[0][i] = i;
+        SMAWK(n, 1, m, row_minima);
     }
     num_t solve() {
         /*for (int a = 0; a < n; a++) {
