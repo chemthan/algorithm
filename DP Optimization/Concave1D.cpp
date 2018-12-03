@@ -33,10 +33,10 @@ namespace OneDOneD {
     int h[maxn];
     int cols[logn][maxn];
 
-    num_t D(int i) {return f[i];} //Need to modify
-    num_t W(int i, int j) {return ar[i][j];} //Need to modify
-    num_t B(int i, int j) {return D(i) + W(i, j);}
-    num_t lookup(int j, int i) {if (!i) return g[j + c]; return B(i + r - 1, j + c);}
+    inline num_t D(int i) {return f[i];} //Need to modify
+    inline num_t W(int i, int j) {return ar[i][j];} //Need to modify
+    inline num_t B(int i, int j) {return D(i) + W(i, j);}
+    inline num_t lookup(int j, int i) {if (!i) return g[j + c]; return B(i + r - 1, j + c);}
 
     void SMAWK(int n, int inc, int ncol, int row_minima[]) {
         int row_size = (n + inc - 1) / inc;
