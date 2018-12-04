@@ -204,11 +204,11 @@ namespace MaxCostMatching {
         }
         return 0;
     }
-    pair<long long, int> weight_blossom() {
+    int maxcost() {
         fill(match, match + n + 1, 0);
         n_x = n;
+        int tot_weight = 0;
         int n_matches = 0;
-        long long tot_weight = 0;
         for (int u = 0; u <= n; u++) st[u] = u, flower[u].clear();
         int w_max = 0;
         for (int u = 1; u <= n; u++) {
@@ -217,14 +217,14 @@ namespace MaxCostMatching {
                 w_max = max(w_max, g[u][v].w);
             }
         }
-        for (int u =1 ; u <= n; u++) lab[u] = w_max;
+        for (int u = 1; u <= n; u++) lab[u] = w_max;
         while (matching()) n_matches++;
         for (int u = 1; u <= n; u++) {
             if (match[u] && match[u] < u) {
                 tot_weight += g[u][match[u]].w;
             }
         }
-        return make_pair(tot_weight, n_matches);
+        return tot_weight;
     }
 }
 
@@ -233,7 +233,6 @@ int main() {
     MCM::add(1, 2, 5);
     MCM::add(2, 3, 10);
     MCM::add(3, 4, 2);
-    cout << MCM::weight_blossom().first << "\n";
-    cout << MCM::weight_blossom().second << "\n";
+    cout << MCM::maxcost() << "\n";
     return 0;
 }
