@@ -108,6 +108,7 @@ int main() {
         BS::act[i] = 0;
     }
     BS::maxmat();
+    //BS::act[i] = 1 iff the number of matching doesn't change if remove vertex i
     for (int i = 1; i <= BS::n; i++) {
         cout << i << " " << BS::act[i] << "\n";
     }
