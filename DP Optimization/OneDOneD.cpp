@@ -24,10 +24,10 @@ const int ar[9][18] = {
 
 typedef int num_t;
 const num_t oo = (num_t) 1e9;
-namespace OneDOneD {
+namespace _1D1D {
     const int maxn = 1e5 + 5;
     const int logn = 20;
-    int n, r, c;
+    int r, c;
     num_t f[maxn];
     num_t g[maxn];
     int h[maxn];
@@ -73,7 +73,7 @@ namespace OneDOneD {
         for (int i = 0; i < m; i++) cols[0][i] = i;
         SMAWK(n, 1, m, row_minima);
     }
-    num_t solve() {
+    num_t solve(int n) {
         /*for (int a = 0; a < n; a++) {
             for (int b = a; b < n; b++) {
                 for (int c = b; c < n; c++) {
@@ -119,16 +119,14 @@ namespace OneDOneD {
     }
 }
 
-using namespace OneDOneD;
-
 int main() {
-    n = 9;
-    cout << solve() << "\n";
+    int n = 9;
+    cout << _1D1D::solve(n) << "\n";
     for (int i = 0; i < n; i++) {
         for (int j = 0; j < i; j++) {
-            assert(f[i] <= D(j) + W(j, i));
+            assert(_1D1D::f[i] <= _1D1D::D(j) + _1D1D::W(j, i));
         }
-        cout << f[i] << " \n"[i == n - 1];
+        cout << _1D1D::f[i] << " \n"[i == n - 1];
     }
     return 0;
 }
