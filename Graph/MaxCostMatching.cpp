@@ -12,7 +12,7 @@ namespace MaxCostMatching {
 
     int n, m, n_x;
     int lab[maxn], match[maxn], slack[maxn], st[maxn], pa[maxn];
-    int flower_from[maxn][maxn], S[maxn], vis[maxn];
+    int flower_from[maxn][maxn], s[maxn], vis[maxn];
     vector<int> flower[maxn];
     deque<int> q;
 
@@ -34,7 +34,7 @@ namespace MaxCostMatching {
     void set_slack(int x) {
         slack[x] = 0;
         for (int u = 1; u <= n; u++) {
-            if (g[u][x].w > 0 && st[u] != x && S[st[u]] == 0) update_slack(u, x);
+            if (g[u][x].w > 0 && st[u] != x && s[st[u]] == 0) update_slack(u, x);
         }
     }
     void q_push(int x) {
@@ -87,7 +87,7 @@ namespace MaxCostMatching {
         int b = n + 1;
         while (b <= n_x && st[b]) b++;
         if (b > n_x) n_x++;
-        lab[b] = 0, S[b] = 0;
+        lab[b] = 0, s[b] = 0;
         match[b] = match[lca];
         flower[b].clear();
         flower[b].push_back(lca);
@@ -122,26 +122,26 @@ namespace MaxCostMatching {
         for (int i = 0; i < pr; i += 2) {
             int xs = flower[b][i], xns = flower[b][i + 1];
             pa[xs] = g[xns][xs].u;
-            S[xs] = 1, S[xns] = 0;
+            s[xs] = 1, s[xns] = 0;
             slack[xs] = 0, set_slack(xns);
             q_push(xns);
         }
-        S[xr] = 1, pa[xr] = pa[b];
+        s[xr] = 1, pa[xr] = pa[b];
         for (int i = pr + 1; i < flower[b].size(); i++) {
             int xs = flower[b][i];
-            S[xs] = -1, set_slack(xs);
+            s[xs] = -1, set_slack(xs);
         }
         st[b] = 0;
     }
     int on_found_Edge(const Edge &e) {
         int u = st[e.u], v = st[e.v];
-        if (S[v] == -1) {
-            pa[v] = e.u, S[v] = 1;
+        if (s[v] == -1) {
+            pa[v] = e.u, s[v] = 1;
             int nu = st[match[v]];
             slack[v] = slack[nu] = 0;
-            S[nu] = 0, q_push(nu);
+            s[nu] = 0, q_push(nu);
         }
-        else if (S[v] == 0) {
+        else if (s[v] == 0) {
             int lca = get_lca(u, v);
             if (!lca) return augment(u, v), augment(v, u), 1;
             else add_blossom(u, lca, v);
@@ -149,17 +149,17 @@ namespace MaxCostMatching {
         return 0;
     }
     int matching() {
-        fill(S, S + n_x + 1, -1), fill(slack, slack + n_x + 1, 0);
+        fill(s, s + n_x + 1, -1), fill(slack, slack + n_x + 1, 0);
         q.clear();
         for(int x = 1; x <= n_x; x++) {
-            if (st[x] == x && !match[x]) pa[x] = 0, S[x]= 0, q_push(x);
+            if (st[x] == x && !match[x]) pa[x] = 0, s[x]= 0, q_push(x);
         }
         if (q.empty()) return 0;
         while (1) {
             while (q.size()) {
                 int u = q.front();
                 q.pop_front();
-                if (S[st[u]] == 1) continue;
+                if (s[st[u]] == 1) continue;
                 for (int v = 1; v <= n; v++) {
                     if (g[u][v].w > 0 && st[u] != st[v]) {
                         if (dist(g[u][v]) == 0) {
@@ -171,25 +171,25 @@ namespace MaxCostMatching {
             }
             int d = oo;
             for (int b = n + 1; b <= n_x; b++) {
-                if (st[b] == b && S[b] == 1) d = min(d, lab[b] / 2);
+                if (st[b] == b && s[b] == 1) d = min(d, lab[b] / 2);
             }
             for (int x = 1; x <= n_x; x++) {
                 if (st[x] == x && slack[x]) {
-                    if (S[x] == -1) d = min(d, dist(g[slack[x]][x]));
-                    else if (S[x] == 0) d = min(d, dist(g[slack[x]][x]) / 2);
+                    if (s[x] == -1) d = min(d, dist(g[slack[x]][x]));
+                    else if (s[x] == 0) d = min(d, dist(g[slack[x]][x]) / 2);
                 }
             }
             for (int u = 1; u <= n; u++) {
-                if (S[st[u]] == 0) {
+                if (s[st[u]] == 0) {
                     if (lab[u] <= d) return 0;
                     lab[u] -= d;
                 }
-                else if (S[st[u]] == 1) lab[u] += d;
+                else if (s[st[u]] == 1) lab[u] += d;
             }
             for (int b = n + 1; b <= n_x; b++) {
                 if (st[b] == b) {
-                    if (S[st[b]] == 0) lab[b] += d * 2;
-                    else if (S[st[b]] == 1) lab[b] -= d * 2;
+                    if (s[st[b]] == 0) lab[b] += d * 2;
+                    else if (s[st[b]] == 1) lab[b] -= d * 2;
                 }
             }
             q.clear();
@@ -199,7 +199,7 @@ namespace MaxCostMatching {
                 }
             }
             for (int b = n + 1; b <= n_x; b++) {
-                if (st[b]==b && S[b] == 1 && lab[b] == 0) expand_blossom(b);
+                if (st[b]==b && s[b] == 1 && lab[b] == 0) expand_blossom(b);
             }
         }
         return 0;
