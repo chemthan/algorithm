@@ -126,7 +126,7 @@ int main() {
     cout << solve() << "\n";
     for (int i = 0; i < n; i++) {
         for (int j = 0; j < i; j++) {
-            assert (f[i] <= D(j) + W(j, i));
+            assert(f[i] <= D(j) + W(j, i));
         }
         cout << f[i] << " \n"[i == n - 1];
     }
