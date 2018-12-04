@@ -2,20 +2,22 @@
 using namespace std;
 
 /*
-* Complexity: O(E*sqrt(V))
-* Indexing from 1
-*/
-struct Blossom {
-    static const int MAXV = 1e3 + 5;
-    static const int MAXE = 1e6 + 5;
-    int n, E, lst[MAXV], next[MAXE], adj[MAXE];
-    int nxt[MAXV], mat[MAXV], dad[MAXV], col[MAXV];
-    int que[MAXV], qh, qt;
-    int vis[MAXV], act[MAXV];
+ * Complexity: O(E*sqrt(V))
+ * Indexing from 1
+ */
+
+#define BS Blossom
+namespace Blossom {
+    const int maxv = 1e3 + 5;
+    const int maxe = 1e6 + 5;
+    int n, E, lst[maxv], next[maxe], adj[maxe];
+    int nxt[maxv], mat[maxv], dad[maxv], col[maxv];
+    int que[maxv], qh, qt;
+    int vis[maxv], act[maxv];
     int tag, total;
-    
-    void init(int n) {
-        this->n = n;
+
+    void init(int _n) {
+        n = _n;
         for (int i = 0; i <= n; i++) {
             lst[i] = nxt[i] = mat[i] = vis[i] = 0;
         }
@@ -95,19 +97,19 @@ struct Blossom {
         }
         return total;
     }
-} blossom;
+}
 
 int main() {
-    blossom.init(3);
-    blossom.add(1, 2);
-    blossom.add(1, 3);
-    blossom.maxmat();
-    for (int i = 1; i <= blossom.n; i++) {
-        blossom.act[i] = 0;
+    BS::init(3);
+    BS::add(1, 2);
+    BS::add(1, 3);
+    BS::maxmat();
+    for (int i = 1; i <= BS::n; i++) {
+        BS::act[i] = 0;
     }
-    blossom.maxmat();
-    for (int i = 1; i <= blossom.n; i++) {
-        cout << i << " " << blossom.act[i] << "\n";
+    BS::maxmat();
+    for (int i = 1; i <= BS::n; i++) {
+        cout << i << " " << BS::act[i] << "\n";
     }
     return 0;
 }
