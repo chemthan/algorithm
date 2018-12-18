@@ -80,7 +80,7 @@ void reverse(node_t<num_t>*& x, int l, int r) {
     x = join(x, join(y, z));
 }
 template<class num_t>
-void upd(node_t<num_t>*& x, int l, int r, int val) {
+void upd(node_t<num_t>*& x, int l, int r, num_t val) {
     node_t<num_t> *y, *z;
     split(x, x, y, z, l, r);
     y->lz += val;
