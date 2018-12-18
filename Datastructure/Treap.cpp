@@ -9,7 +9,7 @@ struct node_t {
     node_t *l, *r;
     int h, size, rev;
     num_t key, lz;
-    node_t(num_t key) : l(0), r(0), h(rand()), size(1), rev(0), key(key) {}
+    node_t(num_t key) : l(0), r(0), h(rand()), size(1), rev(0), key(key), lz(0) {}
 };
 
 template<class num_t>
