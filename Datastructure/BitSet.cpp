@@ -19,9 +19,6 @@ struct BitSet {
         mem = (num_t*) calloc(n, sizeof(num_t));
     }
     BitSet(const BitSet& rhs) {
-        if (n) {
-            free(mem);
-        }
         n = rhs.n;
         len = rhs.len;
         mem = (num_t*) malloc(sizeof(num_t) * n);
@@ -98,14 +95,34 @@ struct BitSet {
         memset(mem, 0, sizeof(num_t) * d);
         return *this;
     }
-    void resize(int len) {
-        int nn = len + MS >> WS;
-        num_t* nmem = (num_t*) calloc(nn, sizeof(num_t));
-        memcpy(nmem, mem, sizeof(num_t) * min(n, nn));
-        if (n) {
-            free(mem);
+    BitSet gets(int l, int r) {
+        BitSet res(len);
+        int x = l + MS >> WS;
+        int y = r >> WS;
+        if (x <= y) {
+            memcpy(res.mem + x, mem + x, sizeof(num_t) * (y - x));
         }
-        n = nn, mem = nmem;
+        for (int i = l; i < min(x << WS, r + 1); i++) {
+            res.set(i, get(i));
+        }
+        if (x <= y) {
+            for (int i = (y << WS); i <= r; i++) {
+                res.set(i, get(i));
+            }
+        }
+        return res;
+    }
+    void resize(int _len) {
+        int nn = _len + MS >> WS;
+        if (n ^ nn) {
+            int nlen = nn << WS;
+            num_t* nmem = (num_t*) calloc(nn, sizeof(num_t));
+            memcpy(nmem, mem, sizeof(num_t) * min(n, nn));
+            if (n) {
+                free(mem);
+            }
+            n = nn, len = nlen, mem = nmem;
+        }
     }
     inline int get(int k) {
         if (len <= k) return 0;
@@ -183,8 +200,8 @@ struct BitSet {
     }
 #define MAKE(OP)\
     BitSet operator OP (const BitSet& rhs) const {\
-        int mx = max(n, rhs.n);\
-        BitSet res(mx << WS);\
+        int mx = max(len, rhs.len);\
+        BitSet res(mx);\
         memcpy(res.mem, mem, sizeof(num_t) * n);\
         for (int i = 0; i < rhs.n % 4; i++) {\
             res.mem[i] = res.mem[i] OP rhs.mem[i];\
@@ -197,7 +214,22 @@ struct BitSet {
         }\
         return res;\
     }
-    MAKE(&) MAKE(|) MAKE(^)
+#define MAKE2(OP)\
+    BitSet& operator OP (const BitSet& rhs) {\
+        int mx = max(len, rhs.len);\
+        resize(mx);\
+        for (int i = 0; i < rhs.n % 4; i++) {\
+            mem[i] OP rhs.mem[i];\
+        }\
+        for (int i = rhs.n % 4; i < rhs.n; i += 4) {\
+            mem[i] OP rhs.mem[i];\
+            mem[i + 1] OP rhs.mem[i + 1];\
+            mem[i + 2] OP rhs.mem[i + 2];\
+            mem[i + 3] OP rhs.mem[i + 3];\
+        }\
+        return *this;\
+    }
+    MAKE(&) MAKE(|) MAKE(^) MAKE2(&=) MAKE2(|=) MAKE2(^=)
 };
 
 int main() {
