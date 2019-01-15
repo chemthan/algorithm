@@ -11,7 +11,7 @@ struct BitSet {
     num_t* mem;
 
     BitSet() {
-        n = 0;
+        n = len = 0;
     }
     BitSet(int _len) {
         n = _len + MS >> WS;
