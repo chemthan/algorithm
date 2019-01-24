@@ -2,27 +2,28 @@
 using namespace std;
 
 /*
-* Complexity: build O(NlogN^2), query O(1)
-*/
-template<class T, class cmp = less<T> > struct RMQ2D {
-    static const int MAXN = 1e3 + 5;
-    static const int MAXM = 1e3 + 5;
-    static const int LOGN = 10 + 1;
-    static const int LOGM = 10 + 1;
+ * Complexity: build O(NlogN^2), query O(1)
+ */
+template<class num_t, class cmp = less<num_t> >
+struct RMQ2D {
+    static const int maxn = 1e3 + 5;
+    static const int maxm = 1e3 + 5;
+    static const int logn = 10 + 1;
+    static const int logm = 10 + 1;
     int n, m;
-    T a[MAXN][MAXM];
-    T f[LOGM][MAXN][MAXM];
-    T g[LOGM][LOGN][MAXM][MAXN];
-    
-    T best(T a, T b) {
-        if (cmp()(a, b)) return a;
-        return b;
+    num_t a[maxn][maxm];
+    num_t f[logm][maxn][maxm];
+    num_t g[logm][logn][maxm][maxn];
+
+    inline num_t best(const num_t& a, const num_t& b) {
+        return cmp()(a, b) ? a : b;
     }
-    void init(int n, int m) {
-        this->n = n, this->m = m;
+    void init(int _n, int _m) {
+        n = _n, m = _m;
     }
-    void upd(int u, int v, T x) {
-        a[u][v] = x;
+    num_t* operator [] (int u) {
+        assert(u < n);
+        return a[u];
     }
     void build() {
         for (int k = 1; k <= n; k++) {
@@ -48,7 +49,7 @@ template<class T, class cmp = less<T> > struct RMQ2D {
             }
         }
     }
-    T query(int x, int y, int z, int t) {
+    num_t query(int x, int y, int z, int t) {
         x++, y++, z++, t++;
         int a = z - x + 1, b = t - y + 1;
         int lga = __lg(a);
@@ -64,11 +65,11 @@ RMQ2D<int> rmq;
 
 int main() {
     srand(time(NULL));
-    for (int it = 0; it < 10; it++) {
+    for (int it = 0; it < 100; it++) {
         rmq.init(rand() % 1000 + 1, rand() % 1000 + 1);
         for (int i = 0; i < rmq.n; i++) {
             for (int j = 0; j < rmq.m; j++) {
-                rmq.upd(i, j, rand());
+                rmq[i][j] = rand();
             }
         }
         rmq.build();
@@ -79,15 +80,15 @@ int main() {
             if (u > x) swap(u, x);
             if (v > y) swap(v, y);
             int r1 = rmq.query(u, v, x, y);
-            int r2 = (int) 1e9;
+            int r2 = (1 << 30) - 1 | 1 << 30;
             for (int i = u; i <= x; i++) {
                 for (int j = v; j <= y; j++) {
-                    r2 = min(r2, rmq.a[i][j]);
+                    r2 = min(r2, rmq[i][j]);
                 }
             }
             assert(r1 == r2);
         }
     }
-    cout << "Correct!\n";
+    cerr << "\nTime elapsed: " << 1000 * clock() / CLOCKS_PER_SEC << "ms\n";
     return 0;
 }
