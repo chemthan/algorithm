@@ -4,7 +4,8 @@ using namespace std;
 /*
  * Complexity: build O(NlogN), query O(1)
  */
-template<class num_t, class cmp = less<num_t> > struct RMQ {
+template<class num_t, class cmp = less<num_t> >
+struct RMQ {
     int n;
     vector<num_t> a;
     vector<vector<num_t> > f;
