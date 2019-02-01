@@ -2,7 +2,8 @@
 using namespace std;
 
 /*
- * Complexity: O(logN)
+ * Complexity: O(logN) per query
+ * Space: O((N + Q)logN)
  */
 template<typename num_t>
 struct node_t {
