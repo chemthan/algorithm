@@ -23,11 +23,13 @@ node_t* join(node_t* l, node_t* r) {
     if (l->h < r->h) {
         push(l);
         node_t* res = new node_t(l->key, l->l, join(l->r, r));
+        res->h = l->h;
         pull(res);
         return res;
     }
     push(r);
     node_t* res = new node_t(r->key, join(l, r->l), r->r);
+    res->h = r->h;
     pull(res);
     return res;
 }
@@ -36,6 +38,7 @@ node_t* splitL(node_t* x, int pos) {
     push(x);
     if (x->l->size >= pos) return splitL(x->l, pos);
     node_t* res = new node_t(x->key, x->l, splitL(x->r, pos - x->l->size - 1));
+    res->h = x->h;
     pull(res);
     return res;
 }
@@ -44,24 +47,32 @@ node_t* splitR(node_t* x, int pos) {
     push(x);
     if (x->r->size >= pos) return splitR(x->r, pos);
     node_t* res = new node_t(x->key, splitR(x->l, pos - 1 - x->r->size), x->r);
+    res->h = x->h;
     pull(res);
     return res;
 }
 node_t* split(node_t* x, int l, int r) {
-    x = splitL(x, r);
-    return splitR(x, r - l + 1);
+    if (!x || l > r) return 0;
+    if (l == 1 && r == size(x)) return x;
+    if (r <= size(x->l)) return split(x->l, l, r);
+    if (size(x->l) + 2 <= l) return split(x->r, l - size(x->l) - 1, r - size(x->l) - 1);
+    node_t* res = new node_t(x->key, split(x->l, l, size(x->l)), split(x->r, 1, r - size(x->l) - 1));
+    res->h = x->h;
+    pull(res);
+    return res;
 }
 int depth(node_t* x) {
     if (!x) return 0;
     push(x);
     return 1 + max(depth(x->l), depth(x->r));
 }
-void trace(node_t* x) {
+void trace(node_t* x, int isrt = 1) {
     if (!x) return;
     push(x);
-    trace(x->l);
-    cout << x->key << " ";
-    trace(x->r);
+    trace(x->l, 0);
+    cerr << x->key << " ";
+    trace(x->r, 0);
+    if (isrt) cerr << "\n";
 }
 
 const int maxn = 1e5 + 5;
@@ -71,10 +82,15 @@ int main() {
     node[1] = join(node[0], new node_t(5));
     node[2] = join(new node_t(1), node[1]);
     node[3] = join(new node_t(2), node[1]);
-    trace(node[1]); cout << "\n";
-    trace(node[2]); cout << "\n";
-    trace(node[3]); cout << "\n";
+    trace(node[1]);
+    trace(node[2]);
+    trace(node[3]);
     node[4] = join(node[2], new node_t(10));
-    trace(node[4]); cout << "\n";
+    trace(node[4]);
+    for (int i = 0; i < 1e6; i++) {
+        node[0] = join(node[0], new node_t(rand()));
+    }
+    cerr << depth(node[0]) << "\n";
+    cerr << "\nTime elapsed: " << 1000 * clock() / CLOCKS_PER_SEC << "ms\n";
     return 0;
 }
