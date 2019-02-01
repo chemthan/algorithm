@@ -2,71 +2,55 @@
 using namespace std;
 
 /*
-* Complexity: O(logN)
-*/
+ * Complexity: O(logN)
+ */
+template<typename num_t>
 struct node_t {
     node_t *l, *r;
-    int h, size, key;
-    node_t(int key = 0, node_t* l = 0, node_t* r = 0) : l(l), r(r), h(rand()), size(1), key(key) {}
+    int h, size;
+    num_t key;
+    node_t(num_t key = 0, node_t* l = 0, node_t* r = 0, int h = rand()) : key(key), l(l), r(r), h(h) {
+        size = (l ? l->size : 0) + 1 + (r ? r->size : 0);
+    }
 };
-int size(node_t* x) {
+template<typename num_t>
+int size(node_t<num_t>* x) {
     return x ? x->size : 0;
 }
-void push(node_t* x) {
+template<typename num_t>
+void push(node_t<num_t>* x) {
 }
-void pull(node_t* x) {
+template<typename num_t>
+void pull(node_t<num_t>* x) {
     x->size = size(x->l) + 1 + size(x->r);
 }
-node_t* join(node_t* l, node_t* r) {
+template<typename num_t>
+node_t<num_t>* join(node_t<num_t>* l, node_t<num_t>* r) {
     if (!l) return r;
     if (!r) return l;
     if (l->h < r->h) {
         push(l);
-        node_t* res = new node_t(l->key, l->l, join(l->r, r));
-        res->h = l->h;
-        pull(res);
-        return res;
+        return new node_t<num_t>(l->key, l->l, join(l->r, r), l->h);
     }
     push(r);
-    node_t* res = new node_t(r->key, join(l, r->l), r->r);
-    res->h = r->h;
-    pull(res);
-    return res;
+    return new node_t<num_t>(r->key, join(l, r->l), r->r, r->h);
 }
-node_t* splitL(node_t* x, int pos) {
-    if (!x || !pos) return 0;
-    push(x);
-    if (x->l->size >= pos) return splitL(x->l, pos);
-    node_t* res = new node_t(x->key, x->l, splitL(x->r, pos - x->l->size - 1));
-    res->h = x->h;
-    pull(res);
-    return res;
-}
-node_t* splitR(node_t* x, int pos) {
-    if (!x || !pos) return 0;
-    push(x);
-    if (x->r->size >= pos) return splitR(x->r, pos);
-    node_t* res = new node_t(x->key, splitR(x->l, pos - 1 - x->r->size), x->r);
-    res->h = x->h;
-    pull(res);
-    return res;
-}
-node_t* split(node_t* x, int l, int r) {
+template<typename num_t>
+node_t<num_t>* split(node_t<num_t>* x, int l, int r) {
     if (!x || l > r) return 0;
-    if (l == 1 && r == size(x)) return x;
-    if (r <= size(x->l)) return split(x->l, l, r);
-    if (size(x->l) + 2 <= l) return split(x->r, l - size(x->l) - 1, r - size(x->l) - 1);
-    node_t* res = new node_t(x->key, split(x->l, l, size(x->l)), split(x->r, 1, r - size(x->l) - 1));
-    res->h = x->h;
-    pull(res);
-    return res;
+    if (l == 0 && r == size(x) - 1) return x;
+    if (r <= size(x->l) - 1) return split(x->l, l, r);
+    if (size(x->l) + 1 <= l) return split(x->r, l - size(x->l) - 1, r - size(x->l) - 1);
+    return new node_t<num_t>(x->key, split(x->l, l, size(x->l) - 1), split(x->r, 0, r - size(x->l) - 1), x->h);
 }
-int depth(node_t* x) {
+template<typename num_t>
+int depth(node_t<num_t>* x) {
     if (!x) return 0;
     push(x);
     return 1 + max(depth(x->l), depth(x->r));
 }
-void trace(node_t* x, int isrt = 1) {
+template<typename num_t>
+void trace(node_t<num_t>* x, int isrt = 1) {
     if (!x) return;
     push(x);
     trace(x->l, 0);
@@ -76,21 +60,21 @@ void trace(node_t* x, int isrt = 1) {
 }
 
 const int maxn = 1e5 + 5;
-node_t* node[maxn];
+node_t<int>* p[maxn];
 
 int main() {
-    node[1] = join(node[0], new node_t(5));
-    node[2] = join(new node_t(1), node[1]);
-    node[3] = join(new node_t(2), node[1]);
-    trace(node[1]);
-    trace(node[2]);
-    trace(node[3]);
-    node[4] = join(node[2], new node_t(10));
-    trace(node[4]);
+    p[1] = join(p[0], new node_t<int>(5));
+    p[2] = join(new node_t<int>(1), p[1]);
+    p[3] = join(new node_t<int>(2), p[1]);
+    trace(p[1]);
+    trace(p[2]);
+    trace(p[3]);
+    p[4] = join(p[2], new node_t<int>(10));
+    trace(p[4]);
     for (int i = 0; i < 1e6; i++) {
-        node[0] = join(node[0], new node_t(rand()));
+        p[0] = join(p[0], new node_t<int>(rand()));
     }
-    cerr << depth(node[0]) << "\n";
+    cerr << depth(p[0]) << "\n";
     cerr << "\nTime elapsed: " << 1000 * clock() / CLOCKS_PER_SEC << "ms\n";
     return 0;
 }
