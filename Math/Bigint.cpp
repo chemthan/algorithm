@@ -12,6 +12,7 @@ struct Bigint {
     Bigint(const string& s) {read(s);}
     void operator = (const Bigint& v) {sign = v.sign; a = v.a;}
     void operator = (long long v) {
+        a.clear();
         sign = 1;
         if (v < 0)
             sign = -1, v = -v;
@@ -340,6 +341,10 @@ struct Bigint {
 };
 
 int main() {
+    Bigint one = 1;
+    one = 2;
+    cout << one << "\n";
+    return 0;
 	Bigint n = Bigint("123456789");
 	Bigint m = Bigint("987654321");
 	cout << n * m << "\n";
