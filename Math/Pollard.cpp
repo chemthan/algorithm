@@ -2,7 +2,7 @@
 using namespace std;
 
 namespace Pollard {
-    template<class num_t>
+    template<typename num_t>
     num_t mulmod(num_t a, num_t b, num_t p) {
         a %= p; b %= p;
         num_t q = (num_t) ((long double) a * b / p);
@@ -21,7 +21,7 @@ namespace Pollard {
         return r;
         */
     }
-    template<class num_t>
+    template<typename num_t>
     num_t powmod(num_t n, num_t k, num_t p) {
         num_t r = 1;
         for (; k; k >>= 1) {
@@ -30,7 +30,7 @@ namespace Pollard {
         }
         return r;
     }
-    template<class num_t>
+    template<typename num_t>
     int rabin(num_t n) {
         if (n == 2) return 1;
         if (n < 2 || !(n & 1)) return 0;
@@ -49,12 +49,12 @@ namespace Pollard {
         }
         return 1;
     }
-    template<class num_t>
+    template<typename num_t>
     inline num_t f(num_t a, num_t b, num_t n) {
         num_t res = mulmod(a, a, n) + b;
         return n <= res ? res - n : res;
     }
-    template<class num_t>
+    template<typename num_t>
     void factorize(num_t n, vector<num_t>& facs) {
         static int init_seed = 0;
         if (!init_seed) {
