@@ -11,10 +11,10 @@ int fpow(int n, long long k, int p = (int) 1e9 + 7) {
 }
 
 /*
-* matrix:
-* +1 +1
-* +1 -1
-*/
+ * matrix:
+ * +1 +1
+ * +1 -1
+ */
 void XORFFT(int a[], int n, int p, int invert) {
     for (int i = 1; i < n; i <<= 1) {
         for (int j = 0; j < n; j += i << 1) {
@@ -33,10 +33,10 @@ void XORFFT(int a[], int n, int p, int invert) {
     }
 }
 /*
-* Matrix:
-* +1 +1
-* +1 +0
-*/
+ * Matrix:
+ * +1 +1
+ * +1 +0
+ */
 void ORFFT(int a[], int n, int p, int invert) {
     for (int i = 1; i < n; i <<= 1) {
         for (int j = 0; j < n; j += i << 1) {
@@ -57,10 +57,10 @@ void ORFFT(int a[], int n, int p, int invert) {
     }
 }
 /*
-* matrix:
-* +0 +1
-* +1 +1
-*/
+ * matrix:
+ * +0 +1
+ * +1 +1
+ */
 void ANDFFT(int a[], int n, int p, int invert) {
     for (int i = 1; i < n; i <<= 1) {
         for (int j = 0; j < n; j += i << 1) {
@@ -91,8 +91,8 @@ void testXOR() {
     fill_n(a, maxn, 0);
     fill_n(b, maxn, 0);
     fill_n(c, maxn, 0);
-    for (int i = 0; i < n; i++) a[i] = rand() * rand() % 100000;
-    for (int i = 0; i < n; i++) b[i] = rand() * rand() % 100000;
+    for (int i = 0; i < n; i++) a[i] = (long long) rand() * rand() % 100000;
+    for (int i = 0; i < n; i++) b[i] = (long long) rand() * rand() % 100000;
     for (int i = 0; i < n; i++) {
         for (int j = 0; j < n; j++) {
             c[i ^ j] = (c[i ^ j] + (long long) a[i] * b[j]) % p;
@@ -111,8 +111,8 @@ void testOR() {
     fill_n(a, maxn, 0);
     fill_n(b, maxn, 0);
     fill_n(c, maxn, 0);
-    for (int i = 0; i < n; i++) a[i] = rand() * rand() % 100000;
-    for (int i = 0; i < n; i++) b[i] = rand() * rand() % 100000;
+    for (int i = 0; i < n; i++) a[i] = (long long) rand() * rand() % 100000;
+    for (int i = 0; i < n; i++) b[i] = (long long) rand() * rand() % 100000;
     for (int i = 0; i < n; i++) {
         for (int j = 0; j < n; j++) {
             c[i | j] = (c[i | j] + (long long) a[i] * b[j]) % p;
@@ -131,8 +131,8 @@ void testAND() {
     fill_n(a, maxn, 0);
     fill_n(b, maxn, 0);
     fill_n(c, maxn, 0);
-    for (int i = 0; i < n; i++) a[i] = rand() * rand() % 100000;
-    for (int i = 0; i < n; i++) b[i] = rand() * rand() % 100000;
+    for (int i = 0; i < n; i++) a[i] = (long long) rand() * rand() % 100000;
+    for (int i = 0; i < n; i++) b[i] = (long long) rand() * rand() % 100000;
     for (int i = 0; i < n; i++) {
         for (int j = 0; j < n; j++) {
             c[i & j] = (c[i & j] + (long long) a[i] * b[j]) % p;
@@ -149,11 +149,11 @@ void testAND() {
 }
 
 int main() {
-    srand(time(NULL));
+    srand(time(0));
     n = 1 << 10, p = (int) 1e9 + 7;
     testXOR();
     testOR();
     testAND();
-    cout << "Correct!\n";
+    cerr << "\nTime elapsed: " << 1000 * clock() / CLOCKS_PER_SEC << "ms\n";
     return 0;
 }
