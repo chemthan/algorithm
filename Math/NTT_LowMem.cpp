@@ -64,7 +64,7 @@ namespace NTT {
 const int mod = 998244353;
 
 int main() {
-    srand(time(NULL));
+    srand(time(0));
     vector<int> a(123), b(123);
     for (int& x : a) x = rand() % mod;
     for (int& x : b) x = rand() % mod;
@@ -78,7 +78,6 @@ int main() {
         }
     }
     assert(c == d);
-    cerr << "Correct\n";
     cerr << "\nTime elapsed: " << 1000 * clock() / CLOCKS_PER_SEC << "ms\n";
     return 0;
 }

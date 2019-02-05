@@ -4,11 +4,11 @@ using namespace std;
 const int pr[3] = {1004535809, 1007681537, 1012924417}; //2 ^ 20 * {958, 961, 966} + 1
 const int pw[3] = {3, 3, 5}; //primitive roots
 struct NTT {
-    static const int MAXF = 1 << 18;
-    int pr;
-    int rts[MAXF + 1];
-    int bitrev[MAXF];
-    int iv[MAXF + 1];
+    static const int maxf = 1 << 18;
+    int pr, pw;
+    int rts[maxf + 1];
+    int bitrev[maxf];
+    int iv[maxf + 1];
 
     int fpow(int a, int k, int p) {
         if (!k) return 1;
@@ -23,33 +23,33 @@ struct NTT {
         }
         return res;
     }
-    void init(int pr, int pw) {
-        this->pr = pr;
-        int k = 0; while ((1 << k) < MAXF) k++;
+    void init(int _pr, int _pw) {
+        pr = _pr;
+        int k = 0; while ((1 << k) < maxf) k++;
         bitrev[0] = 0;
-        for (int i = 1; i < MAXF; i++) {
+        for (int i = 1; i < maxf; i++) {
             bitrev[i] = bitrev[i >> 1] >> 1 | ((i & 1) << k - 1);
         }
-        pw = fpow(pw, (pr - 1) / MAXF, pr);
+        pw = fpow(_pw, (pr - 1) / maxf, pr);
         rts[0] = 1;
-        for (int i = 1; i <= MAXF; i++) {
+        for (int i = 1; i <= maxf; i++) {
             rts[i] = (long long) rts[i - 1] * pw % pr;
         }
-        for (int i = 1; i <= MAXF; i <<= 1) {
+        for (int i = 1; i <= maxf; i <<= 1) {
             iv[i] = fpow(i, pr - 2, pr);
         }
     }
     void dft(int a[], int n, int sign) {
-        int d = 0; while ((1 << d) * n != MAXF) d++;
+        int d = 0; while ((1 << d) * n != maxf) d++;
         for (int i = 0; i < n; i++) {
             if (i < (bitrev[i] >> d)) {
                 swap(a[i], a[bitrev[i] >> d]);
             }
         }
         for (int len = 2; len <= n; len <<= 1) {
-            int delta = MAXF / len * sign;
+            int delta = maxf / len * sign;
             for (int i = 0; i < n; i += len) {
-                int *w = sign > 0 ? rts : rts + MAXF;
+                int *w = sign > 0 ? rts : rts + maxf;
                 for (int k = 0; k + k < len; k++) {
                     int &a1 = a[i + k + (len >> 1)], &a2 = a[i + k];
                     int t = (long long) *w * a1 % pr;
@@ -69,7 +69,7 @@ struct NTT {
         }
     }
     void multiply(int a[], int b[], int na, int nb, int c[]) {
-        static int fa[MAXF], fb[MAXF];
+        static int fa[maxf], fb[maxf];
         int n = na + nb - 1; while (n != (n & -n)) n += n & -n;
         for (int i = 0; i < n; i++) fa[i] = fb[i] = 0;
         for (int i = 0; i < na; i++) fa[i] = a[i];
@@ -80,7 +80,7 @@ struct NTT {
         for (int i = 0; i < n; i++) c[i] = fa[i];
     }
     vector<int> multiply(vector<int> a, vector<int> b) {
-        static int fa[MAXF], fb[MAXF], fc[MAXF];
+        static int fa[maxf], fb[maxf], fc[maxf];
         int na = a.size(), nb = b.size();
         for (int i = 0; i < na; i++) fa[i] = a[i];
         for (int i = 0; i < nb; i++) fb[i] = b[i];
@@ -92,15 +92,15 @@ struct NTT {
     }
 } ntt;
 
-const int MAXF = 1 << 18;
+const int maxf = 1 << 18;
 int n;
-int a[MAXF];
-int b[MAXF];
-int c[MAXF];
-int d[MAXF];
+int a[maxf];
+int b[maxf];
+int c[maxf];
+int d[maxf];
 
 int main() {
-    srand(time(NULL));
+    srand(time(0));
     ntt.init(pr[0], pw[0]);
     n = 1000;
     for (int i = 0; i < n; i++) {
@@ -116,7 +116,6 @@ int main() {
     for (int i = 0; i < n + n - 1; i++) {
         assert(c[i] == d[i]);
     }
-    cerr << "Correct\n";
     cerr << "\nTime elapsed: " << 1000 * clock() / CLOCKS_PER_SEC << "ms\n";
     return 0;
 }
