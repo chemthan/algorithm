@@ -17,7 +17,7 @@ using namespace std;
 //if n < 3,317,044,064,679,887,385,961,981, it is enough to test a = 2, 3, 5, 7, 11, 13, 17, 19, 23, 29, 31, 37, and 41.
 
 namespace Rabin {
-    template<class num_t>
+    template<typename num_t>
     num_t mulmod(num_t a, num_t b, num_t p) {
         a %= p; b %= p;
         num_t q = (num_t) ((long double) a * b / p);
@@ -36,7 +36,7 @@ namespace Rabin {
         return r;
         */
     }
-    template<class num_t>
+    template<typename num_t>
     num_t powmod(num_t n, num_t k, num_t p) {
         if (!n) return 0;
         num_t r = 1;
@@ -46,7 +46,7 @@ namespace Rabin {
         }
         return r;
     }
-    template<class num_t>
+    template<typename num_t>
     int test(num_t n) {
         if (n == 2) return 1;
         if (n < 2 || !(n & 1)) return 0;
