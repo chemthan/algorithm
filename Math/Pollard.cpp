@@ -23,7 +23,6 @@ namespace Pollard {
     }
     template<class num_t>
     num_t powmod(num_t n, num_t k, num_t p) {
-        if (!n) return 0;
         num_t r = 1;
         for (; k; k >>= 1) {
             if (k & 1) r = mulmod(r, n, p);
