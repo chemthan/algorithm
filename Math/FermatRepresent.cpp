@@ -1,24 +1,28 @@
 #include <bits/stdc++.h>
 using namespace std;
 
-struct FermatRepresent {
-    template<class T> inline T mult(T a, T b, T p) {
-        T q = (T) ((long double) a * b / p);
-        T r = a * b - q * p;
+#define FR FermatRepresent
+namespace FermatRepresent {
+    template<class num_t>
+    inline num_t mult(num_t a, num_t b, num_t p) {
+        num_t q = (num_t) ((long double) a * b / p);
+        num_t r = a * b - q * p;
         while (r < 0) r += p;
         while (r >= p) r -= p;
         return r;
     }
-    template<class T> inline T fpow(T n, T k, T p) {
-        T r = 1;
+    template<class num_t>
+    inline num_t fpow(num_t n, num_t k, num_t p) {
+        num_t r = 1;
         for (; k; k >>= 1) {
             if (k & 1) r = mult(r, n, p);
             n = mult(n, n, p);
         }
         return r;
     }
-    template<class T> inline T isqrt(T k) {
-        T r = sqrt(k) + 1;
+    template<class num_t>
+    inline num_t isqrt(num_t k) {
+        num_t r = sqrt(k) + 1;
         while (r * r > k) r--;
         return r;
     }
@@ -41,11 +45,12 @@ struct FermatRepresent {
         }
         return make_pair(b, isqrt(p - b * b));
     }
-} fr;
+}
 
 int main() {
-    pair<int, int> res = fr.calc(613);
-    cout << res.first << " " << res.second << "\n";
-    cout << res.first * res.first + res.second * res.second << "\n";
+    pair<int, int> res = FR::calc(613);
+    cerr << res.first << " " << res.second << "\n";
+    cerr << res.first * res.first + res.second * res.second << "\n";
+    cerr << "\nTime elapsed: " << 1000 * clock() / CLOCKS_PER_SEC << "ms\n";
     return 0;
 }
