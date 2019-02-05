@@ -51,8 +51,7 @@ namespace Pollard {
     }
     template<typename num_t>
     inline num_t f(num_t a, num_t b, num_t n) {
-        num_t res = mulmod(a, a, n) + b;
-        return n <= res ? res - n : res;
+        return (mulmod(a, a, n) + b) % n;
     }
     template<typename num_t>
     void factorize(num_t n, vector<num_t>& facs) {
