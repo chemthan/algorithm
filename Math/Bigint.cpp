@@ -341,10 +341,6 @@ struct Bigint {
 };
 
 int main() {
-    Bigint one = 1;
-    one = 2;
-    cout << one << "\n";
-    return 0;
 	Bigint n = Bigint("123456789");
 	Bigint m = Bigint("987654321");
 	cout << n * m << "\n";
@@ -357,5 +353,6 @@ int main() {
 	cout << k++ << "\n";
 	cout << --k << "\n";
 	cout << k-- << "\n";
+    cerr << "\nTime elapsed: " << 1000 * clock() / CLOCKS_PER_SEC << "ms\n";
 	return 0;
 }

@@ -77,5 +77,6 @@ int main() {
     Bigint a(1);
     for (int i = 1; i <= 20; i++) a = a * i;
     cout << a << "\n"; //Expected: 2432902008176640000
+    cerr << "\nTime elapsed: " << 1000 * clock() / CLOCKS_PER_SEC << "ms\n";
     return 0;
 }

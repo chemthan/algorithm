@@ -1,42 +1,42 @@
 #include <bits/stdc++.h>
 using namespace std;
 
+template<const int n>
 struct BinaryMatrix {
-    static const int MAXN = 100;
-    bitset<MAXN> x[MAXN];
+    bitset<n> x[n];
     
     BinaryMatrix() {
         memset(x, 0, sizeof(x));
     }
-    bitset<MAXN>& operator [] (int r) {
+    bitset<n>& operator [] (int r) {
         return x[r];
     }
     static BinaryMatrix unit() {
         BinaryMatrix res;
-        for (int i = 0; i < MAXN; i++) res[i][i] = 1;
+        for (int i = 0; i < n; i++) res[i][i] = 1;
         return res;
     }
     friend BinaryMatrix operator + (BinaryMatrix A, BinaryMatrix B) {
         BinaryMatrix res;
-        for (int i = 0; i < MAXN; i++) for (int j = 0; j < MAXN; j++) {
+        for (int i = 0; i < n; i++) for (int j = 0; j < n; j++) {
             res[i][j] = A[i][j] ^ B[i][j];
         }
         return res;
     }
     friend BinaryMatrix operator * (BinaryMatrix A, BinaryMatrix B) {
-        BinaryMatrix res, tmp;
-        for (int i = 0; i < MAXN; i++) for (int j = 0; j < MAXN; j++) {
+        BinaryMatrix<n> res, tmp;
+        for (int i = 0; i < n; i++) for (int j = 0; j < n; j++) {
             tmp[i][j] = B[j][i];
         }
-        for (int i = 0; i < MAXN; i++) for (int j = 0; j < MAXN; j++) {
+        for (int i = 0; i < n; i++) for (int j = 0; j < n; j++) {
             res[i][j] = (A[i] & tmp[j]).any();
         }
         return res;
     }
     friend BinaryMatrix operator ^ (BinaryMatrix A, long long k) {
         if (k == 0) return unit();
-        BinaryMatrix res, tmp;
-        for (int i = 0; i < MAXN; i++) for (int j = 0; j < MAXN; j++) {
+        BinaryMatrix<n> res, tmp;
+        for (int i = 0; i < n; i++) for (int j = 0; j < n; j++) {
             res[i][j] = tmp[i][j] = A[i][j];
         }
         k--;
@@ -56,7 +56,7 @@ struct BinaryMatrix {
             bit.push_back(k & 1);
             k >>= 1;
         }
-        BinaryMatrix res = A, tmp = A;
+        BinaryMatrix<n> res = A, tmp = A;
         for (int i = bit.size() - 2; i >= 0; i--) {
             res = res + (res * tmp);
             tmp = tmp * tmp;
@@ -71,5 +71,13 @@ struct BinaryMatrix {
 };
 
 int main() {
+    BinaryMatrix<100> mat;
+    for (int i = 0; i < 100; i++) {
+        for (int j = 0; j < 100; j++) {
+            mat[i][j] = rand() & 1;
+        }
+    }
+    mat = mat ^ 123456;
+    cerr << "\nTime elapsed: " << 1000 * clock() / CLOCKS_PER_SEC << "ms\n";
     return 0;
 }
