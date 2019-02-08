@@ -19,10 +19,6 @@ int size(node_t<num_t>* x) {
     return x ? x->size : 0;
 }
 template<typename num_t>
-void pull(node_t<num_t>* x) {
-    x->size = size(x->l) + 1 + size(x->r);
-}
-template<typename num_t>
 node_t<num_t>* join(node_t<num_t>* l, node_t<num_t>* r) {
     if (!l) return r;
     if (!r) return l;
