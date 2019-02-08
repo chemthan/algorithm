@@ -19,9 +19,6 @@ int size(node_t<num_t>* x) {
     return x ? x->size : 0;
 }
 template<typename num_t>
-void push(node_t<num_t>* x) {
-}
-template<typename num_t>
 void pull(node_t<num_t>* x) {
     x->size = size(x->l) + 1 + size(x->r);
 }
@@ -30,15 +27,13 @@ node_t<num_t>* join(node_t<num_t>* l, node_t<num_t>* r) {
     if (!l) return r;
     if (!r) return l;
     if (l->h < r->h) {
-        push(l);
         return new node_t<num_t>(l->key, l->l, join(l->r, r), l->h);
     }
-    push(r);
     return new node_t<num_t>(r->key, join(l, r->l), r->r, r->h);
 }
 template<typename num_t>
 node_t<num_t>* split(node_t<num_t>* x, int l, int r) {
-    if (!x || l > r) return 0;
+    if (!x || r < l) return 0;
     if (l == 0 && r == size(x) - 1) return x;
     if (r <= size(x->l) - 1) return split(x->l, l, r);
     if (size(x->l) + 1 <= l) return split(x->r, l - size(x->l) - 1, r - size(x->l) - 1);
@@ -47,13 +42,11 @@ node_t<num_t>* split(node_t<num_t>* x, int l, int r) {
 template<typename num_t>
 int depth(node_t<num_t>* x) {
     if (!x) return 0;
-    push(x);
     return 1 + max(depth(x->l), depth(x->r));
 }
 template<typename num_t>
 void trace(node_t<num_t>* x, int isrt = 1) {
     if (!x) return;
-    push(x);
     trace(x->l, 0);
     cerr << x->key << " ";
     trace(x->r, 0);
