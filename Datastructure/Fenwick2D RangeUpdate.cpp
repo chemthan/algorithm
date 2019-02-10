@@ -6,7 +6,7 @@ using namespace std;
  * Problems:
  * 1. http://codeforces.com/contest/341/problem/D
  */
-template<class num_t>
+template<typename num_t>
 struct RangeFenwick2D {
     int n, m;
     vector<vector<num_t> > fen[4];
