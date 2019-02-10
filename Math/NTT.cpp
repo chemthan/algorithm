@@ -46,7 +46,6 @@ struct NTT {
         for (int i = 1; i < maxf; i++) {
             bitrev[i] = bitrev[i >> 1] >> 1 | ((i & 1) << k - 1);
         }
-        srand(2311);
         int pw = fpow(prt(), (mod - 1) / maxf);
         rts[0] = 1;
         for (int i = 1; i <= maxf; i++) {
