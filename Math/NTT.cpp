@@ -1,42 +1,59 @@
 #include <bits/stdc++.h>
 using namespace std;
 
-const int pr[3] = {1004535809, 1007681537, 1012924417}; //2 ^ 20 * {958, 961, 966} + 1
-const int pw[3] = {3, 3, 5}; //primitive roots
+template<const int mod, const int maxf>
 struct NTT {
-    static const int maxf = 1 << 18;
-    int pr, pw;
     int rts[maxf + 1];
     int bitrev[maxf];
     int iv[maxf + 1];
 
-    int fpow(int a, int k, int p) {
+    int fpow(int a, int k) {
         if (!k) return 1;
         int res = a, tmp = a;
         k--;
         while (k) {
             if (k & 1) {
-                res = (long long) res * tmp % p;
+                res = (long long) res * tmp % mod;
             }
-            tmp = (long long) tmp * tmp % p;
+            tmp = (long long) tmp * tmp % mod;
             k >>= 1;
         }
         return res;
     }
-    void init(int _pr, int _pw) {
-        pr = _pr;
+    int prt() {
+        vector<int> dvs;
+        for (int i = 2; i * i < mod; i++) {
+            if ((mod - 1) % i) continue;
+            dvs.push_back(i);
+            if (i * i != mod - 1) dvs.push_back((mod - 1) / i);
+        }
+        for (int i = 2; i < mod; i++) {
+            int flag = 1;
+            for (int j = 0; j < dvs.size(); j++) {
+                if (fpow(i, dvs[j]) == 1) {
+                    flag = 0;
+                    break;
+                }
+            }
+            if (flag) return i;
+        }
+        assert(0);
+        return -1;
+    }
+    NTT() {
         int k = 0; while ((1 << k) < maxf) k++;
         bitrev[0] = 0;
         for (int i = 1; i < maxf; i++) {
             bitrev[i] = bitrev[i >> 1] >> 1 | ((i & 1) << k - 1);
         }
-        pw = fpow(_pw, (pr - 1) / maxf, pr);
+        srand(2311);
+        int pw = fpow(prt(), (mod - 1) / maxf);
         rts[0] = 1;
         for (int i = 1; i <= maxf; i++) {
-            rts[i] = (long long) rts[i - 1] * pw % pr;
+            rts[i] = (long long) rts[i - 1] * pw % mod;
         }
         for (int i = 1; i <= maxf; i <<= 1) {
-            iv[i] = fpow(i, pr - 2, pr);
+            iv[i] = fpow(i, mod - 2);
         }
     }
     void dft(int a[], int n, int sign) {
@@ -52,11 +69,11 @@ struct NTT {
                 int *w = sign > 0 ? rts : rts + maxf;
                 for (int k = 0; k + k < len; k++) {
                     int &a1 = a[i + k + (len >> 1)], &a2 = a[i + k];
-                    int t = (long long) *w * a1 % pr;
+                    int t = (long long) *w * a1 % mod;
                     a1 = a2 - t;
                     a2 = a2 + t;
-                    a1 += a1 < 0 ? pr : 0;
-                    a2 -= a2 >= pr ? pr : 0;
+                    a1 += a1 < 0 ? mod : 0;
+                    a2 -= a2 >= mod ? mod : 0;
                     w += delta;
                 }
             }
@@ -64,7 +81,7 @@ struct NTT {
         if (sign < 0) {
             int in = iv[n];
             for (int i = 0; i < n; i++) {
-                a[i] = (long long) a[i] * in % pr;
+                a[i] = (long long) a[i] * in % mod;
             }
         }
     }
@@ -75,7 +92,7 @@ struct NTT {
         for (int i = 0; i < na; i++) fa[i] = a[i];
         for (int i = 0; i < nb; i++) fb[i] = b[i];
         dft(fa, n, 1), dft(fb, n, 1);
-        for (int i = 0; i < n; i++) fa[i] = (long long) fa[i] * fb[i] % pr;
+        for (int i = 0; i < n; i++) fa[i] = (long long) fa[i] * fb[i] % mod;
         dft(fa, n, -1);
         for (int i = 0; i < n; i++) c[i] = fa[i];
     }
@@ -90,27 +107,30 @@ struct NTT {
         for (int i = 0; i < k; i++) res[i] = fc[i];
         return res;
     }
-} ntt;
+};
 
+const int pr0 = 1004535809; //2^20 * 958 + 1
+const int pr1 = 1007681537; //2^20 * 961 + 1
+const int pr2 = 1012924417; //2^20 * 966 + 1
 const int maxf = 1 << 18;
 int n;
 int a[maxf];
 int b[maxf];
 int c[maxf];
 int d[maxf];
+NTT<pr0, 1 << 18> ntt;
 
 int main() {
     srand(time(0));
-    ntt.init(pr[0], pw[0]);
     n = 1000;
     for (int i = 0; i < n; i++) {
-        a[i] = rand() % pr[0];
-        b[i] = rand() % pr[0];
+        a[i] = rand() % pr0;
+        b[i] = rand() % pr0;
     }
     ntt.multiply(a, b, n, n, c);
     for (int i = 0; i < n; i++) {
         for (int j = 0; j < n; j++) {
-            d[i + j] = (d[i + j] + (long long) a[i] * b[j]) % pr[0];
+            d[i + j] = (d[i + j] + (long long) a[i] * b[j]) % pr0;
         }
     }
     for (int i = 0; i < n + n - 1; i++) {
