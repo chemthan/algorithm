@@ -2,22 +2,24 @@
 using namespace std;
 
 /*
-* Complexity: O(logN^2)
-* Problems:
-* 1. http://codeforces.com/contest/341/problem/D
-*/
-template<class T> struct RangeFenwick2D {
+ * Complexity: O(logN^2)
+ * Problems:
+ * 1. http://codeforces.com/contest/341/problem/D
+ */
+template<class num_t>
+struct RangeFenwick2D {
     int n, m;
-    vector<vector<T> > fen[4];
-    
+    vector<vector<num_t> > fen[4];
+
     RangeFenwick2D(int n, int m) {
         this->n = n, this->m = m;
         for (int i = 0; i < 4; i++) {
-            fen[i].resize(n + 1, vector<T>(m + 1));
+            fen[i].resize(n + 1, vector<num_t>(m + 1));
         }
     }
-    void upd(int x, int y, T val) {
-        assert(x > 0 && y > 0);
+    void upd(int x, int y, num_t val) {
+        x++, y++;
+        assert(0 < x && 0 < y);
         for (int xx = x; xx <= n; xx += xx & -xx) {
             for (int yy = y; yy <= m; yy += yy & -yy) {
                 fen[0][xx][yy] += val;
@@ -27,15 +29,16 @@ template<class T> struct RangeFenwick2D {
             }
         }
     }
-    void upd(int x, int y, int z, int t, T val) {
+    void upd(int x, int y, int z, int t, num_t val) {
         upd(x, y, +val);
         upd(x, t + 1, -val);
         upd(z + 1, y, -val);
         upd(z + 1, t + 1, +val);
     }
-    T query(int x, int y) {
+    num_t query(int x, int y) {
+        x++, y++;
         assert(x <= n && y <= m);
-        T res = 0;
+        num_t res = 0;
         for (int xx = x; xx > 0; xx -= xx & -xx) {
             for (int yy = y; yy > 0; yy -= yy & -yy) {
                 res += (x + 1) * (y + 1) * fen[0][xx][yy];
@@ -46,7 +49,7 @@ template<class T> struct RangeFenwick2D {
         }
         return res;
     }
-    T query(int x, int y, int z, int t) {
+    num_t query(int x, int y, int z, int t) {
         return query(z, t) - query(x - 1, t) - query(z, y - 1) + query(x - 1, y - 1);
     }
 };
@@ -66,7 +69,7 @@ int main() {
                 int x = rand() % n, y = rand() % m, z = rand() % n, t = rand() % m, val = rand() % 100;
                 if (x > z) swap(x, z);
                 if (y > t) swap(y, t);
-                rf2d.upd(x + 1, y + 1, z + 1, t + 1, val);
+                rf2d.upd(x, y, z, t, val);
                 for (int i = x; i <= z; i++) {
                     for (int j = y; j <= t; j++) {
                         a[i][j] += val;
@@ -83,10 +86,10 @@ int main() {
                         ans += a[i][j];
                     }
                 }
-                assert(rf2d.query(x + 1, y + 1, z + 1, t + 1) == ans);
+                assert(rf2d.query(x, y, z, t) == ans);
             }
         }
     }
-    cout << "Correct!\n";
+    cerr << "\nTime elapsed: " << 1000 * clock() / CLOCKS_PER_SEC << "ms\n";
     return 0;
 }

@@ -2,38 +2,41 @@
 using namespace std;
 
 /*
-* Complexity: O(logN)
-* Problems:
-* 1. https://icpcarchive.ecs.baylor.edu/index.php?option=com_onlinejudge&Itemid=8&category=596&page=show_problem&problem=4454
-*/
-template<class T> struct RangeFenwick {
+ * Complexity: O(logN)
+ * Problems:
+ * 1. https://icpcarchive.ecs.baylor.edu/index.php?option=com_onlinejudge&Itemid=8&category=596&page=show_problem&problem=4454
+ */
+template<typename num_t>
+struct RangeFenwick {
     int n;
-    vector<T> fen[2];
+    vector<num_t> fen[2];
     RangeFenwick(int n) {
         this->n = n;
         fen[0].resize(n + 1);
         fen[1].resize(n + 1);
     }
-    void upd(int p, T val) {
-        assert(p > 0);
+    void upd(int p, num_t val) {
+        p++;
+        assert(0 < p);
         for (int pp = p; pp <= n; pp += pp & -pp) {
             fen[0][pp] += val;
             fen[1][pp] += val * p;
         }
     }
-    void upd(int l, int r, T val) {
+    void upd(int l, int r, num_t val) {
         upd(l, +val), upd(r + 1, -val);
     }
-    T query(int p) {
+    num_t query(int p) {
+        p++;
         assert(p <= n);
-        T res = 0;
+        num_t res = 0;
         for (int pp = p; pp > 0; pp -= pp & -pp) {
             res += fen[0][pp] * (p + 1);
             res -= fen[1][pp];
         }
         return res;
     }
-    T query(int l, int r) {
+    num_t query(int l, int r) {
         return query(r) - query(l - 1);
     }
 };
@@ -43,7 +46,7 @@ int n, q;
 int a[maxn];
 
 int main() {
-    srand(time(NULL));
+    srand(time(0));
     for (int it = 0; it < 10; it++) {
         n = rand() % 1000 + 1;
         q = rand() % 1000 + 1;
@@ -53,7 +56,7 @@ int main() {
             if (rand() % 2 == 0) {
                 int l = rand() % n, r = rand() % n, val = rand() % 1000;
                 if (l > r) swap(l, r);
-                rf.upd(l + 1, r + 1, val);
+                rf.upd(l, r, val);
                 for (int i = l; i <= r; i++) {
                     a[i] += val;
                 }
@@ -65,10 +68,10 @@ int main() {
                 for (int i = l; i <= r; i++) {
                     ans += a[i];
                 }
-                assert(rf.query(r + 1) - rf.query(l) == ans);
+                assert(rf.query(l, r) == ans);
             }
         }
     }
-    cout << "Correct!\n";
+    cerr << "\nTime elapsed: " << 1000 * clock() / CLOCKS_PER_SEC << "ms\n";
     return 0;
 }
