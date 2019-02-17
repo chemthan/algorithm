@@ -109,20 +109,20 @@ void split(node_t<num_t>* x, node_t<num_t>*& l, node_t<num_t>*& r, const functio
 template<typename num_t>
 void insert(node_t<num_t>*& x, num_t key) {
     node_t<num_t>* y;
-    split<int>(x, x, y, [&] (node_t<int>* x) {
+    split<num_t>(x, x, y, [&] (node_t<num_t>* x) {
             return x->key < key;
             }
          );
-    x = join(x, join(new node_t<int>(key), y));
+    x = join(x, join(new node_t<num_t>(key), y));
 }
 template<typename num_t>
 node_t<num_t>* erase(node_t<num_t>*& x, num_t key) {
     node_t<num_t> *l, *r, *res;
-    split<int>(x, l, res, [&] (node_t<int>* x) {
+    split<num_t>(x, l, res, [&] (node_t<num_t>* x) {
             return x->key < key;
             }
          );
-    split<int>(res, res, r, [&] (node_t<int>* x) {
+    split<num_t>(res, res, r, [&] (node_t<num_t>* x) {
             return x->key <= key;
             }
          );
