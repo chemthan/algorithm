@@ -91,6 +91,52 @@ void upd(node_t<num_t>*& x, int l, int r, num_t val) {
     x = join(x, join(y, z));
 }
 template<typename num_t>
+void split(node_t<num_t>* x, node_t<num_t>*& l, node_t<num_t>*& r, const function<bool(node_t<num_t>*)>& go_right) {
+    if (!x) {
+        l = r = 0;
+        return;
+    }
+    push(x);
+    if (go_right(x)) {
+        split(x->r, x->r, r, go_right);
+        pull(l = x);
+    }
+    else {
+        split(x->l, l, x->l, go_right);
+        pull(r = x);
+    }
+}
+template<typename num_t>
+void insert(node_t<num_t>*& x, num_t key) {
+    node_t<num_t>* y;
+    split<int>(x, x, y, [&] (node_t<int>* x) {
+            return x->key < key;
+            }
+         );
+    x = join(x, join(new node_t<int>(key), y));
+}
+template<typename num_t>
+node_t<num_t>* erase(node_t<num_t>*& x, num_t key) {
+    node_t<num_t> *l, *r, *res;
+    split<int>(x, l, res, [&] (node_t<int>* x) {
+            return x->key < key;
+            }
+         );
+    split<int>(res, res, r, [&] (node_t<int>* x) {
+            return x->key <= key;
+            }
+         );
+    x = join(l, r);
+    return res;
+}
+template<typename num_t>
+void free(node_t<num_t>* x) {
+    if (!x) return;
+    free(x->l);
+    free(x->r);
+    delete x;
+}
+template<typename num_t>
 int depth(node_t<num_t>* x) {
     if (!x) return 0;
     push(x);
@@ -115,12 +161,19 @@ int main() {
         rt = join(rt, new node_t<int>(i));
     }
     node_t<int> *x, *y, *z;
+    split<int>(rt, x, y, [&] (node_t<int>* t) {
+            return t->key < 6;
+            }
+            );
+    trace(x);
+    rt = join(x, y);
     split(rt, x, y, z, 3, 8);
     trace(y);
     upd(y, 1, 4, 10);
     trace(y);
     rt = join(join(x, y), z);
     cerr << depth(rt) << "\n";
+    free(rt);
     cerr << "\nTime elapsed: " << 1000 * clock() / CLOCKS_PER_SEC << "ms\n";
     return 0;
 }
