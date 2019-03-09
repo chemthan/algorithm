@@ -53,30 +53,17 @@ namespace HLD {
         firstdfs(0, -1), dfs(0, 0, -1);
     }
     vector<pair<int, int>> getsegs(int u, int v) {
-        vector<pair<int, int>> lres, rres;
-        int dir = 0;
+        vector<pair<int, int>> res;
         int hu = head[u], hv = head[v];
         while (hu != hv) {
-            if (lev[hu] < lev[hv]) swap(u, v), swap(hu, hv), dir = !dir;
-            if (!dir) {
-                lres.push_back(make_pair(num[u], num[hu]));
-            }
-            else {
-                rres.push_back(make_pair(num[hu], num[u]));
-            }
+            if (lev[hu] < lev[hv]) swap(u, v), swap(hu, hv);
+            res.push_back(make_pair(num[hu], num[u]));
             u = p[hu], hu = head[u];
         }
-        if (lev[u] > lev[v]) swap(u, v), dir = !dir;
+        if (lev[u] > lev[v]) swap(u, v);
         //upd(num[u] + 1, num[v]) for edge path
-        if (!dir) {
-            lres.push_back(make_pair(num[v], num[u]));
-        }
-        else {
-            rres.push_back(make_pair(num[u], num[v]));
-        }
-        reverse(rres.begin(), rres.end());
-        lres.insert(lres.end(), rres.begin(), rres.end());
-        return lres;
+        res.push_back(make_pair(num[u], num[v]));
+        return res;
     }
 }
 
