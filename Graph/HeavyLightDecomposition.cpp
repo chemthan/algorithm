@@ -1,68 +1,83 @@
 #include <bits/stdc++.h>
 using namespace std;
 
-const int maxn = 1e5 + 5;
-int n;
-vector<int> adj[maxn];
-int size[maxn];
-int lev[maxn];
-int p[maxn];
-int heavy[maxn];
+namespace HLD {
+    int n;
+    vector<vector<int>> adj;
+    vector<int> size;
+    vector<int> lev;
+    vector<int> p;
+    vector<int> heavy;
 
-int num[maxn];
-int head[maxn];
-int cnt;
+    vector<int> num;
+    vector<int> head;
+    int cnt;
 
-void upd(int l, int r, int n, int val) {} //Need to modify
-int query(int l, int r, int n) {return 0;} //Need to modify
-
-void firstdfs(int u, int dad) {
-    size[u] = 1, heavy[u] = -1;
-    for (int i = 0; i < adj[u].size(); i++) {
-        int v = adj[u][i];
-        if (v != dad) {
-            p[v] = u, lev[v] = lev[u] + 1;
-            firstdfs(v, u);
-            size[u] += size[v];
-            if (heavy[u] == -1 || size[heavy[u]] < size[v]) {
-                heavy[u] = v;
+    void firstdfs(int u, int dad) {
+        size[u] = 1, heavy[u] = -1;
+        for (int i = 0; i < adj[u].size(); i++) {
+            int v = adj[u][i];
+            if (v != dad) {
+                p[v] = u, lev[v] = lev[u] + 1;
+                firstdfs(v, u);
+                size[u] += size[v];
+                if (heavy[u] == -1 || size[heavy[u]] < size[v]) {
+                    heavy[u] = v;
+                }
             }
         }
     }
-}
-void dfs(int u, int h, int p) {
-    num[u] = cnt++, head[u] = h;
-    if (~heavy[u]) {
-        dfs(heavy[u], h, u);
-    }
-    for (int i = 0; i < adj[u].size(); i++) {
-        int v = adj[u][i];
-        if (v != p && v != heavy[u]) {
-            dfs(v, v, u);
+    void dfs(int u, int h, int p) {
+        num[u] = cnt++, head[u] = h;
+        if (~heavy[u]) {
+            dfs(heavy[u], h, u);
+        }
+        for (int i = 0; i < adj[u].size(); i++) {
+            int v = adj[u][i];
+            if (v != p && v != heavy[u]) {
+                dfs(v, v, u);
+            }
         }
     }
-}
-void upd(int u, int v, int val) {
-    int hu = head[u], hv = head[v];
-    while (hu != hv) {
-        if (lev[hu] < lev[hv]) swap(u, v), swap(hu, hv);
-        upd(num[hu], num[u], n, val);
-        u = p[hu], hu = head[u];
+    void build(const vector<vector<int>>& _adj) {
+        n = (int) _adj.size();
+        adj = _adj;
+        size.resize(n);
+        lev.resize(n);
+        p.resize(n);
+        heavy.resize(n);
+
+        num.resize(n);
+        head.resize(n);
+        cnt = 0;
+        firstdfs(0, -1), dfs(0, 0, -1);
     }
-    if (lev[u] > lev[v]) swap(u, v);
-    upd(num[u], num[v], n, val); //upd(num[u] + 1, num[v]) for edge path
-}
-int query(int u, int v) {
-    int res = 0;
-    int hu = head[u], hv = head[v];
-    while (hu != hv) {
-        if (lev[hu] < lev[hv]) swap(u, v), swap(hu, hv);
-        res += query(num[hu], num[u], n);
-        u = p[hu], hu = head[u];
+    vector<pair<int, int>> getsegs(int u, int v) {
+        vector<pair<int, int>> lres, rres;
+        int dir = 0;
+        int hu = head[u], hv = head[v];
+        while (hu != hv) {
+            if (lev[hu] < lev[hv]) swap(u, v), swap(hu, hv), dir = !dir;
+            if (!dir) {
+                lres.push_back(make_pair(num[u], num[hu]));
+            }
+            else {
+                rres.push_back(make_pair(num[hu], num[u]));
+            }
+            u = p[hu], hu = head[u];
+        }
+        if (lev[u] > lev[v]) swap(u, v), dir = !dir;
+        //upd(num[u] + 1, num[v]) for edge path
+        if (!dir) {
+            lres.push_back(make_pair(num[v], num[u]));
+        }
+        else {
+            rres.push_back(make_pair(num[u], num[v]));
+        }
+        reverse(rres.begin(), rres.end());
+        lres.insert(lres.end(), rres.begin(), rres.end());
+        return lres;
     }
-    if (lev[u] > lev[v]) swap(u, v);
-    res += query(num[u], num[v], n); //query(num[u] + 1, num[v]) for edge path
-    return res;
 }
 
 int main() {

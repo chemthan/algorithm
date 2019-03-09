@@ -112,7 +112,7 @@ void insert(node_t<num_t>*& x, num_t key) {
     split<num_t>(x, x, y, [&] (node_t<num_t>* x) {
             return x->key < key;
             }
-         );
+            );
     x = join(x, join(new node_t<num_t>(key), y));
 }
 template<typename num_t>
@@ -121,20 +121,21 @@ node_t<num_t>* erase(node_t<num_t>*& x, num_t key) {
     split<num_t>(x, l, res, [&] (node_t<num_t>* x) {
             return x->key < key;
             }
-         );
+            );
     split<num_t>(res, res, r, [&] (node_t<num_t>* x) {
             return x->key <= key;
             }
-         );
+            );
     x = join(l, r);
     return res;
 }
 template<typename num_t>
-void free(node_t<num_t>* x) {
+void free(node_t<num_t>*& x) {
     if (!x) return;
     free(x->l);
     free(x->r);
     delete x;
+    x = 0;
 }
 template<typename num_t>
 int depth(node_t<num_t>* x) {
