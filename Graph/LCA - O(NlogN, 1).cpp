@@ -1,18 +1,16 @@
 #include <bits/stdc++.h>
 using namespace std;
 
-namespace LCA {
-    const int maxn = 1e5 + 5;
-    const int logn = 20;
+struct LCA {
     vector<int> events;
-    int sta[maxn];
-    int tin[maxn];
-    int idx[maxn];
+    vector<int> sta;
+    vector<int> tin;
+    vector<int> idx;
     int tms;
-    int f[logn][maxn << 1];
-    int lg[maxn << 1];
+    vector<vector<int>> f;
+    vector<int> mlg;
 
-    void dfs(int u, int p, vector<int> adj[]) {
+    void dfs(int u, int p, const vector<vector<int>>& adj) {
         idx[tin[u] = tms++] = u;
         sta[u] = events.size();
         events.push_back(tin[u]);
@@ -25,16 +23,24 @@ namespace LCA {
         }
     }
     int query(int u, int v) {
-        int l = u == v ? 0 : lg[v - u];
+        int l = u == v ? 0 : mlg[v - u];
         return min(f[l][u], f[l][v - (1 << l) + 1]);
     }
     int lca(int u, int v) {
         if (sta[u] > sta[v]) swap(u, v);
         return idx[query(sta[u], sta[v])];
     }
-    void build(vector<int> adj[]) {
+    void build(const vector<vector<int>>& adj) {
         events.clear();
+        sta.resize(adj.size());
+        tin.resize(adj.size());
+        idx.resize(adj.size());
         dfs(tms = 0, -1, adj);
+        int logn = __lg(adj.size()) + 1;
+        f.resize(logn);
+        for (int i = 0; i < logn; i++) {
+            f[i].resize(events.size());
+        }
         for (int i = 0; i < events.size(); i++) {
             f[0][i] = events[i];
         }
@@ -43,11 +49,12 @@ namespace LCA {
                 f[i][j] = min(f[i - 1][j], f[i - 1][j + (1 << i - 1)]);
             }
         }
-        for (int i = 1; i < (maxn << 1); i++) {
-            lg[i] = __lg(i);
+        mlg.resize(events.size());
+        for (int i = 1; i < mlg.size(); i++) {
+            mlg[i] = __lg(i);
         }
     }
-}
+};
 
 int main() {
     return 0;
