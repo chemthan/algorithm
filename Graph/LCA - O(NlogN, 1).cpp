@@ -36,7 +36,7 @@ struct LCA {
         tin.resize(adj.size());
         idx.resize(adj.size());
         dfs(tms = 0, -1, adj);
-        int logn = __lg(adj.size()) + 1;
+        int logn = __lg(events.size()) + 1;
         f.resize(logn);
         for (int i = 0; i < logn; i++) {
             f[i].resize(events.size());
