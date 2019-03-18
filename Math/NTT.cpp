@@ -108,9 +108,9 @@ struct NTT {
     }
 };
 
-const int pr0 = 1004535809; //2^20 * 958 + 1
-const int pr1 = 1007681537; //2^20 * 961 + 1
-const int pr2 = 1012924417; //2^20 * 966 + 1
+const int pr0 = 998244353; //2^20 * 476 + 1
+const int pr1 = 1004535809; //2^21 * 479 + 1
+const int pr2 = 1012924417; //2^21 * 483 + 1
 const int maxf = 1 << 18;
 int n;
 int a[maxf];
