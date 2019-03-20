@@ -69,24 +69,20 @@ namespace FFT {
             }
         }
     }
-    void multiply(int a[], int b[], int na, int nb, long long c[]) {
-        int n = na + nb - 1; while (n != (n & -n)) n += n & -n;
-        for (int i = 0; i < n; i++) fa[i] = fb[i] = cp();
-        for (int i = 0; i < na; i++) fa[i] = cp(a[i]);
-        for (int i = 0; i < nb; i++) fb[i] = cp(b[i]);
-        dft(fa, n, 1), dft(fb, n, 1);
-        for (int i = 0; i < n; i++) fa[i] = fa[i] * fb[i];
-        dft(fa, n, -1);
-        for (int i = 0; i < n; i++) c[i] = (long long) floor(fa[i].x + 0.5);
-    }
-    void multiply(int a[], int b[], int na, int nb, int c[], int& nc, int base) {
+    void multiply(int a[], int b[], int na, int nb, int c[], int& nc, int base, int dup) {
         int n = na + nb - 1;
         while (n != (n & -n)) n += n & -n;
         for (int i = 0; i < n; i++) fa[i] = fb[i] = cp();
         static const int magic = 15;
         for (int i = 0; i < na; i++) fa[i] = cp(a[i] >> magic, a[i] & (1 << magic) - 1);
         for (int i = 0; i < nb; i++) fb[i] = cp(b[i] >> magic, b[i] & (1 << magic) - 1);
-        dft(fa, n, 1), dft(fb, n, 1);
+        dft(fa, n, 1);
+        if (dup) {
+            for (int i = 0; i < n; i++) fb[i] = fa[i];
+        }
+        else {
+            dft(fb, n, 1);
+        }
         for (int i = 0; i < n; i++) {
             int j = (n - i) % n;
             cp x = fa[i] + !fa[j];
@@ -121,7 +117,7 @@ namespace FFT {
         for (int i = 0; i < na; i++) fa[i] = a[i];
         for (int i = 0; i < nb; i++) fb[i] = b[i];
         int nc = 0;
-        multiply(fa, fb, na, nb, fc, nc, base);
+        multiply(fa, fb, na, nb, fc, nc, base, a == b);
         vector<int> res(nc);
         for (int i = 0; i < nc; i++) res[i] = fc[i];
         while (1 < res.size() && !res.back()) res.pop_back();
