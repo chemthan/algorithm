@@ -8,12 +8,12 @@ using namespace std;
 namespace HopcroftKarp {
     const int maxv = 1e3 + 5;
     const int maxe = 1e6 + 5;
-    int nx, ny, E;
+    int nx, ny, E, nmatches;
     int adj[maxe], nxt[maxe];
     int lst[maxv], ptr[maxv], lev[maxv], que[maxv], matx[maxv], maty[maxv];
     void init(int _nx, int _ny) {
         nx = _nx, ny = _ny;
-        E = 0, fill_n(lst, nx, -1);
+        E = nmatches = 0, fill_n(lst, nx, -1);
         fill_n(matx, nx, -1), fill_n(maty, ny, -1);
     }
     void add(int x, int y) {
@@ -58,18 +58,17 @@ namespace HopcroftKarp {
         return 0;
     }
     int maxmat() {
-        int res = 0;
         while (bfs()) {
             for (int x = 0; x < nx; x++) {
                 ptr[x] = lst[x];
             }
             for (int x = 0; x < nx; x++) {
                 if (!~matx[x]) {
-                    res += dfs(x);
+                    nmatches += dfs(x);
                 }
             }
         }
-        return res;
+        return nmatches;
     }
     int vis[2][maxv];
     void dfs(int u, int r) {
@@ -90,6 +89,7 @@ namespace HopcroftKarp {
         }
     }
     vector<int> mincover() {
+        maxmat();
         vector<int> res;
         fill_n(vis[0], nx, 0), fill_n(vis[1], ny, 0);
         for (int x = 0; x < nx; x++) {
@@ -110,6 +110,7 @@ namespace HopcroftKarp {
         return res;
     }
     vector<int> maxind() {
+        maxmat();
         vector<int> res;
         fill_n(vis[0], nx, 0), fill_n(vis[1], ny, 0);
         for (int x = 0; x < nx; x++) {
