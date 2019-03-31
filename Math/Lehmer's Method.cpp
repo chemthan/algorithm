@@ -9,7 +9,16 @@ namespace Lehmer {
     int np;
     int sp[maxn];
     int pr[maxp], cn[maxn];
+    long long sum[maxn];
     long long f[maxx][maxy];
+
+    inline long long func(int p) {
+        return 1;
+    }
+
+    inline long long accfunc(long long n) {
+        return n;
+    }
 
     void init() {
         for (int i = 2; i < maxn; i += 2) sp[i] = 2;
@@ -21,23 +30,25 @@ namespace Lehmer {
         }
         np = 0;
         for (int i = 2; i < maxn; i++) {
+            sum[i] = sum[i - 1];
             if (sp[i] == i) {
+                sum[i] += func(i);
                 pr[np++] = i;
             }
             cn[i] = np;
         }
         for (int i = 0; i < maxx; i++) {
             for (int j = 0; j < maxy; j++) {
-                if (!i) f[i][j] = j;
-                else f[i][j] = f[i - 1][j] - f[i - 1][j / pr[i - 1]];
+                if (!i) f[i][j] = accfunc(j);
+                else f[i][j] = f[i - 1][j] - f[i - 1][j / pr[i - 1]] * func(pr[i - 1]);
             }
         }
     }
     long long LegendreSum(long long m, int n) {
-        if (!n) return m;
-        if (pr[n - 1] >= m) return 1;
+        if (!n) return accfunc(m);
+        if (m <= pr[n - 1]) return func(1);
         if (m < maxy && n < maxx) return f[n][m];
-        return LegendreSum(m, n - 1) - LegendreSum(m / pr[n - 1], n - 1);
+        return LegendreSum(m, n - 1) - LegendreSum(m / pr[n - 1], n - 1) * func(pr[n - 1]);
     }
     long long calc(long long m) {
         static int isinit;
@@ -45,11 +56,11 @@ namespace Lehmer {
             isinit = 1;
             init();
         }
-        if (m < maxn) return cn[m];
+        if (m < maxn) return sum[m];
         int x = sqrt(m + 0.9), y = cbrt(m + 0.9);
         int a = cn[y];
-        long long res = LegendreSum(m, a) + a - 1;
-        for (int i = a; pr[i] <= x; i++) res = res - calc(m / pr[i]) + calc(pr[i]) - 1;
+        long long res = LegendreSum(m, a) - func(1) + sum[y];
+        for (int i = a; pr[i] <= x; i++) res -= (calc(m / pr[i]) - calc(pr[i] - 1)) * func(pr[i]);
         return res;
     }
 }
