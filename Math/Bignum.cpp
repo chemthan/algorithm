@@ -129,13 +129,13 @@ namespace FFT {
 const int base = 10;
 const int nblock = 9;
 const int blockbase = (int) round(pow(base, nblock));
-struct Bigint {
+struct Bignum {
     vector<int> a;
     int sign;
-    Bigint() : sign(1) {}
-    Bigint(long long v) {*this = v;}
-    Bigint(const string& s) {read(s);}
-    void operator = (const Bigint& v) {sign = v.sign; a = v.a;}
+    Bignum() : sign(1) {}
+    Bignum(long long v) {*this = v;}
+    Bignum(const string& s) {read(s);}
+    void operator = (const Bignum& v) {sign = v.sign; a = v.a;}
     void operator = (long long v) {
         a.clear();
         sign = 1;
@@ -144,9 +144,9 @@ struct Bigint {
         for (; v > 0; v = v / blockbase)
             a.push_back(v % blockbase);
     }
-    Bigint operator + (const Bigint& v) const {
+    Bignum operator + (const Bignum& v) const {
         if (sign == v.sign) {
-            Bigint res = v;
+            Bignum res = v;
             for (int i = 0, carry = 0; i < (int) max(a.size(), v.a.size()) || carry; i++) {
                 if (i == (int) res.a.size()) res.a.push_back(0);
                 res.a[i] += carry + (i < (int) a.size() ? a[i] : 0);
@@ -157,10 +157,10 @@ struct Bigint {
         }
         return *this - (-v);
     }
-    Bigint operator - (const Bigint& v) const {
+    Bignum operator - (const Bignum& v) const {
         if (sign == v.sign) {
             if (abs() >= v.abs()) {
-                Bigint res = *this;
+                Bignum res = *this;
                 for (int i = 0, carry = 0; i < (int) v.a.size() || carry; i++) {
                     res.a[i] -= carry + (i < (int) v.a.size() ? v.a[i] : 0);
                     carry = res.a[i] < 0;
@@ -185,27 +185,27 @@ struct Bigint {
     }
     void operator *= (long long v) {
         if (v >= (long long) blockbase * blockbase) {
-            *this *= Bigint(v);
+            *this *= Bignum(v);
         }
         int a = v / blockbase;
         int b = v % blockbase;
         *this = *this * a * blockbase + *this * b;
     }
-    Bigint operator * (int v) const {
-        Bigint res = *this;
+    Bignum operator * (int v) const {
+        Bignum res = *this;
         res *= v;
         return res;
     }
-    Bigint operator * (long long v) const {
-        Bigint res = *this;
+    Bignum operator * (long long v) const {
+        Bignum res = *this;
         res *= v;
         return res;
     }
-    friend pair<Bigint, Bigint> divmod(const Bigint& a1, const Bigint& b1) {
+    friend pair<Bignum, Bignum> divmod(const Bignum& a1, const Bignum& b1) {
         int norm = blockbase / (b1.a.back() + 1);
-        Bigint a = a1.abs() * norm;
-        Bigint b = b1.abs() * norm;
-        Bigint q, r;
+        Bignum a = a1.abs() * norm;
+        Bignum b = b1.abs() * norm;
+        Bignum q, r;
         q.a.resize(a.a.size());
         for (int i = a.a.size() - 1; i >= 0; i--) {
             r *= blockbase;
@@ -224,10 +224,10 @@ struct Bigint {
         r.trim();
         return make_pair(q, r / norm);
     }
-    Bigint operator / (const Bigint& v) const {
+    Bignum operator / (const Bignum& v) const {
         return divmod(*this, v).first;
     }
-    Bigint operator % (const Bigint& v) const {
+    Bignum operator % (const Bignum& v) const {
         return divmod(*this, v).second;
     }
     void operator /= (int v) {
@@ -240,15 +240,15 @@ struct Bigint {
         trim();
     }
     void operator /= (long long v) {
-        *this /= Bigint(v);
+        *this /= Bignum(v);
     }
-    Bigint operator / (int v) const {
-        Bigint res = *this;
+    Bignum operator / (int v) const {
+        Bignum res = *this;
         res /= v;
         return res;
     }
-    Bigint operator / (long long v) const {
-        Bigint res = *this;
+    Bignum operator / (long long v) const {
+        Bignum res = *this;
         res /= v;
         return res;
     }
@@ -259,39 +259,39 @@ struct Bigint {
         return m * sign;
     }
     long long operator % (long long v) const {
-        return (*this % Bigint(v)).longValue();
+        return (*this % Bignum(v)).longValue();
     }
-    void operator += (const Bigint& v) {
+    void operator += (const Bignum& v) {
         *this = *this + v;
     }
-    void operator -= (const Bigint& v) {
+    void operator -= (const Bignum& v) {
         *this = *this - v;
     }
-    void operator *= (const Bigint& v) {
+    void operator *= (const Bignum& v) {
         *this = *this * v;
     }
-    void operator /= (const Bigint& v) {
+    void operator /= (const Bignum& v) {
         *this = *this / v;
     }
-    bool operator < (const Bigint& v) const {
+    bool operator < (const Bignum& v) const {
         if (sign != v.sign) return sign < v.sign;
         if (a.size() != v.a.size()) return a.size() * sign < v.a.size() * v.sign;
         for (int i = a.size() - 1; i >= 0; i--) if (a[i] != v.a[i]) return a[i] * sign < v.a[i] * sign;
         return false;
     }
-    bool operator > (const Bigint& v) const {
+    bool operator > (const Bignum& v) const {
         return v < *this;
     }
-    bool operator <= (const Bigint& v) const {
+    bool operator <= (const Bignum& v) const {
         return !(v < *this);
     }
-    bool operator >= (const Bigint& v) const {
+    bool operator >= (const Bignum& v) const {
         return !(*this < v);
     }
-    bool operator == (const Bigint& v) const {
+    bool operator == (const Bignum& v) const {
         return !(*this < v) && !(v < *this);
     }
-    bool operator != (const Bigint& v) const {
+    bool operator != (const Bignum& v) const {
         return *this < v || v < *this;
     }
     void trim() {
@@ -301,13 +301,13 @@ struct Bigint {
     bool isZero() const {
         return a.empty() || (a.size() == 1 && !a[0]);
     }
-    Bigint operator - () const {
-        Bigint res = *this;
+    Bignum operator - () const {
+        Bignum res = *this;
         res.sign = -sign;
         return res;
     }
-    Bigint abs() const {
-        Bigint res = *this;
+    Bignum abs() const {
+        Bignum res = *this;
         res.sign *= res.sign;
         return res;
     }
@@ -316,10 +316,10 @@ struct Bigint {
         for (int i = a.size() - 1; i >= 0; i--) res = res * blockbase + a[i];
         return res * sign;
     }
-    friend Bigint gcd(const Bigint& a, const Bigint& b) {
+    friend Bignum gcd(const Bignum& a, const Bignum& b) {
         return b.isZero() ? a : gcd(b, a % b);
     }
-    friend Bigint lcm(const Bigint& a, const Bigint& b) {
+    friend Bignum lcm(const Bignum& a, const Bignum& b) {
         return a / gcd(a, b) * b;
     }
     void read(const string& s) {
@@ -332,11 +332,11 @@ struct Bigint {
         }
         trim();
     }
-    friend istream& operator>>(istream& stream, Bigint& v) {
+    friend istream& operator>>(istream& stream, Bignum& v) {
         string s; stream>>s; v.read(s);
         return stream;
     }
-    friend ostream& operator<<(ostream& stream, const Bigint& v) {
+    friend ostream& operator<<(ostream& stream, const Bignum& v) {
         if (v.sign == -1) stream << '-';
         stream<<(v.a.empty() ? 0 : v.a.back());
         for (int i = (int) v.a.size() - 2; i >= 0; i--) stream << setw(nblock) << setfill('0') << v.a[i];
@@ -388,7 +388,7 @@ struct Bigint {
         for (int i = 0; i < (int) a2b2.size(); i++) res[i + n] += a2b2[i];
         return res;
     }
-    Bigint operator * (const Bigint& v) const {
+    Bignum operator * (const Bignum& v) const {
         if ((max(this->a.size(), v.a.size()) * 9 + 5) / 6 <= 8192) {
             int r = 6;
             int t = round(pow(base, r));
@@ -400,7 +400,7 @@ struct Bigint {
             while (b.size() < a.size()) b.push_back(0);
             while (a.size() & (a.size() - 1)) a.push_back(0), b.push_back(0);
             vector<long long> c = karatsuba(a, b);
-            Bigint res;
+            Bignum res;
             res.sign = sign * v.sign;
             long long carry = 0;
             for (int i = 0; i < (int) c.size(); i++) {
@@ -418,7 +418,7 @@ struct Bigint {
         }
         else {
             vector<int> c = FFT::multiply(this->a, v.a, blockbase);
-            Bigint res;
+            Bignum res;
             res.sign = sign * v.sign;
             int carry = 0;
             for (int i = 0; i < (int) c.size(); i++) {
@@ -435,70 +435,70 @@ struct Bigint {
             return res;
         }
     }
-    friend Bigint sqrt(const Bigint& a) {
-        Bigint x0 = a, x1 = (a + 1) / 2;
+    friend Bignum sqrt(const Bignum& a) {
+        Bignum x0 = a, x1 = (a + 1) / 2;
         while (x1 < x0) {
             x0 = x1;
             x1 = (x1 + a / x1) / 2;
         }
         return x0;
     }
-    friend Bigint pow(Bigint a, Bigint b) {
-        if (b == Bigint(0)) return Bigint(1);
-        Bigint T = pow(a, b / 2);
+    friend Bignum pow(Bignum a, Bignum b) {
+        if (b == Bignum(0)) return Bignum(1);
+        Bignum T = pow(a, b / 2);
         if (b % 2 == 0) return T * T;
         return T * T * a;
     }
-    friend Bigint pow(Bigint a, int b) {
-        return pow(a, (Bigint(b)));
+    friend Bignum pow(Bignum a, int b) {
+        return pow(a, (Bignum(b)));
     }
-    friend int log(Bigint a, int n) {
+    friend int log(Bignum a, int n) {
         int res = 0;
-        while (a > Bigint(1)) {
+        while (a > Bignum(1)) {
             res++;
             a /= n;
         }
         return res;
     }
-    template<class T> friend Bigint operator + (const T& v, const Bigint& a) {
+    template<class T> friend Bignum operator + (const T& v, const Bignum& a) {
         return a + v;
     }
-    template<class T> friend Bigint operator - (const T& v, const Bigint& a) {
+    template<class T> friend Bignum operator - (const T& v, const Bignum& a) {
         return -a + v;
     }
-    template<class T> friend Bigint operator * (const T& v, const Bigint& a) {
+    template<class T> friend Bignum operator * (const T& v, const Bignum& a) {
         return a * v;
     }
-    template<class T> friend Bigint operator / (const T& v, const Bigint& a) {
-        return Bigint(v) / a;
+    template<class T> friend Bignum operator / (const T& v, const Bignum& a) {
+        return Bignum(v) / a;
     }
-    Bigint operator ++() {
+    Bignum operator ++() {
         (*this) += 1;
         return *this;
     }
-    Bigint operator ++(int) {
+    Bignum operator ++(int) {
         (*this) += 1;
         return *this - 1;
     }
-    Bigint operator --() {
+    Bignum operator --() {
         (*this) -= 1;
         return *this;
     }
-    Bigint operator --(int) {
+    Bignum operator --(int) {
         (*this) -= 1;
         return *this + 1;
     }
 };
 
 int main() {
-    Bigint n = Bigint("123456789");
-    Bigint m = Bigint("987654321");
+    Bignum n = Bignum("123456789");
+    Bignum m = Bignum("987654321");
     cout << n * m << "\n";
     cout << 5 + m << "\n";
     cout << 5 - m << "\n";
     cout << 5 * m << "\n";
     cout << 5 / m << "\n";
-    Bigint k = 1;
+    Bignum k = 1;
     cout << ++k << "\n";
     cout << k++ << "\n";
     cout << --k << "\n";
