@@ -11,13 +11,13 @@ namespace PrefixSumMulticativeFunction {
         return p;
     }
     //func(2, 1) + func(3, 1) + ... + func(n, 1)
-    inline long long accfunc(int n) {
+    inline long long accfunc(long long n) {
         /*
            long long res = 0;
            for (int i = 2; i <= n; i++) res += func(i, 1); //Can be computed in O(1)?
            return res;
          */
-        return (long long) n * (n + 1) / 2 - 1;
+        return n * (n + 1) / 2 - 1;
     }
     //func(1) + func(2) + ... + func(n)
     long long calc(long long n) {
