@@ -35,7 +35,7 @@ namespace Euler {
         vector<int> res, stk;
         function<void(int)> dfs = [&] (int u) {
             stk.push_back(u);
-            while (!adj[u].empty()) {
+            while (u < (int) adj.size() && !adj[u].empty()) {
                 int v = adj[u].back().first;
                 int e = adj[u].back().second;
                 adj[u].pop_back();
