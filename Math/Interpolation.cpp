@@ -45,10 +45,12 @@ namespace Interpolation {
         int res = 0;
         for (int i = 1; i <= k; i++) {
             if (!((k - i) & 1)) {
-                res = (res + (long long) prf[i - 1] * suf[i + 1] % mod * ifac[i - 1] % mod * ifac[k - i] % mod * a[i]) % mod;
+                res = (res + (long long) prf[i - 1] * suf[i + 1] % mod
+                        * ifac[i - 1] % mod * ifac[k - i] % mod * a[i]) % mod;
             }
             else {
-                res = (res - (long long) prf[i - 1] * suf[i + 1] % mod * ifac[i - 1] % mod * ifac[k - i] % mod * a[i] % mod + mod) % mod;
+                res = (res - (long long) prf[i - 1] * suf[i + 1] % mod
+                        * ifac[i - 1] % mod * ifac[k - i] % mod * a[i] % mod + mod) % mod;
             }
         }
         return res;
