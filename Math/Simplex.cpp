@@ -102,5 +102,6 @@ int main() {
     for (int i = 0; i < x.size(); i++) {
         cout << x[i] << " \n"[i == x.size() - 1];
     }
+    cerr << "\nTime elapsed: " << 1000 * clock() / CLOCKS_PER_SEC << "ms\n";
     return 0;
 }

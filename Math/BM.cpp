@@ -1,7 +1,7 @@
 #include <bits/stdc++.h>
 using namespace std;
 
-template<const int mod, const int maxn>
+template<const int maxn, const int mod>
 struct linear_solver {
     static const long long sqmod = (long long) mod * mod;
     int n;
@@ -105,7 +105,7 @@ struct linear_solver {
         return calc(k);
     }
 };
-linear_solver<(int) 1e9 + 7, 1 << 18> ls;
+linear_solver<1 << 18, (int) 1e9 + 7> ls;
 
 const int mod = (int) 1e9 + 7;
 const int maxn = 1 << 20;
