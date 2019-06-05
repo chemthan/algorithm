@@ -7,14 +7,15 @@ using namespace std;
  * maximizing <c, x>
  * where <x, y> is the dot product of x and y.
  */
-typedef long double T;
-typedef vector<T> ROW;
-typedef vector<ROW> MATRIX;
-#define EPS 1e-9
-
-inline int sign(T x) {return x < -EPS ? -1 : x > +EPS;}
-inline int sign(T x, T y) {return sign(x - y);}
+//typedef long double T;
+template<typename T>
 struct LPSolver {
+    typedef vector<T> ROW;
+    typedef vector<ROW> MATRIX;
+    static const T EPS = 1e-9;
+
+    inline int sign(T x) {return x < -EPS ? -1 : x > +EPS;}
+    inline int sign(T x, T y) {return sign(x - y);}
     int m, n;
     vector<int> B, N;
     MATRIX D;
@@ -68,12 +69,12 @@ struct LPSolver {
             Pivot(r, n);
             if (!Simplex(1) || sign(D[m + 1][n + 1]) < 0) return -numeric_limits<T>::infinity();
             for (int i = 0; i < m; i++) if (B[i] == -1) {
-                    int s = -1;
-                    for (int j = 0; j <= n; j++) {
-                        if (s == -1 || D[i][j] < D[i][s] || D[i][j] == D[i][s] && N[j] < N[s]) s = j;
-                    }
-                    Pivot(i, s);
+                int s = -1;
+                for (int j = 0; j <= n; j++) {
+                    if (s == -1 || D[i][j] < D[i][s] || D[i][j] == D[i][s] && N[j] < N[s]) s = j;
                 }
+                Pivot(i, s);
+            }
         }
         if (!Simplex(2)) return numeric_limits<T>::infinity();
         x = ROW(n);
