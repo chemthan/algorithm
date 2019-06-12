@@ -4,11 +4,11 @@ using namespace std;
 const int maxn = 1e5 + 5;
 const int oo = (int) 1e9;
 
-struct Point {
+struct point_t {
     int x, y, idx;
-    Point() {x = y = idx = 0;}
-    Point(const Point& rhs) : x(rhs.x), y(rhs.y), idx(rhs.idx) {}
-    int operator < (const Point& rhs) const {
+    point_t() {x = y = idx = 0;}
+    point_t(const point_t& rhs) : x(rhs.x), y(rhs.y), idx(rhs.idx) {}
+    int operator < (const point_t& rhs) const {
         return make_pair(x, make_pair(y, idx)) < make_pair(rhs.x, make_pair(rhs.y, rhs.idx));
     }
 };
@@ -45,10 +45,10 @@ int join(int u, int v) {
 }
 
 int n;
-Point p[maxn];
+point_t p[maxn];
 priority_queue<pair<int, pair<int, int> >, vector<pair<int, pair<int, int> > >, greater<pair<int, pair<int, int> > > > pq;
 
-int dist(Point a, Point b) {
+int dist(point_t a, point_t b) {
     return abs(a.x - b.x) + abs(a.y - b.y);
 }
 

@@ -1,27 +1,27 @@
 #include <bits/stdc++.h>
 using namespace std;
 
-struct PT {
+struct point_t {
     int x, y;
-    PT() : x(0), y(0) {}
-    PT(int x, int y) : x(x), y(y) {}
-    PT(const PT& rhs) : x(rhs.x), y(rhs.y) {}
-    int operator < (const PT& rhs) const {return make_pair(y, x) < make_pair(rhs.y, rhs.x);}
-    int operator == (const PT& rhs) const {return make_pair(y, x) == make_pair(rhs.y, rhs.x);}
-    int operator != (const PT& rhs) const {return make_pair(y, x) != make_pair(rhs.y, rhs.x);}
-    PT operator - (const PT& rhs) const {return PT(x - rhs.x, y - rhs.y);}
+    point_t() : x(0), y(0) {}
+    point_t(int x, int y) : x(x), y(y) {}
+    point_t(const point_t& rhs) : x(rhs.x), y(rhs.y) {}
+    int operator < (const point_t& rhs) const {return make_pair(y, x) < make_pair(rhs.y, rhs.x);}
+    int operator == (const point_t& rhs) const {return make_pair(y, x) == make_pair(rhs.y, rhs.x);}
+    int operator != (const point_t& rhs) const {return make_pair(y, x) != make_pair(rhs.y, rhs.x);}
+    point_t operator - (const point_t& rhs) const {return point_t(x - rhs.x, y - rhs.y);}
 };
-long long cross(PT a, PT b) {
+long long cross(point_t a, point_t b) {
     return (long long) a.x * b.y - (long long) a.y * b.x;
 }
-long long area(PT a, PT b, PT c) {
+long long area(point_t a, point_t b, point_t c) {
     return cross(a, b) + cross(b, c) + cross(c, a);
 }
-long long dist(PT a, PT b) {
+long long dist(point_t a, point_t b) {
     return (long long) (a.x - b.x) * (a.x - b.x) + (long long) (a.y - b.y) * (a.y - b.y);
 }
-void ConvexHull(vector<PT>& pts) {
-    vector<PT> up, dn;
+void ConvexHull(vector<point_t>& pts) {
+    vector<point_t> up, dn;
     sort(pts.begin(), pts.end());
     pts.erase(unique(pts.begin(), pts.end()), pts.end());
     for (int i = 0; i < pts.size(); i++) {
@@ -36,12 +36,12 @@ void ConvexHull(vector<PT>& pts) {
 
 const int maxn = 1e5 + 5;
 int n, n1, n2;
-vector<PT> vp1, vp2;
+vector<point_t> vp1, vp2;
 
 int next1(int i) {if (++i == n1) i = 0; return i;}
 int next2(int i) {if (++i == n2) i = 0; return i;}
 
-int compare(pair<PT, int> a, pair<PT, int> b) {
+int compare(pair<point_t, int> a, pair<point_t, int> b) {
     return cross(a.first, b.first) > 0;
 }
 
@@ -64,10 +64,10 @@ int main() {
     srand(time(NULL));
     n1 = n2 = 1000;
     for (int i = 0; i < n1; i++) {
-        vp1.push_back(PT(rand(), rand()));
+        vp1.push_back(point_t(rand(), rand()));
     }
     for (int i = 0; i < n2; i++) {
-        vp2.push_back(PT(rand(), rand()));
+        vp2.push_back(point_t(rand(), rand()));
     }
     ConvexHull(vp1), ConvexHull(vp2);
     n1 = vp1.size(), n2 = vp2.size();
@@ -92,9 +92,9 @@ int main() {
     }
     assert(~i2), assert(~j2);
     long long mx = calc(i1, i2, j1, j2);
-    PT vec = PT(1, 0), first = PT((int) -1e9, (int) -1e9);
+    point_t vec = point_t(1, 0), first = point_t((int) -1e9, (int) -1e9);
     while (1) {
-        vector<pair<PT, int> > vv;
+        vector<pair<point_t, int> > vv;
         if (cross(vec, vp1[next1(i1)] - vp1[i1]) >= 0) {
             vv.push_back(make_pair(vp1[next1(i1)] - vp1[i1], 0));
         }
@@ -115,7 +115,7 @@ int main() {
         else if (ix == 3) j2 = next2(j2);
         vec = vv[0].first;
         mx = max(mx, calc(i1, i2, j1, j2));
-        if (first == PT((int) -1e9, (int) -1e9)) {
+        if (first == point_t((int) -1e9, (int) -1e9)) {
             first = vec;
             continue;
         }

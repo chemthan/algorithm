@@ -4,20 +4,20 @@ using namespace std;
 const int MAXN = 1e5 + 5;
 typedef long long T;
 const T oo = (T) 1e18;
-struct Point {
+struct point_t {
     int x, y;
-    Point() : x(0), y(0) {}
-    Point(int x, int y) : x(x), y(y) {}
-    Point(const Point& rhs) : x(rhs.x), y(rhs.y) {}
-    int operator < (const Point& rhs) const {return make_pair(x, y) < make_pair(rhs.x, rhs.y);}
+    point_t() : x(0), y(0) {}
+    point_t(int x, int y) : x(x), y(y) {}
+    point_t(const point_t& rhs) : x(rhs.x), y(rhs.y) {}
+    int operator < (const point_t& rhs) const {return make_pair(x, y) < make_pair(rhs.x, rhs.y);}
 } mem[MAXN];
-T squaredist(Point a, Point b) {
+T squaredist(point_t a, point_t b) {
     return (T) (a.x - b.x) * (a.x - b.x) + (T) (a.y - b.y) * (a.y - b.y);
 }
-int cmpY(Point lhs, Point rhs) {
+int cmpY(point_t lhs, point_t rhs) {
     return make_pair(lhs.y, lhs.x) < make_pair(rhs.y, rhs.x);
 }
-T closestpair(Point p[], int l, int r) {
+T closestpair(point_t p[], int l, int r) {
     T res = oo;
     if (r - l <= 3) {
         for (int i = l; i <= r; i++) {
@@ -46,7 +46,7 @@ T closestpair(Point p[], int l, int r) {
 }
 
 int n;
-Point p[MAXN];
+point_t p[MAXN];
 
 int main() {
     srand(time(NULL));

@@ -3,30 +3,30 @@ using namespace std;
 
 #define RL double
 #define EPS 1e-9
-struct PT {
+struct point_t {
     RL x, y;
-    PT() : x(0), y(0) {}
-    PT(RL x, RL y) : x(x), y(y) {}
-    PT(const PT& p) : x(p.x), y(p.y) {}
-    int operator < (const PT& rhs) const {return make_pair(y, x) < make_pair(rhs.y, rhs.x);}
-    int operator == (const PT& rhs) const {return make_pair(y, x) == make_pair(rhs.y, rhs.x);}
-    PT operator + (const PT& p) const {return PT(x + p.x, y + p.y);}
-    PT operator - (const PT& p) const {return PT(x - p.x, y - p.y);}
-    PT operator * (RL c) const {return PT(x * c, y * c);}
-    PT operator / (RL c) const {return PT(x / c, y / c);}
+    point_t() : x(0), y(0) {}
+    point_t(RL x, RL y) : x(x), y(y) {}
+    point_t(const point_t& p) : x(p.x), y(p.y) {}
+    int operator < (const point_t& rhs) const {return make_pair(y, x) < make_pair(rhs.y, rhs.x);}
+    int operator == (const point_t& rhs) const {return make_pair(y, x) == make_pair(rhs.y, rhs.x);}
+    point_t operator + (const point_t& p) const {return point_t(x + p.x, y + p.y);}
+    point_t operator - (const point_t& p) const {return point_t(x - p.x, y - p.y);}
+    point_t operator * (RL c) const {return point_t(x * c, y * c);}
+    point_t operator / (RL c) const {return point_t(x / c, y / c);}
 };
-RL cross(PT p, PT q) {return p.x * q.y - p.y * q.x;}
-RL area(PT a, PT b, PT c) {return fabs(cross(a, b) + cross(b, c) + cross(c, a)) / 2;}
-RL area2(PT a, PT b, PT c) {return cross(a, b) + cross(b, c) + cross(c, a);}
-RL dot(PT p, PT q) {return p.x * q.x + p.y * q.y;}
-RL dist(PT p, PT q) {return sqrt(dot(p - q, p - q));}
-RL dist2(PT p, PT q) {return dot(p - q, p - q);}
-PT RotateCCW90(PT p) {return PT(-p.y, p.x);}
-PT RotateCW90(PT p) {return PT(p.y, -p.x);}
-PT RotateCCW(PT p, RL t) {return PT(p.x * cos(t) - p.y * sin(t), p.x * sin(t) + p.y * cos(t));}
+RL cross(point_t p, point_t q) {return p.x * q.y - p.y * q.x;}
+RL area(point_t a, point_t b, point_t c) {return fabs(cross(a, b) + cross(b, c) + cross(c, a)) / 2;}
+RL area2(point_t a, point_t b, point_t c) {return cross(a, b) + cross(b, c) + cross(c, a);}
+RL dot(point_t p, point_t q) {return p.x * q.x + p.y * q.y;}
+RL dist(point_t p, point_t q) {return sqrt(dot(p - q, p - q));}
+RL dist2(point_t p, point_t q) {return dot(p - q, p - q);}
+point_t RotateCCW90(point_t p) {return point_t(-p.y, p.x);}
+point_t RotateCW90(point_t p) {return point_t(p.y, -p.x);}
+point_t RotateCCW(point_t p, RL t) {return point_t(p.x * cos(t) - p.y * sin(t), p.x * sin(t) + p.y * cos(t));}
 int sign(RL x) {return x < -EPS ? -1 : x > EPS;}
 int sign(RL x, RL y) {return sign(x - y);}
-ostream& operator << (ostream& os, const PT& p) {
+ostream& operator << (ostream& os, const point_t& p) {
     os << "(" << p.x << "," << p.y << ")";
     return os;
 }
@@ -34,14 +34,14 @@ ostream& operator << (ostream& os, const PT& p) {
 //Remove degenerate
 #define REMOVE_REDUNDANT
 #ifdef REMOVE_REDUNDANT
-bool between(const PT& a, const PT& b, const PT& c) {
+bool between(const point_t& a, const point_t& b, const point_t& c) {
     return (fabs(area2(a, b, c)) < EPS && (a.x - b.x) * (c.x - b.x) <= 0 && (a.y - b.y) * (c.y - b.y) <= 0);
 }
 #endif
-void ConvexHull(vector<PT>& pts) {
+void ConvexHull(vector<point_t>& pts) {
     sort(pts.begin(), pts.end());
     pts.erase(unique(pts.begin(), pts.end()), pts.end());
-    vector<PT> up, dn;
+    vector<point_t> up, dn;
     for (int i = 0; i < pts.size(); i++) {
         while (up.size() > 1 && area2(up[up.size() - 2], up.back(), pts[i]) >= 0) up.pop_back();
         while (dn.size() > 1 && area2(dn[dn.size() - 2], dn.back(), pts[i]) <= 0) dn.pop_back();

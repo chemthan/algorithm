@@ -6,42 +6,42 @@ const int BLACK = 1;
 const int LEFT = 0;
 const int RIGHT = 1;
 
-struct Point {
+struct point_t {
     int x, y;
-    Point() {
+    point_t() {
         x = y = 0;
     }
-    Point(int x, int y) : x(x), y(y) {}
-    Point(const Point& rhs) : x(rhs.x), y(rhs.y) {}
-    int operator == (const Point& rhs) const {
+    point_t(int x, int y) : x(x), y(y) {}
+    point_t(const point_t& rhs) : x(rhs.x), y(rhs.y) {}
+    int operator == (const point_t& rhs) const {
         return make_pair(x, y) == make_pair(rhs.x, rhs.y);
     }
-    int operator != (const Point& rhs) const {
+    int operator != (const point_t& rhs) const {
         return make_pair(x, y) != make_pair(rhs.x, rhs.y);
     }
-    int operator < (const Point& rhs) const {
+    int operator < (const point_t& rhs) const {
         return make_pair(x, y) < make_pair(rhs.x, rhs.y);
     }
-    int operator > (const Point& rhs) const {
+    int operator > (const point_t& rhs) const {
         return make_pair(x, y) > make_pair(rhs.x, rhs.y);
     }
-    int operator <= (const Point& rhs) const {
+    int operator <= (const point_t& rhs) const {
         return make_pair(x, y) <= make_pair(rhs.x, rhs.y);
     }
-    int operator >= (const Point& rhs) const {
+    int operator >= (const point_t& rhs) const {
         return make_pair(x, y) >= make_pair(rhs.x, rhs.y);
     }
-    long long cross(Point rhs) {
+    long long cross(point_t rhs) {
         return (long long) x * rhs.y - (long long) y * rhs.x;
     }
 };
 
 struct Node {
-    Point key;
+    point_t key;
     Node *parent, *left, *right;
     Node *maxNode, *minNode, *prv, *nxt;
     long long sumcross;
-    Node(Point key) {
+    Node(point_t key) {
         this->key = key;
         parent = left = right = 0;
         maxNode = minNode = this;
@@ -79,7 +79,7 @@ struct CQueue {
     CQueue() {
         root = 0;
     }
-    CQueue(Point key) {
+    CQueue(point_t key) {
         root = new Node(key);
     }
     CQueue(Node* root) {
@@ -123,7 +123,7 @@ struct CQueue {
         }
         x->pushup();
     }
-    inline Node* insert(Node* x, Point key) {
+    inline Node* insert(Node* x, point_t key) {
         Node* p = 0;
         while (x != 0) {
             p = x;
@@ -140,7 +140,7 @@ struct CQueue {
         splay(x);
         return root = x;
     }
-    inline Node* findkey(Node* x, Point key) {
+    inline Node* findkey(Node* x, point_t key) {
         while (x != 0) {
             if (x->key < key) x = x->right;
             else if (x->key > key) x = x->left;
@@ -174,7 +174,7 @@ struct CQueue {
         if (y == 0) return x;
         return new CQueue(join(x->root, y->root));
     }
-    inline CQueue* split(Point p, int returnLoR, int inclusive) {
+    inline CQueue* split(point_t p, int returnLoR, int inclusive) {
         Node *qLeft = 0, *qRight = 0;
         Node* y = findkey(root, p);
         if (y == 0) {
@@ -278,21 +278,21 @@ struct CQueue {
         }
         return concatenate(lHull->split(lItr->key, LEFT, true), rHull->split(rItr->key, RIGHT, true));
     }
-    inline static double computeSlope(Point pleft, Point pright) {
+    inline static double computeSlope(point_t pleft, point_t pright) {
         if (pright.x - pleft.x == 0) {
             if (pright.y - pleft.y > 0) return 1e9;
             return -1e9;
         }
         return ((double) (pright.y - pleft.y)) / (pright.x - pleft.x);
     }
-    inline static int check(Point a, Point b, Point c, Point d) {
+    inline static int check(point_t a, point_t b, point_t c, point_t d) {
         long long x = (long long) (b.y - a.y) * (d.x - c.x);
         long long y = (long long) (d.y - c.y) * (b.x - a.x);
         if (x == y) return 0;
         if (x > y) return 1;
         return -1;
     }
-    inline static int determineCase(Node* n, Point s, Point t) {
+    inline static int determineCase(Node* n, point_t s, point_t t) {
         int leftAbove = 1;
         int rightAbove = 0;
         if ((n->prv != 0) && check(n->prv->key, n->key, s, t) < 0) {
@@ -316,15 +316,15 @@ struct CQueue {
 struct CNode {
     int isLeaf, color;
     CNode *left, *right, *lMax;
-    Point px;
+    point_t px;
     CQueue *uhull, *dhull;
-    CNode(Point p) {
+    CNode(point_t p) {
         this->isLeaf = 1;
         this->color = BLACK;
         this->px = p;
         this->lMax = this;
         uhull = new CQueue(p);
-        dhull = new CQueue(Point(-p.x, -p.y));
+        dhull = new CQueue(point_t(-p.x, -p.y));
     }
     CNode(CNode *lMax, CNode *left, CNode *right) {
         this->isLeaf = 0;
@@ -335,7 +335,7 @@ struct CNode {
         uhull = bridge(left->uhull, right->uhull);
         dhull = bridge(right->dhull, left->dhull);
     }
-    CNode(Point p, CNode *leftLeaf, CNode *rightLeaf) {
+    CNode(point_t p, CNode *leftLeaf, CNode *rightLeaf) {
         //assert((leftLeaf == NULL || leftLeaf->isLeaf) && (rightLeaf == NULL || rightLeaf->isLeaf));
         this->isLeaf = 1;
         this->color = BLACK;
@@ -344,7 +344,7 @@ struct CNode {
         this->right = rightLeaf;
         this->lMax = this;
         uhull = new CQueue(p);
-        dhull = new CQueue(Point(-p.x, -p.y));
+        dhull = new CQueue(point_t(-p.x, -p.y));
     }
 };
 
@@ -358,7 +358,7 @@ struct DynamicConvexHull {
         //assert(!n->isLeaf);
         n->left->uhull = concatenate(n->uhull->split(n->lMax->px, LEFT, 1), n->left->uhull);
         n->right->uhull = concatenate(n->right->uhull, n->uhull);
-        n->right->dhull = concatenate(n->dhull->split(Point(-n->lMax->px.x, -n->lMax->px.y), LEFT, 0), n->right->dhull);
+        n->right->dhull = concatenate(n->dhull->split(point_t(-n->lMax->px.x, -n->lMax->px.y), LEFT, 0), n->right->dhull);
         n->left->dhull = concatenate(n->left->dhull, n->dhull);
     }
     inline static void Up(CNode* n) {
@@ -397,7 +397,7 @@ struct DynamicConvexHull {
         Up(tempCNode);
         return tempCNode;
     }
-    inline CNode* addLeaf(Point p, CNode* nLeft, CNode* nRight) {
+    inline CNode* addLeaf(point_t p, CNode* nLeft, CNode* nRight) {
         return new CNode(p);
     }
     inline void removeLeaf(CNode* n) {
@@ -428,7 +428,7 @@ struct DynamicConvexHull {
         }
         return n;
     }
-    inline CNode* insertAt(CNode* n, Point p) {
+    inline CNode* insertAt(CNode* n, point_t p) {
         //assert(n != NULL);
         if (p <= n->lMax->px) {
             if (n->isLeaf) {
@@ -459,7 +459,7 @@ struct DynamicConvexHull {
         n = fixUp(n);
         return n;
     }
-    inline CNode* deleteAt(CNode* n, Point p) {
+    inline CNode* deleteAt(CNode* n, point_t p) {
         //assert(n != NULL);
         //assert(!n->isLeaf);
         //assert(n->color == RED || n->left->color == RED);
@@ -553,7 +553,7 @@ struct DynamicConvexHull {
         }
         return n;
     }
-    inline void insert(Point p) {
+    inline void insert(point_t p) {
         if (root == 0) {
             root = new CNode(p);
         }
@@ -564,7 +564,7 @@ struct DynamicConvexHull {
             }
         }
     }
-    inline void remove(Point p) {
+    inline void remove(point_t p) {
         if (root == 0) {
             return;
         }
@@ -606,7 +606,7 @@ int main() {
         int u = seed & ((1 << 16) - 1);
         seed = (seed * 1001 + 100621) % 999983;
         int v = seed & ((1 << 16) - 1);
-        con.insert(Point(u, v));
+        con.insert(point_t(u, v));
     }
     cout << con.Area2() << "\n"; //Expected 8433900701
     return 0;

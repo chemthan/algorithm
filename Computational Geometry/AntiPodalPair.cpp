@@ -1,26 +1,26 @@
 #include <bits/stdc++.h>
 using namespace std;
 
-struct PT {
+struct point_t {
     int x, y;
-    PT() : x(0), y(0) {}
-    PT(int x, int y) : x(x), y(y) {}
-    PT(const PT& rhs) : x(rhs.x), y(rhs.y) {}
-    int operator < (const PT& rhs) const {return make_pair(y, x) < make_pair(rhs.y, rhs.x);}
-    int operator == (const PT& rhs) const {return make_pair(y, x) == make_pair(rhs.y, rhs.x);}
-    PT operator - (const PT& rhs) const {return PT(x - rhs.x, y - rhs.y);}
+    point_t() : x(0), y(0) {}
+    point_t(int x, int y) : x(x), y(y) {}
+    point_t(const point_t& rhs) : x(rhs.x), y(rhs.y) {}
+    int operator < (const point_t& rhs) const {return make_pair(y, x) < make_pair(rhs.y, rhs.x);}
+    int operator == (const point_t& rhs) const {return make_pair(y, x) == make_pair(rhs.y, rhs.x);}
+    point_t operator - (const point_t& rhs) const {return point_t(x - rhs.x, y - rhs.y);}
 };
-long long cross(PT a, PT b) {
+long long cross(point_t a, point_t b) {
     return (long long) a.x * b.y - (long long) a.y * b.x;
 }
-long long area(PT a, PT b, PT c) {
+long long area(point_t a, point_t b, point_t c) {
     return cross(a, b) + cross(b, c) + cross(c, a);
 }
-long long dist(PT a, PT b) {
+long long dist(point_t a, point_t b) {
     return (long long) (a.x - b.x) * (a.x - b.x) + (long long) (a.y - b.y) * (a.y - b.y);
 }
-void ConvexHull(vector<PT>& pts) {
-    vector<PT> up, dn;
+void ConvexHull(vector<point_t>& pts) {
+    vector<point_t> up, dn;
     sort(pts.begin(), pts.end());
     pts.erase(unique(pts.begin(), pts.end()), pts.end());
     for (int i = 0; i < pts.size(); i++) {
@@ -35,7 +35,7 @@ void ConvexHull(vector<PT>& pts) {
 
 const int maxn = 1e5 + 5;
 int n;
-PT p[maxn];
+point_t p[maxn];
 long long mx;
 
 long long area(int i, int j, int k) {return area(p[i], p[j], p[k]);}
@@ -73,8 +73,8 @@ void GetAllAntiPodalPairs() {
 
 int main() {
     srand(time(NULL));
-    vector<PT> vp;
-    for (int i = 0; i < 100000; i++) vp.push_back(PT(rand(), rand()));
+    vector<point_t> vp;
+    for (int i = 0; i < 100000; i++) vp.push_back(point_t(rand(), rand()));
     ConvexHull(vp);
     n = vp.size();
     for (int i = 0; i < n; i++) p[i] = vp[i];
