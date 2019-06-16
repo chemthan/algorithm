@@ -6,12 +6,12 @@ struct LCA {
     vector<int> sta;
     vector<int> tin;
     vector<int> idx;
-    int tms;
+    int timer;
     vector<vector<int>> f;
     vector<int> mlg;
 
     void dfs(int u, int p, const vector<vector<int>>& adj) {
-        idx[tin[u] = tms++] = u;
+        idx[tin[u] = timer++] = u;
         sta[u] = events.size();
         events.push_back(tin[u]);
         for (int i = 0; i < adj[u].size(); i++) {
@@ -30,12 +30,12 @@ struct LCA {
         if (sta[u] > sta[v]) swap(u, v);
         return idx[query(sta[u], sta[v])];
     }
-    void build(const vector<vector<int>>& adj) {
+    void build(const vector<vector<int>>& adj, int rt = 0) {
         events.clear();
         sta.resize(adj.size());
         tin.resize(adj.size());
         idx.resize(adj.size());
-        dfs(tms = 0, -1, adj);
+        timer = 0, dfs(rt, -1, adj);
         int logn = __lg(events.size()) + 1;
         f.resize(logn);
         for (int i = 0; i < logn; i++) {
