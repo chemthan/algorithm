@@ -175,6 +175,24 @@ namespace FFT {
         }
         return make_pair(d, r);
     }
+    vector<int> chirpz_transform(vector<int> a, int z, int k, int mod) {
+        int n = a.size();
+        vector<int> x;
+        vector<int> y;
+        int iz = fpow(z, mod - 2, mod);
+        for (int i = 0; i < n; i++) {
+            x.push_back((long long) a[i] * fpow(z, (long long) i * i, mod) % mod);
+        }
+        for (int i = 1 - n; i < k; i++) {
+            y.push_back(fpow(iz, (long long) i * i, mod));
+        }
+        vector<int> r = FFT::multiply(x, y, mod);
+        vector<int> res(k);
+        for (int i = 0; i < k; i++) {
+            res[i] = (long long) r[i + n - 1] * fpow(z, (long long) i * i, mod) % mod;
+        }
+        return res;
+    }
 }
 #undef double
 
@@ -253,10 +271,30 @@ void testmuleval() {
     }
 }
 
+void testchirpz_transform() {
+    int n = 1234;
+    vector<int> a(n);
+    for (int i = 0; i < n; i++) {
+        a[i] = rand() % mod;
+    }
+    int z = rand() % mod;
+    vector<int> r = FFT::chirpz_transform(a, z, n, mod);
+    for (int i = 0; i < n; i++) {
+        int x = FFT::fpow(z, i + i, mod);
+        int y = 0;
+        for (int j = 0; j < n; j++) {
+            y += (long long) a[j] * FFT::fpow(x, j, mod) % mod;
+            if (mod <= y) y -= mod;
+        }
+        assert(y == r[i]);
+    }
+}
+
 int main() {
-    srand(time(NULL));
+    srand(time(0));
     testdivmod();
     testmuleval();
+    testchirpz_transform();
     cerr << "Correct!\n";
     cerr << "\nTime elapsed: " << 1000 * clock() / CLOCKS_PER_SEC << "ms\n";
     return 0;
