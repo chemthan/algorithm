@@ -113,7 +113,7 @@ namespace FFT {
             long long u = ((long long) floor(fc[i].x + 0.5)) % mod;
             long long v = ((long long) floor(fd[i].x + 0.5)) % mod;
             long long w = ((long long) floor(fd[i].y + 0.5)) % mod;
-            c[i] = ((u << 15) + v + (w << 30)) % mod;
+            c[i] = ((u << magic) + v + (w << magic + magic)) % mod;
         }
     }
     vector<int> multiply(vector<int> a, vector<int> b, int mod = (int) 1e9 + 7) {
