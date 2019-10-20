@@ -136,8 +136,9 @@ struct SuffixArray {
             phi[i] = pclp[i] = lcp[i] = 0;
         }
         s[n] = 0;
-        buildSA(s, sa, n, maxc, 1);
+        buildSA(s, sa, n + 1, maxc, 1);
         for (int i = 0; i < n; i++) {
+            sa[i] = sa[i + 1];
             ra[sa[i]] = i;
         }
         buildLCP();
