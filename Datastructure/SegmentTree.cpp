@@ -5,9 +5,10 @@ using namespace std;
 * Complexity: O(logN)
 */
 template<class num_t> struct SegmenTree {
+    int n;
     vector<num_t> st;
     vector<num_t> lz;
-    SegmenTree(int n) {
+    SegmenTree(int n) : n(n) {
         st.resize(n << 2);
         lz.resize(n << 2);
     }
@@ -39,11 +40,11 @@ template<class num_t> struct SegmenTree {
         if (l <= L && R <= r) return st[p];
         return query(p << 1, l, r, L, L + R >> 1) + query(p << 1 | 1, l, r, (L + R >> 1) + 1, R);
     }
-    void upd(int p, int l, int r, num_t val) {
-        upd(p, l, r, 0, st.size() - 1, val);
+    void upd(int l, int r, num_t val) {
+        upd(1, l, r, 0, n - 1, val);
     }
-    num_t query(int p, int l, int r) {
-        return query(p, l, r, 0, st.size() - 1);
+    num_t query(int l, int r) {
+        return query(1, l, r, 0, n - 1);
     }
 };
 
@@ -63,7 +64,7 @@ int main() {
         for (int i = l; i <= r; i++) {
             a[i] += v;
         }
-        seg.upd(1, l, r, 0, n - 1, v);
+        seg.upd(l, r, v);
         l = rand() % n;
         r = rand() % n;
         if (l > r) swap(l, r);
@@ -71,7 +72,7 @@ int main() {
         for (int i = l; i <= r; i++) {
             ans += a[i];
         }
-        assert(ans == seg.query(1, l, r, 0, n - 1));    
+        assert(ans == seg.query(l, r));    
     }
     cout << "Correct!\n";
     return 0;
