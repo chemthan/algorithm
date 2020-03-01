@@ -4,10 +4,13 @@ using namespace std;
 /*
 * Complexity: O(logN)
 */
-template<class T> struct SegmenTree {
-    static const int MAXN = 1e5 + 5;
-    T st[MAXN << 2];
-    T lz[MAXN << 2];
+template<class num_t> struct SegmenTree {
+    vector<num_t> st;
+    vector<num_t> lz;
+    SegmenTree(int n) {
+        st.resize(n << 2);
+        lz.resize(n << 2);
+    }
     void pushdown(int p, int L, int R) {
         if (lz[p]) {
             st[p] += (R - L + 1) * lz[p];
@@ -18,10 +21,10 @@ template<class T> struct SegmenTree {
             lz[p] = 0;
         }
     }
-    void upd(int p, int l, int r, int L, int R, T val) {
+    void upd(int p, int l, int r, int L, int R, num_t val) {
         pushdown(p, L, R);
-        if (l > R || r < L) return;
-        if (l <= L && r >= R) {
+        if (r < L || R < l) return;
+        if (l <= L && R <= r) {
             lz[p] = val;
             pushdown(p, L, R);
             return;
@@ -30,14 +33,19 @@ template<class T> struct SegmenTree {
         upd(p << 1 | 1, l, r, (L + R >> 1) + 1, R, val);
         st[p] = st[p << 1] + st[p << 1 | 1];
     }
-    T query(int p, int l, int r, int L, int R) {
+    num_t query(int p, int l, int r, int L, int R) {
         pushdown(p, L, R);
-        if (l > R || r < L) return 0;
-        if (l <= L && r >= R) return st[p];
+        if (r < L || R < l) return 0;
+        if (l <= L && R <= r) return st[p];
         return query(p << 1, l, r, L, L + R >> 1) + query(p << 1 | 1, l, r, (L + R >> 1) + 1, R);
     }
+    void upd(int p, int l, int r, num_t val) {
+        upd(p, l, r, 0, st.size() - 1, val);
+    }
+    num_t query(int p, int l, int r) {
+        return query(p, l, r, 0, st.size() - 1);
+    }
 };
-SegmenTree<int> seg;
 
 const int maxn = 1e5 + 5;
 int n;
@@ -46,6 +54,7 @@ int a[maxn];
 int main() {
     srand(time(NULL));
     n = 1000;
+    SegmenTree<int> seg(n);
     for (int it = 0; it < 1000; it++) {
         int l = rand() % n;
         int r = rand() % n;
