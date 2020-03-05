@@ -4,11 +4,12 @@ using namespace std;
 /*
 * Complexity: O(logN)
 */
-template<class num_t> struct SegmenTree {
+template<class num_t> struct SegmentTree {
     int n;
     vector<num_t> st;
     vector<num_t> lz;
-    SegmenTree(int n) : n(n) {
+    void init(int n_) {
+        n = n_;
         st.resize(n << 2);
         lz.resize(n << 2);
     }
@@ -51,11 +52,12 @@ template<class num_t> struct SegmenTree {
 const int maxn = 1e5 + 5;
 int n;
 int a[maxn];
+SegmentTree<int> seg;
 
 int main() {
     srand(time(NULL));
     n = 1000;
-    SegmenTree<int> seg(n);
+    seg.init(n);
     for (int it = 0; it < 1000; it++) {
         int l = rand() % n;
         int r = rand() % n;
