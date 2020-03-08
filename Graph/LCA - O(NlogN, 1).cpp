@@ -87,7 +87,7 @@ struct Tree_t {
     }
     int go_to(int u, int v, int k) {
         int a = lca(u, v);
-        if (lev[u] - lev[a] <= k) {
+        if (k <= lev[u] - lev[a]) {
             return go_up(u, k);
         }
         k -= lev[u] - lev[a];
