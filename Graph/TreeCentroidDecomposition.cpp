@@ -7,7 +7,6 @@ using namespace std;
 namespace TCD {
     vector<int> rem;
     vector<int> size;
-    void workspace(int);
 
     void dfs(const vector<vector<int>>& adj, int u, int p) {
         size[u] = 1;
@@ -37,6 +36,7 @@ namespace TCD {
         }
         assert(0);
     }
+    void workspace(const vector<vector<int>>&, int);
     void divide(const vector<vector<int>>& adj, int u = 0, int depth = 0) {
         if (!depth) {
             rem.resize(adj.size());
@@ -44,7 +44,7 @@ namespace TCD {
             size.resize(adj.size());
         }
         u = findcentroid(adj, u);
-        rem[u] = 1, workspace(u);
+        rem[u] = 1, workspace(adj, u);
         for (int i = 0; i < adj[u].size(); i++) {
             int v = adj[u][i];
             if (!rem[v]) {
@@ -52,7 +52,7 @@ namespace TCD {
             }
         }
     }
-    void workspace(int u) {
+    void workspace(const vector<vector<int>>& adj, int u) {
     }
 }
 
