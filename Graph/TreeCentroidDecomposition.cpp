@@ -4,47 +4,55 @@ using namespace std;
 /*
  * Comlexity: O(NlogN)
  */
-const int MAXN = 1e5 + 5;
-int n;
-vector<int> adj[MAXN];
-int del[MAXN];
-int size[MAXN];
-void dfs(int u, int p) {
-    size[u] = 1;
-    for (int i = 0; i < adj[u].size(); i++) {
-        int v = adj[u][i];
-        if (v != p && !del[v]) {
-            dfs(v, u);
-            size[u] += size[v];
-        }
-    }
-}
-int findcentroid(int u) {
-    int p = -1; dfs(u, -1);
-    int cap = size[u] >> 1;
-    while (1) {
-        bool found = false;
+namespace TCD {
+    vector<int> rem;
+    vector<int> size;
+    void workspace(int);
+
+    void dfs(const vector<vector<int>>& adj, int u, int p) {
+        size[u] = 1;
         for (int i = 0; i < adj[u].size(); i++) {
             int v = adj[u][i];
-            if (v != p && !del[v] && size[v] > cap) {
-                found = true;
-                p = u; u = v;
-                break;
+            if (v != p && !rem[v]) {
+                dfs(adj, v, u);
+                size[u] += size[v];
             }
         }
-        if (!found) return u;
     }
-}
-void work(int u) {
-}
-void divide(int u) {
-    u = findcentroid(u);
-    del[u] = 1, work(u);
-    for (int i = 0; i < adj[u].size(); i++) {
-        int v = adj[u][i];
-        if (!del[v]) {
-            divide(v);
+    int findcentroid(const vector<vector<int>>& adj, int u) {
+        int p = -1;
+        dfs(adj, u, -1);
+        int cap = size[u] >> 1;
+        while (1) {
+            int found = 0;
+            for (int i = 0; i < adj[u].size(); i++) {
+                int v = adj[u][i];
+                if (v != p && !rem[v] && cap < size[v]) {
+                    p = u, u = v;
+                    found = 1;
+                    break;
+                }
+            }
+            if (!found) return u;
         }
+        assert(0);
+    }
+    void divide(const vector<vector<int>>& adj, int u = 0, int depth = 0) {
+        if (!depth) {
+            rem.resize(adj.size());
+            fill(rem.begin(), rem.end(), 0);
+            size.resize(adj.size());
+        }
+        u = findcentroid(adj, u);
+        rem[u] = 1, workspace(u);
+        for (int i = 0; i < adj[u].size(); i++) {
+            int v = adj[u][i];
+            if (!rem[v]) {
+                divide(adj, v, depth + 1);
+            }
+        }
+    }
+    void workspace(int u) {
     }
 }
 
