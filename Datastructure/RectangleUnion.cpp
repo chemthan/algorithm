@@ -1,6 +1,12 @@
 #include <bits/stdc++.h>
 using namespace std;
 
+/*
+ * Complexity: NlogN
+ * Problems:
+ * 1. https://vn.spoj.com/problems/AREA/
+ */
+
 template<typename num_t>
 long long calc(vector<tuple<num_t, num_t, num_t, num_t>>& recs) {
     vector<num_t> dc;
