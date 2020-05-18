@@ -54,7 +54,7 @@ struct RMQ2D {
         int a = z - x + 1, b = t - y + 1;
         int lga = __lg(a);
         int lgb = __lg(b);
-        int res = g[lgb][lga][y][x];
+        num_t res = g[lgb][lga][y][x];
         res = best(res, g[lgb][lga][y + b - (1 << (lgb))][x + a - (1 << (lga))]);
         res = best(res, g[lgb][lga][y][x + a - (1 << (lga))]);
         res = best(res, g[lgb][lga][y + b - (1 << (lgb))][x]);
