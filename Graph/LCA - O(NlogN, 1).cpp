@@ -38,8 +38,9 @@ struct Tree_t {
         tin.resize(adj.size());
         tou.resize(adj.size());
         idx.resize(adj.size());
-        par.resize(__lg(adj.size()) + 1, vector<int>(adj.size()));
+        par.resize(__lg(adj.size()) + 1);
         for (int i = 0; i < (int) par.size(); i++) {
+            par[i].resize(adj.size());
             par[i][rt] = rt;
         }
         timer = lev[rt] = 0, dfs(rt, -1, adj);
